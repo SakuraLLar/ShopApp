@@ -53,6 +53,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
     // Lifecycle
     implementation(libs.androidx.lifecycle.extensions)
     implementation(libs.androidx.lifecycle.runtime.ktx)

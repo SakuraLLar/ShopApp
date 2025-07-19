@@ -5,12 +5,12 @@
     <string name="intro_title_test">Line one\nLine two</string>
 
     <!--Activity Intro-->
-    <string name="intro_title">Step into your\n <font color="#6033bd">A world of shoes</font></string>
+    <string name="intro_title">Step into your\n <font color="#444343">A world of shoes</font></string>
     <string name="intro_text">Browse the latest styles from top brands\nGet personalized recommendations\nEnjoy fast, free shipping</string>
 
     <string name="button_text">Let\'s Get Started</string>
 
-    <string name="intro_sign_in">Already have an account? <font color="#6033bd">Sign In</font></string>
+    <string name="intro_sign_in">Already have an account? <font color="#444343">Sign In</font></string>
 
     <!--Main Activity-->
     <string name="main_greeting">Welcome Back</string>

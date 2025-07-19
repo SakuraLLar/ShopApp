@@ -48,9 +48,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="32dp"
-                android:background="@drawable/purple_button_bg"
+                android:background="@drawable/button_yellow_bg"
                 android:text="@string/button_text"
-                android:textColor="@color/white"
+                android:textColor="@color/lightDark"
                 android:textSize="18sp" />
 
             <TextView

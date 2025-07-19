@@ -3,7 +3,7 @@ package dev.sakura.shopapp.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import dev.sakura.shopapp.MainActivity
+import dev.sakura.shopapp.activity.MainActivity
 import dev.sakura.shopapp.databinding.ActivityIntroBinding
 
 class IntroActivity : BaseActivity() {

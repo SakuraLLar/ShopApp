@@ -1,4 +1,4 @@
-package dev.sakura.shopapp.Model
+package dev.sakura.shopapp.model
 
 data class BrandModel(
     val title: String = "",

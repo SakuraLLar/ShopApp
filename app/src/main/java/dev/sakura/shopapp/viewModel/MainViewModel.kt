@@ -1,11 +1,11 @@
-package dev.sakura.shopapp.ViewModel
+package dev.sakura.shopapp.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dev.sakura.shopapp.Model.BrandModel
-import dev.sakura.shopapp.Model.ItemsModel
-import dev.sakura.shopapp.Model.SliderModel
+import dev.sakura.shopapp.model.BrandModel
+import dev.sakura.shopapp.model.ItemsModel
+import dev.sakura.shopapp.model.SliderModel
 import dev.sakura.shopapp.R
 
 class MainViewModel() : ViewModel() {
@@ -86,6 +86,28 @@ class MainViewModel() : ViewModel() {
                 size = arrayListOf("38", "39"),
                 40.0,
                 4.2,
+                numberInCart = 0,
+            )
+        )
+        localPopulars.add(
+            ItemsModel(
+                R.drawable.shoes5,
+                title = "Nike Jordans",
+                description = "Сomfortable and beautiful sneakers",
+                size = arrayListOf("37", "39", "40"),
+                70.0,
+                5.0,
+                numberInCart = 0,
+            )
+        )
+        localPopulars.add(
+            ItemsModel(
+                R.drawable.shoes6,
+                title = "Multi-colored palette",
+                description = "Bright and stylish sneakers",
+                size = arrayListOf("40", "44"),
+                28.0,
+                4.7,
                 numberInCart = 0,
             )
         )

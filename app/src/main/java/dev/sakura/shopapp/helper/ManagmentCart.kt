@@ -1,8 +1,8 @@
-package dev.sakura.shopapp.Helper
+package dev.sakura.shopapp.helper
 
 import android.content.Context
 import android.widget.Toast
-import dev.sakura.shopapp.Model.ItemsModel
+import dev.sakura.shopapp.model.ItemsModel
 
 class ManagmentCart(val context: Context) {
 

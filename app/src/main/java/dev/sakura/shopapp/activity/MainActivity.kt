@@ -1,9 +1,9 @@
 package dev.sakura.shopapp.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
-import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import dev.sakura.shopapp.Adapter.BrandAdapter
-import dev.sakura.shopapp.Adapter.PopularAdapter
-import dev.sakura.shopapp.Adapter.SliderAdapter
-import dev.sakura.shopapp.Model.SliderModel
-import dev.sakura.shopapp.ViewModel.MainViewModel
+import dev.sakura.shopapp.R
+import dev.sakura.shopapp.adapter.BrandAdapter
+import dev.sakura.shopapp.adapter.PopularAdapter
+import dev.sakura.shopapp.adapter.SliderAdapter
 import dev.sakura.shopapp.databinding.ActivityMainBinding
+import dev.sakura.shopapp.model.SliderModel
+import dev.sakura.shopapp.viewModel.MainViewModel
 
 class MainActivity : BaseActivity() {
 
@@ -24,8 +25,6 @@ class MainActivity : BaseActivity() {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
     private lateinit var binding: ActivityMainBinding
-    private lateinit var brandAdapter: BrandAdapter
-    private lateinit var popularAdapter: PopularAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,21 +32,11 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupBrandRecyclerView()
-        setupPopularRecyclerView()
-
         initBanner()
         initBrand()
         initPopular()
-    }
-
-    private fun setupPopularRecyclerView() {
-        binding.viewPopular.layoutManager = GridLayoutManager(this, 2)
-    }
-
-    private fun setupBrandRecyclerView() {
-        binding.viewBrand.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        initCustomBottomNavigation()
+        updateBottomNavSelection(binding.includedBottomNavMain, R.id.nav_explorer, this)
     }
 
     private fun initBanner() {
@@ -56,7 +45,6 @@ class MainActivity : BaseActivity() {
             banners(items)
             binding.progressBarBanner.visibility = View.GONE
         })
-
         viewModel.loadBanners()
     }
 
@@ -68,8 +56,11 @@ class MainActivity : BaseActivity() {
         binding.viewpagerSlider.clipChildren = false
         binding.viewpagerSlider.offscreenPageLimit = 3
 
-        if (images.isNotEmpty()) {
-            binding.viewpagerSlider.get(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        if (mutableImages.isNotEmpty()) {
+            if (binding.viewpagerSlider.childCount > 0) {
+                (binding.viewpagerSlider.getChildAt(0) as? RecyclerView)?.overScrollMode =
+                    RecyclerView.OVER_SCROLL_NEVER
+            }
         }
 
         val compositePageTransformer = CompositePageTransformer().apply {
@@ -87,15 +78,17 @@ class MainActivity : BaseActivity() {
 
     private fun initBrand() {
         binding.progressBarBrand.visibility = View.VISIBLE
+        if (binding.viewBrand.layoutManager == null) {
+            binding.viewBrand.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        }
         viewModel.brands.observe(this, Observer { brandList ->
             binding.progressBarBrand.visibility = View.GONE
-
             if (brandList != null) {
-                if (!::brandAdapter.isInitialized) {
-                    brandAdapter = BrandAdapter(brandList)
-                    binding.viewBrand.adapter = brandAdapter
+                if (binding.viewBrand.adapter == null) {
+                    binding.viewBrand.adapter = BrandAdapter(brandList)
                 } else {
-                    brandAdapter.updateData(brandList)
+                    (binding.viewBrand.adapter as BrandAdapter).updateData(brandList)
                 }
             }
         })
@@ -104,14 +97,37 @@ class MainActivity : BaseActivity() {
 
     private fun initPopular() {
         binding.progressBarPopular.visibility = View.VISIBLE
+        if (binding.viewPopular.layoutManager == null) {
+            binding.viewPopular.layoutManager = GridLayoutManager(this, 2)
+        }
         viewModel.populars.observe(this, Observer { popularList ->
             binding.progressBarPopular.visibility = View.GONE
-
             if (popularList != null) {
-                val currentPopularAdapter = PopularAdapter(popularList)
-                binding.viewPopular.adapter = currentPopularAdapter
+                if (binding.viewPopular.adapter == null) {
+                    binding.viewPopular.adapter = PopularAdapter(popularList)
+                } else {
+                    (binding.viewPopular.adapter as PopularAdapter).updateDataWith(popularList)
+                }
             }
         })
         viewModel.loadPopulars()
+    }
+
+    private fun initCustomBottomNavigation() {
+        binding.includedBottomNavMain.navExplorer.setOnClickListener {
+            updateBottomNavSelection(binding.includedBottomNavMain, R.id.nav_explorer, this)
+        }
+        binding.includedBottomNavMain.navCart.setOnClickListener {
+            startActivity(Intent(this, CartActivity::class.java))
+        }
+        binding.includedBottomNavMain.navOrders.setOnClickListener {
+            // startActivity(Intent(this, OrdersActivity::class.java))
+        }
+        binding.includedBottomNavMain.navWishlist.setOnClickListener {
+            // startActivity(Intent(this, WishlistActivity::class.java))
+        }
+        binding.includedBottomNavMain.navProfile.setOnClickListener {
+            // startActivity(Intent(this, ProfileActivity::class.java))
+        }
     }
 }

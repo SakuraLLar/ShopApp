@@ -1,4 +1,4 @@
-package dev.sakura.shopapp.Model
+package dev.sakura.shopapp.model
 
 import android.os.Parcel
 import android.os.Parcelable

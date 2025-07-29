@@ -1,4 +1,4 @@
-package dev.sakura.shopapp.Adapter
+package dev.sakura.shopapp.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import dev.sakura.shopapp.Model.SliderModel
+import dev.sakura.shopapp.model.SliderModel
 import dev.sakura.shopapp.R
 
 class SliderAdapter(

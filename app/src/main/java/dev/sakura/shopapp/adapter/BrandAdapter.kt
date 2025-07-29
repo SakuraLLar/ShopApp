@@ -1,4 +1,4 @@
-package dev.sakura.shopapp.Adapter
+package dev.sakura.shopapp.adapter
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import dev.sakura.shopapp.Model.BrandModel
+import dev.sakura.shopapp.model.BrandModel
 import dev.sakura.shopapp.R
 import dev.sakura.shopapp.databinding.ViewHolderBrandBinding
 import kotlinx.coroutines.CoroutineScope

@@ -1,21 +1,36 @@
-package dev.sakura.shopapp.Adapter
+package dev.sakura.shopapp.adapter
 
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
-import dev.sakura.shopapp.Model.ItemsModel
 import dev.sakura.shopapp.activity.DetailActivity
 import dev.sakura.shopapp.databinding.ViewHolderRecommendedBinding
+import dev.sakura.shopapp.model.ItemsModel
 
 class PopularAdapter(private val items: MutableList<ItemsModel>) :
     RecyclerView.Adapter<PopularAdapter.ViewHolder>() {
 
     private var context: Context? = null
+
+    fun updateDataWith(newPopularList: List<ItemsModel>) {
+        val diffCallback = PopularDiffCallback(this.items, newPopularList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        this.items.clear()
+        this.items.addAll(newPopularList)
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+//    fun updateData(newPopularList: MutableList<ItemsModel>) {
+//        items.clear()
+//        items.addAll(newPopularList)
+//        notifyDataSetChanged()
+//    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -55,4 +70,27 @@ class PopularAdapter(private val items: MutableList<ItemsModel>) :
 
     class ViewHolder(val binding: ViewHolderRecommendedBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    class PopularDiffCallback(
+        private val oldList: List<ItemsModel>,
+        private val newList: List<ItemsModel>,
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldList.size
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(
+            oldItemPosition: Int,
+            newItemPosition: Int)
+        : Boolean {
+            return oldList[oldItemPosition].title == newList[newItemPosition].title &&
+                    oldList[oldItemPosition].resourceId == newList[newItemPosition].resourceId
+        }
+
+        override fun areContentsTheSame(
+            oldItemPosition: Int,
+            newItemPosition: Int,
+        ): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
+    }
 }

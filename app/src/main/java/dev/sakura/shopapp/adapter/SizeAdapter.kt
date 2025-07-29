@@ -1,18 +1,14 @@
-package dev.sakura.shopapp.Adapter
+package dev.sakura.shopapp.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import dev.sakura.shopapp.R
-import dev.sakura.shopapp.databinding.ViewholderColorBinding
+import dev.sakura.shopapp.databinding.ViewholderSizeBinding
 
-
-class ColorAdapter(private var items: List<String>) :
-    RecyclerView.Adapter<ColorAdapter.ViewHolder>() {
+class SizeAdapter(private var items: MutableList<String>) :
+    RecyclerView.Adapter<SizeAdapter.ViewHolder>() {
     private var selectedPosition = -1
     private var lastSelectedPosition = -1
     private lateinit var context: Context
@@ -29,7 +25,7 @@ class ColorAdapter(private var items: List<String>) :
         viewType: Int,
     ): ViewHolder {
         context = parent.context
-        val binding = ViewholderColorBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = ViewholderSizeBinding.inflate(LayoutInflater.from(context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -37,21 +33,8 @@ class ColorAdapter(private var items: List<String>) :
         holder: ViewHolder,
         position: Int,
     ) {
-        val imageName = items[position]
-        val resourceId = context.resources.getIdentifier(imageName, "drawable", context.packageName)
 
-        if (resourceId != 0) {
-            Glide.with(holder.itemView.context)
-                .load(resourceId)
-                .into(holder.binding.pic)
-        } else {
-            holder.binding.pic.setImageDrawable(
-                ContextCompat.getColor(
-                    context,
-                    R.color.lightGrey
-                ).toDrawable()
-            )
-        }
+        holder.binding.txtSize.text = items[position]
 
         holder.binding.root.setOnClickListener {
             val currentAdapterPosition = holder.adapterPosition
@@ -61,29 +44,31 @@ class ColorAdapter(private var items: List<String>) :
                     selectedPosition = -1
                     notifyItemChanged(currentAdapterPosition)
                 } else {
-                    val previouslySelectedPosition = selectedPosition
+                    lastSelectedPosition = selectedPosition
                     selectedPosition = currentAdapterPosition
 
-                    if (previouslySelectedPosition != RecyclerView.NO_POSITION) {
-                        notifyItemChanged(previouslySelectedPosition)
+                    if (lastSelectedPosition != RecyclerView.NO_POSITION && lastSelectedPosition < items.size && lastSelectedPosition >= 0) {
+                        notifyItemChanged(lastSelectedPosition)
                     }
-                    notifyItemChanged(selectedPosition)
+
+                    if (selectedPosition != RecyclerView.NO_POSITION && selectedPosition < items.size) {
+                        notifyItemChanged(selectedPosition)
+                    }
                 }
             }
         }
 
         if (selectedPosition == position) {
             holder.binding.layoutColor.setBackgroundResource(R.drawable.yellow_bg)
+            holder.binding.txtSize.setTextColor(context.resources.getColor(R.color.black))
         } else {
             holder.binding.layoutColor.setBackgroundResource(R.drawable.grey_bg_selected)
+            holder.binding.txtSize.setTextColor(context.resources.getColor(R.color.black))
         }
     }
 
-    override fun getItemCount(): Int {
-        val count = items.size
-        return count
-    }
+    override fun getItemCount(): Int = items.size
 
-    inner class ViewHolder(val binding: ViewholderColorBinding) :
+    inner class ViewHolder(val binding: ViewholderSizeBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

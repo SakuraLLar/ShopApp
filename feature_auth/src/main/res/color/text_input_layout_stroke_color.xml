@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Цвет рамки в фокусе -->
+    <item android:color="@android:color/darker_gray" android:state_focused="true" />
+
+    <!-- Цвет рамки при ошибке -->
+    <item android:color="?attr/colorError" android:state_enabled="true" android:state_hovered="true" />
+
+    <!-- Цвет рамки в обычном состоянии -->
+    <item android:color="@android:color/darker_gray" android:state_enabled="true" />
+
+    <!-- Цвет по умолчанию -->
+    <item android:color="@android:color/darker_gray" />
+
+</selector>
+
+
+

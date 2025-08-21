@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">ShopApp</string>
+
+    <!--Test-->
+    <string name="intro_title_test">Line one\nLine two</string>
+
+
+    <!--Intro Activity-->
+    <string name="intro_title">Сделай шаг \n<font color="#444343">В мир моды и стиля</font></string>
+    <string name="intro_text">Выбери свой образ от ведущих брендов\nПолучи персональные рекомендации\nБыстрая и бесплатная доставка</string>
+    <string name="button_text">Нажми, чтобы начать</string>
+    <string name="login_text">Войти</string>
+    <string name="register_text">Зарегистрироваться</string>
+    <string name="entrance_text">Email или номер телефона</string>
+
+
+    <!--Main Activity-->
+    <string name="main_greeting">Добро пожаловать!</string>
+    <string name="main_greeting_user">Привет, %1$s!</string>
+    <string name="guest_name">Гость</string>
+    <string name="name">Имя польизователя</string>
+
+
+    <!--Register Activity-->
+    <string name="register_first_name">Имя</string>
+    <string name="register_last_name">Фамилия</string>
+    <string name="register_email_name">Почта</string>
+    <string name="register_phone">Номер телефона</string>
+    <string name="register_password">Пароль</string>
+
+
+    <!--Profile Activity-->
+    <string name="profile_logged_in_as">Вы вошли как: %1$s!</string>
+    <string name="profile_guest">Вы вошли как: Гость</string>
+    <string name="profile_email">email@example.com</string>
+    <string name="profile_action_logout">Выйти</string>
+    <string name="profile_action_login">Войти</string>
+
+
+    <!--General strings-->
+    <string name="check_password">Показать пароль</string>
+
+
+</resources>

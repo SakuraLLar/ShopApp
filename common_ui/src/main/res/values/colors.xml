@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="lightGrey">#D4D3D3</color>
+    <color name="grey">#919191</color>
+    <color name="darkGrey">#2a2927</color>
+
+    <color name="darkWhite">#C2BEBE</color>
+    <color name="lightDark">#444343</color>
+
+    <color name="yellowLight">#fce000</color>
+    <color name="yellow">#EDB606</color>
+    <color name="yellowDark">#C19615</color>
+
+    <color name="red">#E62617</color>
+    <color name="redLight">#e97415</color>
+
+    <!-- Цвет элемента layout_custom_bottom_nav-->
+    <color name="color_bottom_nav_light">#565050</color>
+    <color name="color_bottom_nav_dark">#1D1B1B</color>
+
+
+    <!-- Цвет элемента block_background для разных тем-->
+    <color name="color_block_light">#f4f3f1</color>
+    <color name="color_block_dark">#3d3c3a</color>
+
+    <!-- Кнопка "Добавить в коризну" -->
+    <style name="Widget.App.Button.YellowLight" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/yellowLight</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!--Светлая тема-->
+    <color name="m3_primary_light">@color/redLight</color>
+    <color name="m3_on_primary_light">@color/white</color>
+    <color name="m3_primary_container_light">#EADDFF</color>
+    <color name="m3_on_primary_container_light">#21005D</color>
+    <color name="m3_secondary_light">#625B71</color>
+    <color name="m3_on_secondary_light">@color/white</color>
+    <color name="m3_background_light">@color/white</color>
+    <color name="m3_on_background_light">@color/black</color>
+    <color name="m3_surface_light">@color/lightGrey</color>
+    <color name="m3_on_surface_light">@color/black</color>
+
+    <!-- Темная тема -->
+    <color name="m3_primary_dark">@color/redLight</color>
+    <color name="m3_on_primary_dark">@color/black</color>
+    <color name="m3_primary_container_dark">#D2A316</color>
+    <color name="m3_on_primary_container_dark">#EADDFF</color>
+    <color name="m3_secondary_dark">#CCC2DC</color>
+    <color name="m3_on_secondary_dark">#332D41</color>
+    <color name="m3_background_dark">@color/darkGrey</color>
+    <color name="m3_on_background_dark">@color/darkWhite</color>
+    <color name="m3_surface_dark">#313033</color>
+    <color name="m3_on_surface_dark">@color/darkWhite</color>
+</resources>

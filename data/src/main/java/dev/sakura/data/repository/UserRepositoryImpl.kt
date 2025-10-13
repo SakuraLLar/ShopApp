@@ -1,33 +1,19 @@
-package dev.sakura.shopapp.data
+package dev.sakura.data.repository
 
-import dev.sakura.shopapp.db.user.User
-import dev.sakura.shopapp.db.user.UserDao
+import dev.sakura.models.User
+import dev.sakura.co
+import dev.sakura.data.user.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserRepository(private val userDao: UserDao) {
+class UserAlreadyExistsException(message: String) : Exception(message)
 
-//    suspend fun registerUser(user: User): Result<Long> {
-//        return withContext(Dispatchers.IO) {
-//            try {
-//                if (userDao.doesUserExist(user.email, user.phoneNumber)) {
-//                    Result.failure(UserAlreadyExistsException("Полльзователь с email ${user.email} или телефоном ${user.phoneNumber} уже существует."))
-//                } else {
-//                    val userId = userDao.insertUser(user)
-//
-//                    if (userId > 0) {
-//                        Result.success(userId)
-//                    } else {
-//                        Result.failure(Exception("Не удалось зарегистрировать пользователя. Код ошибки БД"))
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                Result.failure(e)
-//            }
-//        }
-//    }
+@Singleton
+class UserRepository @Inject constructor(private val userDao: UserDao) : {
 
-    suspend fun registerUserAndGetNewUser(user: User): Result<User?> { // <--- НОВЫЙ МЕТОД
+    suspend fun registerUserAndGetNewUser(user: User): Result<User?> {
         return withContext(Dispatchers.IO) {
             try {
                 if (userDao.doesUserExist(user.email, user.phoneNumber)) {

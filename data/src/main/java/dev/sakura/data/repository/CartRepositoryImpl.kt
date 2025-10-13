@@ -1,13 +1,16 @@
-package dev.sakura.shopapp.data
+package dev.sakura.data.repository
 
-import dev.sakura.shopapp.db.cart.CartDao
-import dev.sakura.shopapp.db.cart.CartItem
-import dev.sakura.shopapp.model.ItemsModel
+import dev.sakura.data.cart.CartDao
+import dev.sakura.models.CartItem
+import dev.sakura.models.ItemsModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CartRepository(private val cartDao: CartDao) {
+@Singleton
+class CartRepository @Inject constructor(private val cartDao: CartDao) {
     val allCartItems: Flow<List<CartItem>> = cartDao.getAllItems()
     val cartTotalPrice: Flow<Double?> = cartDao.getTotalPrice()
     val cartTotalItemCount: Flow<Int?> = cartDao.getTotalItemCount()

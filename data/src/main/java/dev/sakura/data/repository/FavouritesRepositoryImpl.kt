@@ -1,10 +1,13 @@
-package dev.sakura.shopapp.data
+package dev.sakura.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import dev.sakura.shopapp.model.ItemsModel
+import dev.sakura.models.ItemsModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object FavouritesRepository {
+@Singleton
+class FavouritesRepository @Inject constructor() {
     private val favourites = mutableListOf<ItemsModel>()
     private val _favouritesLiveData = MutableLiveData<List<ItemsModel>>(emptyList())
     val favouritesLiveData: LiveData<List<ItemsModel>> = _favouritesLiveData
@@ -53,6 +56,7 @@ object FavouritesRepository {
 
     private fun updateLiveData() {
         _favouritesLiveData.postValue(ArrayList(favourites))
+//        val currentStatusMap = favourites.associate { it.resourceId to true }.toMutableMap()
         val statusMap = favourites.associate { it.resourceId to true }
         _isFavouriteStatusLiveData.postValue(statusMap)
     }

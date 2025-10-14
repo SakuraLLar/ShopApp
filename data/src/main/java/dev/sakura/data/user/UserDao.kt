@@ -1,9 +1,10 @@
-package dev.sakura.shopapp.db.user
+package dev.sakura.data.user
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import dev.sakura.models.User
 
 @Dao
 interface UserDao {
@@ -26,11 +27,10 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE email = :emailOrPhone OR phoneNumber = :emailOrPhone LIMIT 1")
     suspend fun getUserByEmailOrPhoneNumber(emailOrPhone: String): User?
 
-
     // Метод для обновления пользователя
     // @Update
     // suspend fun updateUser(user: User)
-    //
+
     // Метод для удаления пользователя
     // @Delete
     // suspend fun deleteUser(user: User)

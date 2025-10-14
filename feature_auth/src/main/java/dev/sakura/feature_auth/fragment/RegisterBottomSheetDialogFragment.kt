@@ -1,9 +1,9 @@
-package dev.sakura.shopapp.fragment
+package dev.sakura.feature_auth.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,23 +12,29 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dev.sakura.shopapp.activity.MainActivity
-import dev.sakura.shopapp.databinding.BottomSheetRegisterBinding
-import dev.sakura.shopapp.db.user.User
-import dev.sakura.shopapp.util.SessionManager
-import dev.sakura.shopapp.viewModel.AuthState
-import dev.sakura.shopapp.viewModel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dev.sakura.models.User
+import dev.sakura.feature_auth.databinding.BottomSheetRegisterBinding
+import dev.sakura.core.auth.SessionManagerImpl
+import dev.sakura.core.navigation.AppNavigator
+import dev.sakura.feature_auth.viewModel.AuthState
+import dev.sakura.feature_auth.viewModel.AuthViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
+    @Inject
+    lateinit var appNavigator: AppNavigator
+
     private var _binding: BottomSheetRegisterBinding? = null
     private val binding get() = _binding!!
 
     private val authViewModel: AuthViewModel by viewModels()
-    private lateinit var sessionManager: SessionManager
+    private lateinit var sessionManager: SessionManagerImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sessionManager = SessionManager(requireContext())
+        sessionManager = SessionManagerImpl(requireContext())
     }
 
     override fun onCreateView(
@@ -86,10 +92,8 @@ class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     Toast.LENGTH_LONG
                 ).show()
                 sessionManager.createLoginSession(registeredUser.id)
-                val intent = Intent(activity, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                activity?.finishAffinity()
+                appNavigator.openMain(requireActivity())
+                requireActivity().finishAffinity()
                 dismiss()
                 authViewModel.onRegistrationNavigationComplete()
             }
@@ -150,7 +154,7 @@ class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
         if (email.isEmpty()) {
             binding.tilRegisterEmail.error = "Почта - обязательно"
             isValid = false
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.tilRegisterEmail.error = "Некорректный формат почты"
             isValid = false
         }

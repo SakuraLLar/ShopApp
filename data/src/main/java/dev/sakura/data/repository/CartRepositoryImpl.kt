@@ -1,5 +1,6 @@
 package dev.sakura.data.repository
 
+import dev.sakura.core.data.CartRepository
 import dev.sakura.data.cart.CartDao
 import dev.sakura.models.CartItem
 import dev.sakura.models.ItemsModel
@@ -10,12 +11,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CartRepository @Inject constructor(private val cartDao: CartDao) {
-    val allCartItems: Flow<List<CartItem>> = cartDao.getAllItems()
-    val cartTotalPrice: Flow<Double?> = cartDao.getTotalPrice()
-    val cartTotalItemCount: Flow<Int?> = cartDao.getTotalItemCount()
+class CartRepositoryImpl @Inject constructor(private val cartDao: CartDao) : CartRepository {
+    override val allCartItems: Flow<List<CartItem>> = cartDao.getAllItems()
+    override val cartTotalPrice: Flow<Double?> = cartDao.getTotalPrice()
+    override val cartTotalItemCount: Flow<Int?> = cartDao.getTotalItemCount()
 
-    suspend fun addItemToCart(product: ItemsModel, quantity: Int = 1) {
+    override suspend fun addItemToCart(product: ItemsModel, quantity: Int) {
         withContext(Dispatchers.IO) {
             val existingItem = cartDao.getItemById(product.resourceId.toString())
             if (existingItem != null) {
@@ -34,7 +35,7 @@ class CartRepository @Inject constructor(private val cartDao: CartDao) {
         }
     }
 
-    suspend fun updateItemQuantity(productId: String, newQuantity: Int) {
+    override suspend fun updateItemQuantity(productId: String, newQuantity: Int) {
         withContext(Dispatchers.IO) {
             val item = cartDao.getItemById(productId)
             if (item != null) {
@@ -48,13 +49,13 @@ class CartRepository @Inject constructor(private val cartDao: CartDao) {
         }
     }
 
-    suspend fun removeItemFromCart(productId: String) {
+    override suspend fun removeItemFromCart(productId: String) {
         withContext(Dispatchers.IO) {
             cartDao.deleteItemById(productId)
         }
     }
 
-    suspend fun clearCart() {
+    override suspend fun clearCart() {
         withContext(Dispatchers.IO) {
             cartDao.clearCart()
         }

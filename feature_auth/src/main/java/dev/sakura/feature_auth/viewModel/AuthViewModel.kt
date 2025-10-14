@@ -1,18 +1,20 @@
-package dev.sakura.shopapp.viewModel
+package dev.sakura.feature_auth.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import dev.sakura.shopapp.data.UserRepository
-import dev.sakura.shopapp.db.AppDatabase
-import dev.sakura.shopapp.db.user.User
-import dev.sakura.shopapp.util.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sakura.core.auth.AuthManager
+import dev.sakura.core.data.UserRepository
+import dev.sakura.core.util.Event
+import dev.sakura.models.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mindrot.jbcrypt.BCrypt
+import javax.inject.Inject
 
 sealed class AuthState {
     object Idle : AuthState()
@@ -21,9 +23,12 @@ sealed class AuthState {
     data class Error(val message: String) : AuthState()
 }
 
-class AuthViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val userRepository: UserRepository
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    application: Application,
+    private val userRepository: UserRepository,
+    private val authManager: AuthManager
+) : AndroidViewModel(application) {
 
     private val _authState = MutableLiveData<AuthState>(AuthState.Idle)
     val authState: LiveData<AuthState> = _authState
@@ -34,14 +39,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val _registrationSuccessAction = MutableLiveData<Event<User>>()
     val registrationSuccessAction: LiveData<Event<User>> = _registrationSuccessAction
 
-    private val _currentUser = MutableLiveData<User?>()
-    val currentUser: LiveData<User?> = _currentUser
-
-    init {
-        val userDao = AppDatabase.getDatabase(application).userDao()
-        userRepository = UserRepository(userDao)
-
-    }
+    val currentUser: LiveData<User?> = authManager.currentUser
 
     fun registerUser(
         firstName: String,
@@ -74,6 +72,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                             message = "Регистрация успешна!"
                         )
                         _registrationSuccessAction.value = Event(registeredUser)
+                        authManager.loadCurrentUser(registeredUser.id)
                     } else {
                         _authState.value =
                             AuthState.Error("Ошибка регистрации: не удалось получить данные пользователя.")
@@ -81,7 +80,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     val exception = registrationResult.exceptionOrNull()
                     val errorMessage = when (exception) {
-                        is UserRepository.UserAlreadyExistsException -> "Пользователь с такими данными уже существует."
+                        is UserRepository -> "Пользователь с такими данными уже существует."
                         else -> "Ошибка регистрации: ${exception?.message ?: "Неизвестная ошибка."}"
                     }
                     _authState.value = AuthState.Error(errorMessage)
@@ -103,6 +102,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                     val user = userResult.getOrNull()
                     if (user != null) {
                         if (checkPasswordWithBCrypt(password, user.passwordHash)) {
+                            authManager.loadCurrentUser(user.id)
                             _navigationToMain.value = Event(user)
                         } else {
                             _authState.value = AuthState.Error("Неверный логин или пароль.")
@@ -121,19 +121,8 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun loadCurrentUser(userId: Long) {
-        viewModelScope.launch {
-            val result = userRepository.getUserById(userId)
-            if (result.isSuccess) {
-                _currentUser.value = result.getOrNull()
-                _authState.value =
-                    AuthState.Idle
-            } else {
-                _currentUser.value = null
-                _authState.value =
-                    AuthState.Error("Не удалось загрузить данные пользователя.")
-            }
-        }
+    fun loadCurrentUserFromSession(userId: Long) {
+        authManager.loadCurrentUser(userId)
     }
 
     private suspend fun hashPasswordWithBcrypt(password: String): String {

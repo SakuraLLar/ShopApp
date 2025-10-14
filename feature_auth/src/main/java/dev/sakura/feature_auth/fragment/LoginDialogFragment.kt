@@ -1,4 +1,4 @@
-package dev.sakura.shopapp.fragment
+package dev.sakura.feature_auth.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,23 +11,29 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import dev.sakura.shopapp.activity.MainActivity
-import dev.sakura.shopapp.databinding.DialogLoginBinding
-import dev.sakura.shopapp.util.SessionManager
-import dev.sakura.shopapp.viewModel.AuthState
-import dev.sakura.shopapp.viewModel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dev.sakura.feature_auth.databinding.DialogLoginBinding
+import dev.sakura.core.auth.SessionManagerImpl
+import dev.sakura.core.navigation.AppNavigator
+import dev.sakura.feature_auth.viewModel.AuthState
+import dev.sakura.feature_auth.viewModel.AuthViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginDialogFragment : DialogFragment() {
+    @Inject
+    lateinit var appNavigator: AppNavigator
+
     private var _binding: DialogLoginBinding? = null
     private val binding get() = _binding!!
 
     private val authViewModel: AuthViewModel by viewModels()
 
-    private lateinit var sessionManager: SessionManager
+    private lateinit var sessionManager: SessionManagerImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sessionManager = SessionManager(requireContext())
+        sessionManager = SessionManagerImpl(requireContext())
     }
 
     override fun onCreateView(
@@ -104,13 +110,8 @@ class LoginDialogFragment : DialogFragment() {
                     "Добро пожаловать, ${user.firstName}",
                     Toast.LENGTH_LONG
                 ).show()
-
-                val intent = Intent(
-                    activity, MainActivity::class.java
-                )
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                activity?.finish()
+                appNavigator.openMain(requireActivity())
+                requireActivity().finishAffinity()
                 dismiss()
                 authViewModel.onLoginNavigationComplete()
             }

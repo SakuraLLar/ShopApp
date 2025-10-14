@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 android {
@@ -43,10 +44,12 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.ui.android)
 
     // Test
     testImplementation(libs.junit)
@@ -60,18 +63,31 @@ dependencies {
     // Lifecycle
     implementation(libs.androidx.lifecycle.extensions)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-
-    // room
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-
-    // ViewModel
-    implementation(libs.androidx.activity.ktx)
 
     implementation(libs.glide)
     implementation(libs.gson)
     implementation(libs.dotsindicator)
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.fragment.ktx)
+
+    // jBCrypt
+    implementation(libs.jbcrypt)
+
+    // DI
+    implementation(libs.dagger.hilt.android)
+    ksp(libs.dagger.hilt.compiler)
+
+    implementation(project(":common_ui"))
+    implementation(project(":core"))
+    implementation(project(":data"))
+    implementation(project(":models"))
+
+    implementation(project(":feature_auth"))
+    implementation(project(":feature_cart"))
+    implementation(project(":feature_catalog"))
+    implementation(project(":feature_favourites"))
+    implementation(project(":feature_profile"))
 }

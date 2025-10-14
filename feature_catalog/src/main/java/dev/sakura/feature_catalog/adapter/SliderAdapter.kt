@@ -1,4 +1,4 @@
-package dev.sakura.shopapp.adapter
+package dev.sakura.feature_catalog.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,12 +8,11 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import dev.sakura.shopapp.model.SliderModel
-import dev.sakura.shopapp.R
+import dev.sakura.feature_catalog.R
+import dev.sakura.models.SliderModel
 
 class SliderAdapter(
     private var sliderItemsInternal: MutableList<SliderModel>,
-    private val viewPager2: ViewPager2,
 ) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
 
     private lateinit var context: Context
@@ -42,9 +41,6 @@ class SliderAdapter(
         position: Int,
     ) {
         holder.setImage(sliderItemsInternal[position], context)
-        if (position == sliderItemsInternal.lastIndex - 1 && sliderItemsInternal.size > 1) {
-            viewPager2.postDelayed(runnable, 3000)
-        }
     }
 
     override fun getItemCount(): Int = sliderItemsInternal.size

@@ -1,7 +1,7 @@
 package dev.sakura.data.repository
 
 import dev.sakura.models.User
-import dev.sakura.co
+import dev.sakura.core.data.UserRepository
 import dev.sakura.data.user.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -11,9 +11,9 @@ import javax.inject.Singleton
 class UserAlreadyExistsException(message: String) : Exception(message)
 
 @Singleton
-class UserRepository @Inject constructor(private val userDao: UserDao) : {
+class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : UserRepository{
 
-    suspend fun registerUserAndGetNewUser(user: User): Result<User?> {
+    override suspend fun registerUserAndGetNewUser(user: User): Result<User?> {
         return withContext(Dispatchers.IO) {
             try {
                 if (userDao.doesUserExist(user.email, user.phoneNumber)) {
@@ -37,7 +37,7 @@ class UserRepository @Inject constructor(private val userDao: UserDao) : {
         }
     }
 
-    suspend fun getUserByEmailOrPhoneNumberForLogin(emailOrPhone: String): Result<User?> {
+    override suspend fun getUserByEmailOrPhoneNumberForLogin(emailOrPhone: String): Result<User?> {
         return withContext(Dispatchers.IO) {
             try {
                 val user = userDao.getUserByEmailOrPhoneNumber(emailOrPhone)
@@ -48,7 +48,7 @@ class UserRepository @Inject constructor(private val userDao: UserDao) : {
         }
     }
 
-    suspend fun getUserById(userID: Long): Result<User?> {
+    override suspend fun getUserById(userID: Long): Result<User?> {
         return withContext(Dispatchers.IO) {
             try {
                 Result.success(userDao.getUserById(userID))
@@ -57,6 +57,4 @@ class UserRepository @Inject constructor(private val userDao: UserDao) : {
             }
         }
     }
-
-    class UserAlreadyExistsException(message: String) : Exception(message)
 }

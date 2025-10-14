@@ -1,11 +1,11 @@
-package dev.sakura.shopapp.adapter
+package dev.sakura.feature_catalog.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import dev.sakura.shopapp.R
-import dev.sakura.shopapp.databinding.ViewholderSizeBinding
+import dev.sakura.common_ui.R
+import dev.sakura.feature_catalog.databinding.ViewholderSizeBinding
 
 class SizeAdapter(private var items: MutableList<String>) :
     RecyclerView.Adapter<SizeAdapter.ViewHolder>() {
@@ -33,7 +33,6 @@ class SizeAdapter(private var items: MutableList<String>) :
         holder: ViewHolder,
         position: Int,
     ) {
-
         holder.binding.txtSize.text = items[position]
 
         holder.binding.root.setOnClickListener {

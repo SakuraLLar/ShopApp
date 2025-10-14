@@ -1,4 +1,8 @@
 package dev.sakura.core.util
 
-interface AuthManager {
+import androidx.fragment.app.FragmentManager
+
+interface AuthScreenProvider {
+    fun showLogin(fragmentManager: FragmentManager)
+    fun showRegistration(fragmentManager: FragmentManager)
 }

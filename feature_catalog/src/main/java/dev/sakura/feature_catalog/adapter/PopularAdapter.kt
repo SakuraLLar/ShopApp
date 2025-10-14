@@ -1,34 +1,36 @@
-package dev.sakura.shopapp.adapter
+package dev.sakura.feature_catalog.adapter
 
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.request.RequestOptions
-import dev.sakura.shopapp.R
-import dev.sakura.shopapp.activity.DetailActivity
-import dev.sakura.shopapp.databinding.ViewHolderRecommendedBinding
-import dev.sakura.shopapp.model.ItemsModel
-import dev.sakura.shopapp.viewModel.FavouritesViewModel
+import dev.sakura.common_ui.R
+import dev.sakura.core.favourites.FavouritesManager
+import dev.sakura.feature_catalog.activity.DetailActivity
+import dev.sakura.feature_catalog.databinding.ViewHolderRecommendedBinding
+import dev.sakura.models.ItemsModel
 
 class PopularAdapter(
-    private val items: MutableList<ItemsModel>,
-    private val favouritesViewModel: FavouritesViewModel,
-    private val lifecycleOwner: LifecycleOwner,
-) : RecyclerView.Adapter<PopularAdapter.ViewHolder>() {
+    private val favouritesManager: FavouritesManager,
+) : ListAdapter<ItemsModel, PopularAdapter.ViewHolder>(PopularDiffCallback()) {
 
-    fun updateDataWith(newPopularList: List<ItemsModel>) {
-        val diffCallback = PopularDiffCallback(this.items, newPopularList)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        this.items.clear()
-        this.items.addAll(newPopularList)
-        diffResult.dispatchUpdatesTo(this)
+    private var favouritesStatusMap: Map<Int, Boolean> = emptyMap()
+
+    fun setFavouritesStatusMap(newMap: Map<Int, Boolean>) {
+        val oldMap = favouritesStatusMap
+        favouritesStatusMap = newMap
+        currentList.forEachIndexed { index, item ->
+            val oldStatus = oldMap[item.resourceId] ?: false
+            val newStatus = newMap[item.resourceId] ?: false
+            if (oldStatus != newStatus) {
+                notifyItemChanged(index)
+            }
+        }
     }
 
     override fun onCreateViewHolder(
@@ -37,75 +39,42 @@ class PopularAdapter(
     ): ViewHolder {
         val binding =
             ViewHolderRecommendedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding, favouritesViewModel, lifecycleOwner)
+        return ViewHolder(binding, favouritesManager)
     }
 
     override fun onBindViewHolder(
-        holder: PopularAdapter.ViewHolder,
+        holder: ViewHolder,
         position: Int,
     ) {
-        val currentItem = items[position]
-        holder.bind(currentItem)
-    }
-
-    override fun getItemCount(): Int = items.size
-
-    override fun onViewRecycled(holder: ViewHolder) {
-        super.onViewRecycled(holder)
-        holder.onRecycled()
+        val currentItem = getItem(position)
+        val isFavourite = favouritesStatusMap[currentItem.resourceId] ?: false
+        holder.bind(currentItem, isFavourite)
     }
 
     class ViewHolder(
         val binding: ViewHolderRecommendedBinding,
-        private val favouritesVm: FavouritesViewModel,
-        private val lifecycleOwner: LifecycleOwner,
+        private val favouritesManager: FavouritesManager,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private var currentItemBound: ItemsModel? = null
-        private var favouriteStatusObserver: Observer<Map<Int, Boolean>>? = null
-
-        fun bind(currentItem: ItemsModel) {
-            currentItemBound = currentItem
-            binding.txtTitle.text = currentItem.title
-            binding.txtPrice.text = String.format("$%.2f", currentItem.price)
-            binding.txtRating.text = currentItem.rating.toString()
-
-            val requestOptions = RequestOptions().transform(CenterCrop())
+        fun bind(item: ItemsModel, isFavourite: Boolean) {
+            binding.txtTitle.text = item.title
+            binding.txtPrice.text = String.format("$%.2f", item.price)
+            binding.txtRating.text = item.rating.toString()
 
             Glide.with(itemView.context)
-                .load(currentItem.resourceId)
-                .apply(requestOptions)
+                .load(item.resourceId)
+                .transform(CenterCrop())
                 .into(binding.pic)
 
-            updateIconBasedOnStatus(
-                favouritesVm.favouriteStatusMap.value?.get(currentItem.resourceId) ?: false
-            )
-
-            favouriteStatusObserver?.let {
-                favouritesVm.favouriteStatusMap.removeObserver(it)
-
-            }
-
-            favouriteStatusObserver = Observer { statusMap ->
-                currentItemBound?.let { boundItem ->
-                    if (currentItem.resourceId == boundItem.resourceId) {
-                        val isFavCurrent = statusMap[boundItem.resourceId] ?: false
-                        updateIconBasedOnStatus(isFavCurrent)
-                    }
-                }
-            }
-
-            favouritesVm.favouriteStatusMap.observe(lifecycleOwner, favouriteStatusObserver!!)
+            updateIconBasedOnStatus(isFavourite)
 
             binding.imageView7.setOnClickListener {
-                currentItemBound?.let { boundItem ->
-                    favouritesVm.toggleFavouriteStatus(boundItem)
-                }
+                favouritesManager.toggleFavouriteStatus(item)
             }
 
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, DetailActivity::class.java)
-                intent.putExtra("object", currentItem)
+                intent.putExtra("object", item)
                 itemView.context.startActivity(intent)
             }
         }
@@ -118,36 +87,15 @@ class PopularAdapter(
                 binding.imageView7.setColorFilter(ContextCompat.getColor(context, R.color.grey))
             }
         }
+    }
 
-        fun onRecycled() {
-            favouriteStatusObserver?.let {
-                favouritesVm.favouriteStatusMap.removeObserver(it)
-            }
-            favouriteStatusObserver = null
-            currentItemBound = null
+    class PopularDiffCallback : DiffUtil.ItemCallback<ItemsModel>() {
+        override fun areItemsTheSame(oldItem: ItemsModel, newItem: ItemsModel): Boolean {
+            return oldItem.resourceId == newItem.resourceId
         }
-    }
-}
 
-class PopularDiffCallback(
-    private val oldList: List<ItemsModel>,
-    private val newList: List<ItemsModel>,
-) : DiffUtil.Callback() {
-    override fun getOldListSize(): Int = oldList.size
-    override fun getNewListSize(): Int = newList.size
-
-    override fun areItemsTheSame(
-        oldItemPosition: Int,
-        newItemPosition: Int,
-    ): Boolean {
-        return oldList[oldItemPosition].resourceId == newList[newItemPosition].resourceId &&
-                oldList[oldItemPosition].title == newList[newItemPosition].title
-    }
-
-    override fun areContentsTheSame(
-        oldItemPosition: Int,
-        newItemPosition: Int,
-    ): Boolean {
-        return oldList[oldItemPosition] == newList[newItemPosition]
+        override fun areContentsTheSame(oldItem: ItemsModel, newItem: ItemsModel): Boolean {
+            return oldItem == newItem
+        }
     }
 }

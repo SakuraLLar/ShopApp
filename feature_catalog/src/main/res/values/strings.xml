@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Main Activity-->
+    <string name="main_greeting">Добро пожаловать!</string>
+    <string name="main_greeting_user">Привет, %1$s!</string>
+    <string name="guest_name">Гость</string>
+    <string name="name">Имя польизователя</string>
+
+
 </resources>

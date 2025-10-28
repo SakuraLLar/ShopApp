@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
-    tools:context="dev.sakura.feature_catalog.DetailActivity">
+    tools:context="dev.sakura.feature_catalog.activity.DetailActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/toolbar_fragment_container"
@@ -194,7 +194,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_add_to_cart_detail"
-                            style="@style/Widget.App.Button.YellowLight"
+                            style="@style/Widget.App.Button.Yellow"
                             android:layout_width="0dp"
                             android:layout_height="56dp"
                             android:layout_margin="8dp"

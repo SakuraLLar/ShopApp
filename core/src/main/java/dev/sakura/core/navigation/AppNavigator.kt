@@ -1,11 +1,13 @@
 package dev.sakura.core.navigation
 
+import androidx.fragment.app.FragmentManager
 import android.content.Context
 import dev.sakura.models.ItemsModel
 
 interface AppNavigator {
+    fun openIntro(context: Context)
     fun openMain(context: Context)
-    fun openLogin(context: Context)
+    fun openLogin(fragmentManager: FragmentManager)
     fun openRegistration(context: Context)
     fun openProductDetails(context: Context, item: ItemsModel)
     fun openCart(context: Context)

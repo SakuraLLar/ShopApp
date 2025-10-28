@@ -18,6 +18,7 @@ import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.viewModel.AuthState
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import javax.inject.Inject
+import kotlin.jvm.java
 
 @AndroidEntryPoint
 class LoginDialogFragment : DialogFragment() {
@@ -111,7 +112,6 @@ class LoginDialogFragment : DialogFragment() {
                     Toast.LENGTH_LONG
                 ).show()
                 appNavigator.openMain(requireActivity())
-                requireActivity().finishAffinity()
                 dismiss()
                 authViewModel.onLoginNavigationComplete()
             }

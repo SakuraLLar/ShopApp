@@ -44,4 +44,10 @@
         <item name="android:textColorPrimary">@color/m3_on_background_light</item>
     </style>
 
+    <!-- Стиль для создания круглого ImageView -->
+    <style name="ShapeAppearance.App.Circle.ImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

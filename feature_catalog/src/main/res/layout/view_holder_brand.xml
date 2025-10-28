@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
-    android:layout_marginEnd="16dp">
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/brand_item_background_selector"
+    android:gravity="center_vertical"
+    android:paddingStart="4dp"
+    android:paddingEnd="12dp">
 
     <ImageView
         android:id="@+id/pic"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_weight="1"
-        android:background="@drawable/yellow_bg"
-        android:padding="2dp"
-        android:src="@drawable/yellow_bg" />
+        android:background="@drawable/brand_icon_background_selector"
+        android:padding="8dp"
+        app:tint="@color/brand_icon_tint_selector"
+        tools:src="@drawable/cat1" />
 
     <TextView
         android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="8dp"
-        android:layout_weight="1"
+        android:layout_marginStart="8dp"
         android:text="title"
-        android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textColor="@color/brand_text_color_selector"
+        android:textSize="14sp"
+        android:textStyle="bold"
         android:visibility="gone"
         tools:visibility="visible" />
 </LinearLayout>

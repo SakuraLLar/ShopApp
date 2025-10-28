@@ -30,6 +30,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/intro_title"
                 android:textAlignment="center"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="31sp" />
 
             <TextView
@@ -40,18 +41,17 @@
                 android:lineSpacingExtra="10dp"
                 android:text="@string/intro_text"
                 android:textAlignment="center"
-                android:textColor="@color/grey" />
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/startBtn"
-                style="@android:style/Widget.Button"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/start_btn"
+                style="@style/Widget.App.Button.Yellow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="32dp"
-                android:background="@drawable/button_yellow_bg"
                 android:text="@string/button_text"
-                android:textColor="@color/lightDark"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:cornerRadius="8dp" />
 
             <TextView
                 android:id="@+id/txt_login_prompt"
@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:text="У вас уже есть учётная запись?"
                 android:textAlignment="center"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -74,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@string/login_text"
-                    android:textColor="@color/yellowLight"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="18sp"
                     android:textStyle="italic" />
 
@@ -90,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@string/register_text"
-                    android:textColor="@color/yellowLight"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="18sp"
                     android:textStyle="italic" />
             </LinearLayout>

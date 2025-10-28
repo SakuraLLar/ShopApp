@@ -65,7 +65,13 @@ class MainActivity : BaseActivity() {
         observeFavourites()
 
         initCustomBottomNavigation()
-        (binding.includeBottomNavMain as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_explorer)
+        (binding.includeBottomNavMain
+                as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_explorer)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupUserInfo()
     }
 
     private fun setupUserInfo() {
@@ -130,7 +136,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initBrand() {
-
         brandAdapter = BrandAdapter { selectedBrand ->
             mainViewModel.onBrandSelected(selectedBrand)
         }
@@ -151,13 +156,9 @@ class MainActivity : BaseActivity() {
         mainViewModel.selectedBrand.observe(this) { selectedBrand ->
             val currentList = mainViewModel.brands.value ?: emptyList()
             brandAdapter.submitList(currentList.map {
-                BrandAdapter.BrandItem(
-                    it,
-                    it.resourceId == selectedBrand?.resourceId
-                )
+                BrandAdapter.BrandItem(it, it.resourceId == selectedBrand?.resourceId)
             })
         }
-
         mainViewModel.loadBrands()
     }
 

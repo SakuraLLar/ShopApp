@@ -5,7 +5,7 @@
     android:id="@+id/favourites_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dev.sakura.feature_favourites.FavouritesActivity">
+    tools:context="dev.sakura.feature_favourites.activity.FavouritesActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout_favourites"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="В избранном пока пусто"
-            android:textColor="@color/darkGrey"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="18sp" />
 
     </LinearLayout>

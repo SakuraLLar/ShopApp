@@ -14,8 +14,7 @@ import dev.sakura.core.auth.SessionManagerImpl
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.core.util.ThemeManager
 import dev.sakura.models.User
-import dev.sakura.feature_auth.fragment.LoginDialogFragment
-import dev.sakura.feature_auth.viewModel.AuthState.Loading
+import dev.sakura.feature_auth.viewModel.AuthState
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import dev.sakura.feature_profile.R
 import dev.sakura.feature_profile.databinding.ActivityProfileBinding
@@ -38,28 +37,42 @@ class ProfileActivity : BaseActivity() {
 
         sessionManager = SessionManagerImpl(this)
 
-        setupToolbar()
+//        setupToolbar()
         observeViewModel()
-        updateUIBaseOnLoginStatus()
         setupThemeSwitch()
+//        updateThemeIcon()
+        setupClickListeners()
 
-        binding.btnProfileAction.setOnClickListener {
-            handleProfileAction()
-        }
+        updateUIBaseOnLoginStatus()
 
         initCustomBottomNavigation()
         (binding.includeBottomNavProfile as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_profile)
     }
 
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolBarProfile)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
-        supportActionBar?.title = "Профиль"
+    private fun setupClickListeners() {
+        binding.btnRegister.setOnClickListener {
+            appNavigator.openIntro(this) //openIntro
+            finish()
+        }
+
+        binding.btnLogin.setOnClickListener {
+            appNavigator.openLogin(supportFragmentManager)
+        }
+
+        binding.btnLogout.setOnClickListener {
+            sessionManager.logoutUser()
+            updateUIBaseOnLoginStatus()
+            recreate()
+        }
+
+        binding.imageProfileAvatar.setOnClickListener {
+            // TODO: Здесь будет логика для выбора фото
+            Toast.makeText(this, "Выбор фото профиля (в разработке)", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun observeViewModel() {
         authViewModel.currentUser.observe(this, Observer { user ->
-            binding.progressBarProfile.visibility = View.GONE
             if (user != null && sessionManager.isLoggedIn()) {
                 displayLoggedInUserUI(user)
             } else {
@@ -68,29 +81,20 @@ class ProfileActivity : BaseActivity() {
         })
 
         authViewModel.authState.observe(this, Observer { state ->
-            if (state is Loading) {
-                binding.progressBarProfile.visibility = View.VISIBLE
-                binding.btnProfileAction.isEnabled = false
-            } else {
-                binding.progressBarProfile.visibility = View.GONE
-                binding.btnProfileAction.isEnabled = true
-            }
+            if (state is AuthState.Loading) View.VISIBLE else View.GONE
         })
     }
 
     private fun updateUIBaseOnLoginStatus() {
-        binding.progressBarProfile.visibility = View.VISIBLE
         if (sessionManager.isLoggedIn()) {
             sessionManager.getCurrentUserId()?.let { userId ->
                 authViewModel.loadCurrentUserFromSession(userId)
             } ?: run {
                 sessionManager.logoutUser()
                 displayGuestUI()
-                binding.progressBarProfile.visibility = View.GONE
             }
         } else {
             displayGuestUI()
-            binding.progressBarProfile.visibility = View.GONE
         }
     }
 
@@ -98,31 +102,31 @@ class ProfileActivity : BaseActivity() {
         binding.txtProfileUserInfo.text = getString(R.string.profile_logged_in_as, user.firstName)
         binding.txtProfileUserEmail.text = user.email
         binding.txtProfileUserEmail.visibility = View.VISIBLE
-        binding.btnProfileAction.text = getString(R.string.profile_action_logout)
+
+        // TODO: Загрузить фото пользователя с помощью Glide/Picasso
+        // binding.imageProfileAvatar.load(user.avatarUrl)
+
+        binding.btnLogin.visibility = View.GONE
+        binding.btnRegister.visibility = View.GONE
+        binding.btnLogout.visibility = View.VISIBLE
     }
 
     private fun displayGuestUI() {
         binding.txtProfileUserInfo.text = getString(R.string.profile_guest)
         binding.txtProfileUserEmail.visibility = View.GONE
-        binding.btnProfileAction.text = getString(R.string.profile_action_login)
-    }
+        binding.imageProfileAvatar.setImageResource(R.drawable.ic_avatar_placeholder)
 
-    private fun handleProfileAction() {
-        if (sessionManager.isLoggedIn()) {
-            sessionManager.logoutUser()
-            updateUIBaseOnLoginStatus()
-            recreate()
-        } else {
-            val loginDialog = LoginDialogFragment()
-            loginDialog.show(supportFragmentManager, LoginDialogFragment.TAG)
-        }
+        binding.btnLogin.visibility = View.VISIBLE
+        binding.btnRegister.visibility = View.VISIBLE
+        binding.btnLogout.visibility = View.GONE
     }
 
     private fun setupThemeSwitch() {
-        val currentTheme = ThemeManager.getSavedThemePreference(this)
-        binding.switchTheme.isChecked = currentTheme == ThemeManager.THEME_DARK
+        val isDarkMode = ThemeManager.getSavedThemePreference(this) == ThemeManager.THEME_DARK
+        binding.switchTheme.isChecked = isDarkMode
+        updateThemeIcon(isDarkMode)
 
-        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
+        binding.switchTheme.setOnCheckedChangeListener { _,isChecked ->
             val newTheme = if (isChecked) {
                 ThemeManager.THEME_DARK
             } else {
@@ -130,6 +134,14 @@ class ProfileActivity : BaseActivity() {
             }
             ThemeManager.saveThemePreference(this, newTheme)
             recreate()
+        }
+    }
+
+    private fun updateThemeIcon(isDark: Boolean) {
+        if (isDark) {
+            binding.iconTheme.setImageResource(R.drawable.ic_moon_mod)
+        } else {
+            binding.iconTheme.setImageResource(R.drawable.ic_sun_mod)
         }
     }
 

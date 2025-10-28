@@ -5,7 +5,7 @@
     <string name="intro_title_test">Line one\nLine two</string>
 
     <!--Intro Activity-->
-    <string name="intro_title">Сделай шаг \n<font color="#444343">В мир моды и стиля</font></string>
+    <string name="intro_title">Сделай шаг \n В мир моды и стиля</string>
     <string name="intro_text">Выбери свой образ от ведущих брендов\nПолучи персональные рекомендации\nБыстрая и бесплатная доставка</string>
     <string name="button_text">Нажми, чтобы начать</string>
     <string name="login_text">Войти</string>

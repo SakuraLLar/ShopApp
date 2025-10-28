@@ -1,5 +1,6 @@
 package dev.sakura.feature_auth.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -20,6 +21,7 @@ import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.viewModel.AuthState
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import javax.inject.Inject
+import kotlin.jvm.java
 
 @AndroidEntryPoint
 class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
@@ -74,7 +76,6 @@ class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 }
 
                 is AuthState.Error -> {
-//                    binding.btnRegister.isEnabled = true
                     Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
                 }
 
@@ -93,7 +94,6 @@ class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 ).show()
                 sessionManager.createLoginSession(registeredUser.id)
                 appNavigator.openMain(requireActivity())
-                requireActivity().finishAffinity()
                 dismiss()
                 authViewModel.onRegistrationNavigationComplete()
             }

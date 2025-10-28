@@ -68,7 +68,7 @@ class PopularAdapter(
 
             updateIconBasedOnStatus(isFavourite)
 
-            binding.imageView7.setOnClickListener {
+            binding.addToFavourites.setOnClickListener {
                 favouritesManager.toggleFavouriteStatus(item)
             }
 
@@ -82,9 +82,9 @@ class PopularAdapter(
         private fun updateIconBasedOnStatus(isFavourite: Boolean) {
             val context = itemView.context
             if (isFavourite) {
-                binding.imageView7.setColorFilter(ContextCompat.getColor(context, R.color.red))
+                binding.addToFavourites.setColorFilter(ContextCompat.getColor(context, R.color.red))
             } else {
-                binding.imageView7.setColorFilter(ContextCompat.getColor(context, R.color.grey))
+                binding.addToFavourites.clearColorFilter()
             }
         }
     }

@@ -3,25 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/colorBackground"
     android:orientation="vertical"
     android:padding="24dp">
 
     <TextView
+        android:id="@+id/txt_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:gravity="center_horizontal"
         android:text="Вход"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textColor="?attr/colorOnSurface" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_login_email_or_phone"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:boxStrokeColor="@color/text_input_layout_stroke_color">
+        android:layout_marginBottom="8dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_login_email_or_phone"
@@ -38,7 +39,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        app:boxStrokeColor="@color/text_input_layout_stroke_color"
         app:passwordToggleEnabled="false">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -55,14 +55,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:buttonTint="@color/radio_button_tint_color"
         android:text="@string/check_password" />
 
     <Button
         android:id="@+id/btn_login"
+        style="@style/Widget.Material3.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Войти" />
-
 </LinearLayout>

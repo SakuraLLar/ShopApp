@@ -1,6 +1,5 @@
 package dev.sakura.feature_auth.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -21,7 +20,6 @@ import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.viewModel.AuthState
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import javax.inject.Inject
-import kotlin.jvm.java
 
 @AndroidEntryPoint
 class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
@@ -33,6 +31,8 @@ class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var sessionManager: SessionManagerImpl
+
+    private var lastCheckId = View.NO_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +52,23 @@ class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
         setupPasswordToggle()
         setupObservers()
+        setupGenderRadioButtons()
 
         binding.btnRegister.setOnClickListener {
             registerUser()
+        }
+    }
+
+    private fun setupPasswordToggle() {
+        binding.cbRegisterShowPassword.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.etRegisterPassword.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
+            } else {
+                binding.etRegisterPassword.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
+            }
+            binding.etRegisterPassword.setSelection(binding.etRegisterPassword.text?.length ?: 0)
         }
     }
 
@@ -100,17 +114,19 @@ class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
         })
     }
 
-    private fun setupPasswordToggle() {
-        binding.cbRegisterShowPassword.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                binding.etRegisterPassword.transformationMethod =
-                    HideReturnsTransformationMethod.getInstance()
+    private fun setupGenderRadioButtons() {
+        val listener = View.OnClickListener { clickedView ->
+            val checkedId = clickedView.id
+            if (lastCheckId == checkedId) {
+                binding.rgRegisterGroupGender.clearCheck()
+                lastCheckId = View.NO_ID
             } else {
-                binding.etRegisterPassword.transformationMethod =
-                    PasswordTransformationMethod.getInstance()
+                lastCheckId = checkedId
             }
-            binding.etRegisterPassword.setSelection(binding.etRegisterPassword.text?.length ?: 0)
         }
+
+        binding.rbRegisterMale.setOnClickListener(listener)
+        binding.rbRegisterFemale.setOnClickListener(listener)
     }
 
     private fun registerUser() {
@@ -119,7 +135,6 @@ class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
         val email = binding.etRegisterEmailName.text.toString().trim()
         val phoneNumber = binding.etRegisterPhoneNumber.text.toString().trim()
         val password = binding.etRegisterPassword.text.toString().trim()
-
         val selectedGenderId = binding.rgRegisterGroupGender.checkedRadioButtonId
         val gender: String? = if (selectedGenderId != -1) {
             view?.findViewById<RadioButton>(selectedGenderId)?.text?.toString()

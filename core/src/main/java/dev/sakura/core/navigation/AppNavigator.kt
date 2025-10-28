@@ -8,7 +8,7 @@ interface AppNavigator {
     fun openIntro(context: Context)
     fun openMain(context: Context)
     fun openLogin(fragmentManager: FragmentManager)
-    fun openRegistration(context: Context)
+    fun openRegistration(fragmentManager: FragmentManager)
     fun openProductDetails(context: Context, item: ItemsModel)
     fun openCart(context: Context)
     fun openFavourites(context: Context)

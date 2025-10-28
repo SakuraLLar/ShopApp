@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.fragment.LoginDialogFragment
+import dev.sakura.feature_auth.fragment.RegisterBottomSheetDialogFragment
 import dev.sakura.feature_cart.activity.CartActivity
 import dev.sakura.feature_catalog.activity.DetailActivity
 import dev.sakura.feature_catalog.activity.MainActivity
@@ -25,7 +26,7 @@ class AppNavigatorImpl @Inject constructor() : AppNavigator {
 
     override fun openMain(context: Context) {
         val intent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         context.startActivity(intent)
     }
@@ -56,8 +57,9 @@ class AppNavigatorImpl @Inject constructor() : AppNavigator {
         loginDialog.show(fragmentManager, LoginDialogFragment.TAG)
     }
 
-    override fun openRegistration(context: Context) {
-        TODO("Not yet implemented")
+    override fun openRegistration(fragmentManager: FragmentManager) {
+        val registerSheet = RegisterBottomSheetDialogFragment.newInstance()
+        registerSheet.show(fragmentManager, RegisterBottomSheetDialogFragment.TAG)
     }
 
     override fun openProductDetails(context: Context, item: ItemsModel) {

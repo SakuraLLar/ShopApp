@@ -51,8 +51,7 @@ class ProfileActivity : BaseActivity() {
 
     private fun setupClickListeners() {
         binding.btnRegister.setOnClickListener {
-            appNavigator.openIntro(this) //openIntro
-            finish()
+            appNavigator.openRegistration(supportFragmentManager)
         }
 
         binding.btnLogin.setOnClickListener {

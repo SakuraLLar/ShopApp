@@ -13,6 +13,7 @@ interface AppNavigator {
     fun openCart(context: Context)
     fun openFavourites(context: Context)
     fun openProfile(context: Context)
+    fun openProfileDetails(context: Context, avatarUri: String?)
 //    fun openOrders(context: Context)
     fun goBack(context: Context)
 }

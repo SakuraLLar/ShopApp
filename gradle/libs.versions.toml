@@ -1,5 +1,6 @@
 [versions]
 agp = "8.10.1"
+androidImageCropper = "4.5.0"
 dotsindicator = "5.0"
 fragmentKtx = "1.8.9"
 glide = "4.12.0"
@@ -28,6 +29,7 @@ uiAndroid = "1.9.0"
 jetbrainsKotlinJvm = "2.1.10"
 
 [libraries]
+android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropper" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 

@@ -17,7 +17,7 @@
         android:id="@+id/pic"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:background="@drawable/brand_icon_background_selector"
+        android:background="@drawable/background_rectangle_gradient_catalog"
         android:padding="8dp"
         app:tint="@color/brand_icon_tint_selector"
         tools:src="@drawable/cat1" />

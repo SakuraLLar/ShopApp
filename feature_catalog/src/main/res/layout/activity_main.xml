@@ -77,16 +77,9 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/img_notice_main"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_marginEnd="16dp"
-                    app:srcCompat="@drawable/bell_icon" />
-
-                <ImageView
                     android:id="@+id/img_search_main"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     app:srcCompat="@drawable/search_icon" />
 
             </LinearLayout>

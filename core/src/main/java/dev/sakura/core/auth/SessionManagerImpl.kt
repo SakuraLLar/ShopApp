@@ -16,6 +16,7 @@ class SessionManagerImpl @Inject constructor(@ApplicationContext context: Contex
         private const val PREFS_NAME = "ShopAppPrefs"
         private const val USER_ID_KEY = "user_id"
         private const val IS_LOGGED_IN_KEY = "is_logged_in"
+        private const val AVATAR_URI_KEY_PREFIX = "avatar_uri_"
     }
 
     override fun createLoginSession(userId: Long) {
@@ -39,5 +40,17 @@ class SessionManagerImpl @Inject constructor(@ApplicationContext context: Contex
         editor.remove(USER_ID_KEY)
         editor.putBoolean(IS_LOGGED_IN_KEY, false)
         editor.apply()
+    }
+
+    fun saveAvatarForCurrentUser(avatarUri: String) {
+        getCurrentUserId()?.let { userId ->
+            prefs.edit().putString("$AVATAR_URI_KEY_PREFIX$userId", avatarUri).apply()
+        }
+    }
+
+    fun getAvatarForCurrentUser(): String? {
+        return getCurrentUserId()?.let { userId ->
+            prefs.getString("$AVATAR_URI_KEY_PREFIX$userId", null)
+        }
     }
 }

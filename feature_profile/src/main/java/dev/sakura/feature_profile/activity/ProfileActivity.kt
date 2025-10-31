@@ -1,23 +1,30 @@
 package dev.sakura.feature_profile.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.common_ui.view.CustomBottomNavView
 import dev.sakura.core.activity.BaseActivity
 import dev.sakura.core.auth.SessionManagerImpl
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.core.util.ThemeManager
-import dev.sakura.models.User
 import dev.sakura.feature_auth.viewModel.AuthState
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import dev.sakura.feature_profile.R
 import dev.sakura.feature_profile.databinding.ActivityProfileBinding
+import dev.sakura.models.User
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,10 +44,8 @@ class ProfileActivity : BaseActivity() {
 
         sessionManager = SessionManagerImpl(this)
 
-//        setupToolbar()
         observeViewModel()
         setupThemeSwitch()
-//        updateThemeIcon()
         setupClickListeners()
 
         updateUIBaseOnLoginStatus()
@@ -53,20 +58,25 @@ class ProfileActivity : BaseActivity() {
         binding.btnRegister.setOnClickListener {
             appNavigator.openRegistration(supportFragmentManager)
         }
-
         binding.btnLogin.setOnClickListener {
             appNavigator.openLogin(supportFragmentManager)
         }
-
         binding.btnLogout.setOnClickListener {
             sessionManager.logoutUser()
             updateUIBaseOnLoginStatus()
             recreate()
         }
-
         binding.imageProfileAvatar.setOnClickListener {
-            // TODO: Здесь будет логика для выбора фото
-            Toast.makeText(this, "Выбор фото профиля (в разработке)", Toast.LENGTH_SHORT).show()
+            if (sessionManager.isLoggedIn()) {
+                requestPermissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
+            } else {
+                Toast.makeText(this, "Войдите в аккаунт, чтобы измменить фото", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+        binding.txtOpenProfileDetails.setOnClickListener {
+            val avatarUriString = sessionManager.getAvatarForCurrentUser()
+            appNavigator.openProfileDetails(this, avatarUriString)
         }
     }
 
@@ -78,7 +88,6 @@ class ProfileActivity : BaseActivity() {
                 displayGuestUI()
             }
         })
-
         authViewModel.authState.observe(this, Observer { state ->
             if (state is AuthState.Loading) View.VISIBLE else View.GONE
         })
@@ -97,13 +106,74 @@ class ProfileActivity : BaseActivity() {
         }
     }
 
+    private val cropImageLauncher = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            val croppedUri = result.uriContent
+
+            sessionManager.saveAvatarForCurrentUser(croppedUri.toString())
+            Glide.with(this)
+                .load(croppedUri)
+                .into(binding.imageProfileAvatar)
+        } else {
+            val exception = result.error
+            if (exception != null) {
+                Toast.makeText(
+                    this,
+                    "Ошибка при обрезке фото: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { imageUri ->
+                launchCropper(imageUri)
+            }
+        }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                pickImageLauncher.launch("image/*")
+            } else {
+                Toast.makeText(
+                    this,
+                    "Длы выбора фото нужно разрешение на доступ к хранилищу",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+    private fun launchCropper(uri: Uri) {
+        val cropImageOptions = CropImageOptions(
+            cropShape = CropImageView.CropShape.OVAL,
+            fixAspectRatio = true,
+            aspectRatioX = 1,
+            aspectRatioY = 1,
+            guidelines = CropImageView.Guidelines.ON_TOUCH,
+            activityTitle = "Обрезать фото",
+            cropMenuCropButtonTitle = "Готово"
+        )
+        val cropOptions = CropImageContractOptions(uri, cropImageOptions)
+        cropImageLauncher.launch(cropOptions)
+    }
+
     private fun displayLoggedInUserUI(user: User) {
         binding.txtProfileUserInfo.text = getString(R.string.profile_logged_in_as, user.firstName)
-        binding.txtProfileUserEmail.text = user.email
-        binding.txtProfileUserEmail.visibility = View.VISIBLE
+        binding.txtOpenProfileDetails.visibility = View.VISIBLE
 
-        // TODO: Загрузить фото пользователя с помощью Glide/Picasso
-        // binding.imageProfileAvatar.load(user.avatarUrl)
+        val avatarUriString = sessionManager.getAvatarForCurrentUser()
+        if (avatarUriString != null) {
+            Glide.with(this)
+                .load(Uri.parse(avatarUriString))
+                .placeholder(R.drawable.ic_avatar_placeholder)
+                .error(R.drawable.ic_avatar_placeholder)
+                .into(binding.imageProfileAvatar)
+        } else {
+            binding.imageProfileAvatar.setImageResource(R.drawable.ic_avatar_placeholder)
+        }
 
         binding.btnLogin.visibility = View.GONE
         binding.btnRegister.visibility = View.GONE
@@ -112,9 +182,8 @@ class ProfileActivity : BaseActivity() {
 
     private fun displayGuestUI() {
         binding.txtProfileUserInfo.text = getString(R.string.profile_guest)
-        binding.txtProfileUserEmail.visibility = View.GONE
+        binding.txtOpenProfileDetails.visibility = View.GONE
         binding.imageProfileAvatar.setImageResource(R.drawable.ic_avatar_placeholder)
-
         binding.btnLogin.visibility = View.VISIBLE
         binding.btnRegister.visibility = View.VISIBLE
         binding.btnLogout.visibility = View.GONE
@@ -125,7 +194,7 @@ class ProfileActivity : BaseActivity() {
         binding.switchTheme.isChecked = isDarkMode
         updateThemeIcon(isDarkMode)
 
-        binding.switchTheme.setOnCheckedChangeListener { _,isChecked ->
+        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
             val newTheme = if (isChecked) {
                 ThemeManager.THEME_DARK
             } else {

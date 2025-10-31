@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Profile Activity-->
-    <string name="profile_logged_in_as">Вы вошли как: %1$s!</string>
+    <string name="profile_logged_in_as">%1$s</string>
     <string name="profile_guest">Вы вошли как: Гость</string>
     <string name="profile_email">email@example.com</string>
     <string name="login_account">Создать аккаунт</string>

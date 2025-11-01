@@ -15,15 +15,21 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.common_ui.view.CustomBottomNavView
 import dev.sakura.core.activity.BaseActivity
 import dev.sakura.core.navigation.AppNavigator
+import dev.sakura.core.orders.OrdersManager
 import dev.sakura.feature_cart.adapter.CartAdapter
 import dev.sakura.feature_cart.databinding.ActivityCartBinding
 import dev.sakura.feature_cart.viewModel.CartViewModel
+import dev.sakura.models.CartItem
+import dev.sakura.models.ItemsModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class CartActivity : BaseActivity() {
     @Inject
     lateinit var appNavigator: AppNavigator
+
+    @Inject
+    lateinit var ordersManager: OrdersManager
 
     private lateinit var binding: ActivityCartBinding
     private val cartViewModel: CartViewModel by viewModels()
@@ -37,17 +43,24 @@ class CartActivity : BaseActivity() {
 
         setupRecyclerView()
         observeViewModel()
-        initCustomBottomNavigation()
-
-        (binding.includeBottomNavCart as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_cart)
 
         binding.buttonCheckout.setOnClickListener {
-            if (cartViewModel.allCartItems.value.isNullOrEmpty()) {
-                Toast.makeText(this, "Пусто", Toast.LENGTH_SHORT).show()
+            val itemsInCart = cartViewModel.allCartItems.value
+            if (itemsInCart.isNullOrEmpty()) {
+                Toast.makeText(this, "Корзина пуста", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Оформление заказа...", Toast.LENGTH_SHORT).show()
+                val itemsToOrder = ArrayList(itemsInCart.map { it.toItemsModel() })
+
+                ordersManager.placeOrder(itemsToOrder)
+
+                cartViewModel.clearCartViewModelAction()
+                Toast.makeText(this, "Заказ успешно оформлен", Toast.LENGTH_SHORT).show()
+                appNavigator.openOrders(this, arrayListOf())
             }
         }
+
+        initCustomBottomNavigation()
+        (binding.includeBottomNavCart as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_cart)
     }
 
     private fun setupRecyclerView() {
@@ -96,9 +109,7 @@ class CartActivity : BaseActivity() {
 
         bottomNav.navExplorer.setOnClickListener { appNavigator.openMain(this) }
         bottomNav.navFavourites.setOnClickListener { appNavigator.openFavourites(this) }
-        bottomNav.navOrders.setOnClickListener {
-            Toast.makeText(this, "Orders Clicked (Not implemented)", Toast.LENGTH_SHORT).show()
-        }
+        bottomNav.navOrders.setOnClickListener { appNavigator.openOrders(this, arrayListOf()) }
         bottomNav.navProfile.setOnClickListener { appNavigator.openProfile(this) }
     }
 }

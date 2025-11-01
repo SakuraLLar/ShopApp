@@ -6,7 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sakura.core.data.CartRepository
-import dev.sakura.core.util.CartManager
+import dev.sakura.core.cart.CartManager
 import dev.sakura.models.CartItem
 import dev.sakura.models.ItemsModel
 import kotlinx.coroutines.flow.Flow

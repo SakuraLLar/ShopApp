@@ -27,6 +27,22 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_favourites"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout_favourites"
+        app:layout_constraintVertical_bias="0.0"
+        app:spanCount="2"
+        tools:listitem="@layout/item_favourites" />
+
     <LinearLayout
         android:id="@+id/layout_empty_favourites"
         android:layout_width="wrap_content"
@@ -34,11 +50,11 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout_favourites"
         app:layout_constraintBottom_toTopOf="@+id/include_bottom_nav_favourites"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible" >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout_favourites"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/image_view_empty_favourites"
@@ -56,22 +72,6 @@
             android:textSize="18sp" />
 
     </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_favourites"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:padding="8dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout_favourites"
-        app:layout_constraintVertical_bias="0.0"
-        app:spanCount="2"
-        tools:listitem="@layout/item_favourites" />
 
     <include
         android:id="@+id/include_bottom_nav_favourites"

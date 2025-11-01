@@ -10,4 +10,17 @@ data class CartItem(
     val price: Double,
     val imageResourcedId: Int?,
     var quantity: Int,
-)
+) {
+    fun toItemsModel(): ItemsModel {
+        return ItemsModel(
+            resourceId = this.imageResourcedId ?: 0,
+            title = this.title,
+            price = this.price,
+            numberInCart = this.quantity,
+            description = "",
+            size = ArrayList(),
+            rating = 0.0,
+            colorResourceNames = emptyList()
+        )
+    }
+}

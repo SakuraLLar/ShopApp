@@ -1,6 +1,6 @@
 package dev.sakura.feature_cart.domain
 
-import dev.sakura.core.util.CartManager
+import dev.sakura.core.cart.CartManager
 import dev.sakura.data.repository.CartRepositoryImpl
 import dev.sakura.models.ItemsModel
 import kotlinx.coroutines.CoroutineScope

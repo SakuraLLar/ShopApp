@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
@@ -34,16 +33,8 @@ class ProfileDetailsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
-
         binding = ActivityProfileDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        ViewCompat.setOnApplyWindowInsetsListener(binding.appbarProfileDetails) { view, insets ->
-//            val topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-//            view.setPadding(0, topInset, 0, 0)
-//            insets
-//        }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.appbarProfileDetails) { view, insets ->
             val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
@@ -114,9 +105,7 @@ class ProfileDetailsActivity : BaseActivity() {
         bottomNav.navExplorer.setOnClickListener { appNavigator.openMain(this) }
         bottomNav.navCart.setOnClickListener { appNavigator.openCart(this) }
         bottomNav.navFavourites.setOnClickListener { appNavigator.openFavourites(this) }
-        bottomNav.navOrders.setOnClickListener {
-            Toast.makeText(this, "Orders Clicked (Not implemented)", Toast.LENGTH_SHORT).show()
-        }
+        bottomNav.navOrders.setOnClickListener { appNavigator.openOrders(this, arrayListOf()) }
         bottomNav.navProfile.setOnClickListener { appNavigator.openProfile(this) }
     }
 

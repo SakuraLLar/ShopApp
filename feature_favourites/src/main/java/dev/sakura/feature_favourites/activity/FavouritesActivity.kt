@@ -54,7 +54,6 @@ class FavouritesActivity : BaseActivity() {
     private fun setupToolbar() {
         setSupportActionBar(binding.toolBarFavourites)
         supportActionBar?.setDisplayShowTitleEnabled(true)
-        supportActionBar?.title = "Избранное"
     }
 
     private fun setupRecyclerView() {
@@ -92,17 +91,7 @@ class FavouritesActivity : BaseActivity() {
 
         bottomNav.navExplorer.setOnClickListener { appNavigator.openMain(this) }
         bottomNav.navCart.setOnClickListener { appNavigator.openCart(this) }
-        bottomNav.navOrders.setOnClickListener {
-            Toast.makeText(this, "Orders Clicked (Not implemented)", Toast.LENGTH_SHORT).show()
-        }
+        bottomNav.navOrders.setOnClickListener { appNavigator.openOrders(this, arrayListOf()) }
         bottomNav.navProfile.setOnClickListener { appNavigator.openProfile(this) }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressedDispatcher.onBackPressed()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

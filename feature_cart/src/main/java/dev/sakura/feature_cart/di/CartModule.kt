@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.sakura.core.util.CartManager
+import dev.sakura.core.cart.CartManager
 import dev.sakura.feature_cart.domain.CartManagerImpl
 import javax.inject.Singleton
 

@@ -11,6 +11,7 @@ import dev.sakura.feature_cart.activity.CartActivity
 import dev.sakura.feature_catalog.activity.DetailActivity
 import dev.sakura.feature_catalog.activity.MainActivity
 import dev.sakura.feature_favourites.activity.FavouritesActivity
+import dev.sakura.feature_orders.activity.OrdersActivity
 import dev.sakura.feature_profile.activity.ProfileActivity
 import dev.sakura.feature_profile.activity.ProfileDetailsActivity
 import dev.sakura.models.ItemsModel
@@ -41,6 +42,14 @@ class AppNavigatorImpl @Inject constructor() : AppNavigator {
 
     override fun openFavourites(context: Context) {
         val intent = Intent(context, FavouritesActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+        }
+        context.startActivity(intent)
+    }
+
+    override fun openOrders(context: Context, items: ArrayList<ItemsModel>) {
+        val intent = Intent(context, OrdersActivity::class.java).apply {
+            putParcelableArrayListExtra("ORDERED_ITEMS", items)
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
         }
         context.startActivity(intent)

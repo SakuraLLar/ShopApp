@@ -3,12 +3,18 @@ package dev.sakura.feature_catalog.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sakura.common_ui.R
+import dev.sakura.feature_catalog.repository.CatalogRepository
 import dev.sakura.models.BrandModel
 import dev.sakura.models.ItemsModel
 import dev.sakura.models.SliderModel
+import javax.inject.Inject
 
-class MainViewModel() : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val catalogRepository: CatalogRepository,
+) : ViewModel() {
 
     private val _banner = MutableLiveData<List<SliderModel>>()
     val banners: LiveData<List<SliderModel>> = _banner
@@ -16,8 +22,8 @@ class MainViewModel() : ViewModel() {
     private val _brandItems = MutableLiveData<List<BrandModel>>()
     val brands: LiveData<List<BrandModel>> = _brandItems
 
-    private val _popular = MutableLiveData<MutableList<ItemsModel>>()
-    val populars: LiveData<MutableList<ItemsModel>> = _popular
+    private val _popular = MutableLiveData<List<ItemsModel>>()
+    val populars: LiveData<List<ItemsModel>> = _popular
 
     private val _selectedBrand = MutableLiveData<BrandModel?>()
     val selectedBrand: LiveData<BrandModel?> = _selectedBrand
@@ -44,82 +50,7 @@ class MainViewModel() : ViewModel() {
     }
 
     fun loadPopulars() {
-        val localPopulars = mutableListOf<ItemsModel>()
-
-        localPopulars.add(
-            ItemsModel(
-                R.drawable.shoes1,
-                title = "Pink singlet",
-                description = "Прекрасный выбор классической обуви",
-                size = arrayListOf("38", "39", "40", "41", "42", "43"),
-                35.0,
-                4.6,
-                numberInCart = 0,
-                colorResourceNames = listOf("n1", "n2", "n3", "n4", "n5", "n6")
-            )
-        )
-        localPopulars.add(
-            ItemsModel(
-                R.drawable.shoes2,
-                title = "Jean Coat",
-                description = "Стиль и комфорт - это выбор",
-                size = arrayListOf("40", "41", "43"),
-                55.0,
-                4.1,
-                numberInCart = 0,
-                colorResourceNames = listOf("n1", "n2", "n3")
-            )
-        )
-        localPopulars.add(
-            ItemsModel(
-                R.drawable.shoes3,
-                title = "Orange Knit Sweater",
-                description = "Лучший выбор для вас.",
-                size = arrayListOf("38", "42", "43"),
-                75.0,
-                4.5,
-                numberInCart = 0,
-                colorResourceNames = listOf("n1", "n3", "n5", "n6")
-            )
-        )
-        localPopulars.add(
-            ItemsModel(
-                R.drawable.shoes4,
-                title = "Plaid shirt",
-                description = "Красивые и модные кроссовки для повседневной ходьбы.",
-                size = arrayListOf("38", "39"),
-                40.0,
-                4.2,
-                numberInCart = 0,
-                colorResourceNames = listOf("n1", "n5", "n6")
-            )
-        )
-        localPopulars.add(
-            ItemsModel(
-                R.drawable.shoes5,
-                title = "Nike Jordans",
-                description = "Удобные и красивые кроссовки.",
-                size = arrayListOf("37", "39", "40"),
-                70.0,
-                5.0,
-                numberInCart = 0,
-                colorResourceNames = listOf("n6")
-            )
-        )
-        localPopulars.add(
-            ItemsModel(
-                R.drawable.shoes6,
-                title = "Multi-colored palette",
-                description = "Яркие и стильные кроссовки.",
-                size = arrayListOf("40", "44"),
-                28.0,
-                4.7,
-                numberInCart = 0,
-                colorResourceNames = listOf("n1", "n2", "n3")
-            )
-        )
-
-        _popular.value = localPopulars
+        _popular.value = catalogRepository.getPopulars()
     }
 
     fun onBrandSelected(brand: BrandModel) {

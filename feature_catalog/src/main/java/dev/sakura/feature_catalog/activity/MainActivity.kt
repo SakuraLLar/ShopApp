@@ -187,9 +187,7 @@ class MainActivity : BaseActivity() {
 
         bottomNav.navCart.setOnClickListener { appNavigator.openCart(this) }
         bottomNav.navFavourites.setOnClickListener { appNavigator.openFavourites(this) }
-        bottomNav.navOrders.setOnClickListener {
-            Toast.makeText(this, "Orders Clicked (Not implemented)", Toast.LENGTH_SHORT).show()
-        }
+        bottomNav.navOrders.setOnClickListener { appNavigator.openOrders(this, arrayListOf()) }
         bottomNav.navProfile.setOnClickListener { appNavigator.openProfile(this) }
     }
 }

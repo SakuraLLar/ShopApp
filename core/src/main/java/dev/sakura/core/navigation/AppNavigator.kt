@@ -12,8 +12,8 @@ interface AppNavigator {
     fun openProductDetails(context: Context, item: ItemsModel)
     fun openCart(context: Context)
     fun openFavourites(context: Context)
+    fun openOrders(context: Context, items: ArrayList<ItemsModel>)
     fun openProfile(context: Context)
     fun openProfileDetails(context: Context, avatarUri: String?)
-//    fun openOrders(context: Context)
     fun goBack(context: Context)
 }

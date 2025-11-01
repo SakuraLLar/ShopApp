@@ -7,7 +7,7 @@
     <!--Intro Activity-->
     <string name="intro_title">Сделай шаг \n В мир моды и стиля</string>
     <string name="intro_text">Выбери свой образ от ведущих брендов\nПолучи персональные рекомендации\nБыстрая и бесплатная доставка</string>
-    <string name="button_text">Нажми, чтобы начать</string>
+    <string name="button_text">Начать</string>
     <string name="login_text">Войти</string>
     <string name="register_text">Зарегистрироваться</string>
     <string name="entrance_text">Email или номер телефона</string>

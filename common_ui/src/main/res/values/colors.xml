@@ -19,7 +19,7 @@
 
     <!-- Цвет элемента layout_custom_bottom_nav-->
     <color name="color_bottom_nav_light">#565050</color>
-    <color name="color_bottom_nav_dark">#1D1B1B</color>
+    <color name="color_bottom_nav_white">#DAD8D8</color>
 
     <!-- Цвет элемента block_background для разных тем-->
     <color name="color_block_light">#f4f3f1</color>

@@ -46,7 +46,7 @@ class CustomBottomNavView @JvmOverloads constructor(
     }
 
     fun updateSelection(selectedContainerId: Int) {
-        val activeColor = ContextCompat.getColor(context, R.color.color_bottom_nav_dark)
+        val activeColor = ContextCompat.getColor(context, R.color.color_bottom_nav_white)
         val inactiveColor = ContextCompat.getColor(context, R.color.color_bottom_nav_light)
 
         tabIcons.forEach { (containerId, iconView) ->

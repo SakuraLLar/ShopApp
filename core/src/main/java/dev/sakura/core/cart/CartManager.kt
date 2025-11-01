@@ -1,4 +1,4 @@
-package dev.sakura.core.util
+package dev.sakura.core.cart
 
 import dev.sakura.models.ItemsModel
 import kotlinx.coroutines.flow.Flow

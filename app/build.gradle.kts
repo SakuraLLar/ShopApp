@@ -89,5 +89,6 @@ dependencies {
     implementation(project(":feature_cart"))
     implementation(project(":feature_catalog"))
     implementation(project(":feature_favourites"))
+    implementation(project(":feature_orders"))
     implementation(project(":feature_profile"))
 }

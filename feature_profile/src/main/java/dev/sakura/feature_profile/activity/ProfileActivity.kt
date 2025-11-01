@@ -219,9 +219,7 @@ class ProfileActivity : BaseActivity() {
         bottomNav.navExplorer.setOnClickListener { appNavigator.openMain(this) }
         bottomNav.navCart.setOnClickListener { appNavigator.openCart(this) }
         bottomNav.navFavourites.setOnClickListener { appNavigator.openFavourites(this) }
-        bottomNav.navOrders.setOnClickListener {
-            Toast.makeText(this, "Orders Clicked (Not implemented)", Toast.LENGTH_SHORT).show()
-        }
+        bottomNav.navOrders.setOnClickListener { appNavigator.openOrders(this, arrayListOf()) }
     }
 
     override fun onResume() {

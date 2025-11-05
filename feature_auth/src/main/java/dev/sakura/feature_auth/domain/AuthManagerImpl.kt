@@ -3,8 +3,10 @@ package dev.sakura.feature_auth.domain
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dev.sakura.core.auth.AuthManager
+import dev.sakura.core.data.UserRepository
 import dev.sakura.data.repository.UserRepositoryImpl
-import dev.sakura.models.User
+import dev.sakura.data.entities.UserEntity
+import dev.sakura.models.UserModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,10 +16,10 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthManagerImpl @Inject constructor(
-    private val userRepository: UserRepositoryImpl,
+    private val userRepository: UserRepository,
 ) : AuthManager {
-    private val _currentUser = MutableLiveData<User?>()
-    override val currentUser: LiveData<User?> = _currentUser
+    private val _currentUser = MutableLiveData<UserModel?>()
+    override val currentUser: LiveData<UserModel?> = _currentUser
 
     private val managerScope = CoroutineScope(Dispatchers.IO)
 
@@ -29,4 +31,12 @@ class AuthManagerImpl @Inject constructor(
             }
         }
     }
+
+//    override suspend fun registerUser(user: UserModel): Result<UserModel?> {
+//        return userRepository.registerUserAndGetNewUser(user)
+//    }
+//
+//    override suspend fun loginUser(emailOrPhone: String): Result<UserModel?> {
+//        return userRepository.getUserByEmailOrPhoneNumberForLogin(emailOrPhone)
+//    }
 }

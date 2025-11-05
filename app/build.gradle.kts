@@ -76,6 +76,9 @@ dependencies {
     // jBCrypt
     implementation(libs.jbcrypt)
 
+    // ImageCropper
+    implementation(libs.android.image.cropper)
+
     // DI
     implementation(libs.dagger.hilt.android)
     ksp(libs.dagger.hilt.compiler)
@@ -86,8 +89,8 @@ dependencies {
     implementation(project(":models"))
 
     implementation(project(":feature_auth"))
-    implementation(project(":feature_cart"))
     implementation(project(":feature_catalog"))
+    implementation(project(":feature_cart"))
     implementation(project(":feature_favourites"))
     implementation(project(":feature_orders"))
     implementation(project(":feature_profile"))

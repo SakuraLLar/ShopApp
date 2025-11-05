@@ -4,15 +4,25 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import dev.sakura.data.cart.CartDao
-import dev.sakura.models.CartItem
-import dev.sakura.models.User
+import dev.sakura.data.entities.ItemsEntity
+import dev.sakura.data.product.ProductDao
 import dev.sakura.data.user.UserDao
+import dev.sakura.data.entities.CartItemEntity
+import dev.sakura.data.entities.UserEntity
 
-@Database(entities = [CartItem::class, User::class], version = 2, exportSchema = false)
+@Database(
+    entities = [CartItemEntity::class, UserEntity::class, ItemsEntity::class],
+    version = 3,
+    exportSchema = false
+)
+
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cartDao(): CartDao
     abstract fun userDao(): UserDao
+    abstract fun productDao(): ProductDao
 
     companion object {
         @Volatile

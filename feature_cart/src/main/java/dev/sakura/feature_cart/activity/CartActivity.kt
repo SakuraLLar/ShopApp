@@ -5,10 +5,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +15,6 @@ import dev.sakura.core.orders.OrdersManager
 import dev.sakura.feature_cart.adapter.CartAdapter
 import dev.sakura.feature_cart.databinding.ActivityCartBinding
 import dev.sakura.feature_cart.viewModel.CartViewModel
-import dev.sakura.models.CartItem
 import dev.sakura.models.ItemsModel
 import javax.inject.Inject
 
@@ -49,7 +44,18 @@ class CartActivity : BaseActivity() {
             if (itemsInCart.isNullOrEmpty()) {
                 Toast.makeText(this, "Корзина пуста", Toast.LENGTH_SHORT).show()
             } else {
-                val itemsToOrder = ArrayList(itemsInCart.map { it.toItemsModel() })
+                val itemsToOrder = ArrayList(itemsInCart.map { cartItem ->
+                    ItemsModel(
+                        resourceId = cartItem.imageResourceId ?: 0,
+                        title = cartItem.title,
+                        price = cartItem.price,
+                        numberInCart = cartItem.quantity,
+                        description = "",
+                        size = emptyList(),
+                        rating = 0.0,
+                        colorResourceNames = emptyList()
+                    )
+                })
 
                 ordersManager.placeOrder(itemsToOrder)
 

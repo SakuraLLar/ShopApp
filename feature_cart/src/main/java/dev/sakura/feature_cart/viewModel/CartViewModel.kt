@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sakura.core.data.CartRepository
 import dev.sakura.core.cart.CartManager
-import dev.sakura.models.CartItem
+import dev.sakura.models.CartItemModel
 import dev.sakura.models.ItemsModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,7 +20,7 @@ class CartViewModel @Inject constructor(
     private val cartManager: CartManager,
 ) : ViewModel() {
 
-    val allCartItems: LiveData<List<CartItem>> = repository.allCartItems.asLiveData()
+    val allCartItems: LiveData<List<CartItemModel>> = repository.allCartItems.asLiveData()
     val cartTotalPrice: LiveData<Double?> = repository.cartTotalPrice.asLiveData()
     val cartItemCount: Flow<Int> = repository.cartTotalItemCount.map { it ?: 0 }
 

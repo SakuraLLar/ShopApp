@@ -1,21 +1,17 @@
 package dev.sakura.feature_catalog.activity
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.fragment.app.commit
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import dev.sakura.common_ui.ToolbarFragment
 import dev.sakura.core.activity.BaseActivity
 import dev.sakura.core.cart.CartManager
 import dev.sakura.core.navigation.AppNavigator
-import dev.sakura.feature_catalog.R
 import dev.sakura.feature_catalog.adapter.ColorAdapter
 import dev.sakura.feature_catalog.adapter.SizeAdapter
 import dev.sakura.feature_catalog.adapter.SliderAdapter
@@ -23,6 +19,8 @@ import dev.sakura.feature_catalog.databinding.ActivityDetailBinding
 import dev.sakura.feature_catalog.viewModel.DetailViewModel
 import dev.sakura.models.ItemsModel
 import dev.sakura.models.SliderModel
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -42,22 +40,10 @@ class DetailActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-//        setupToolbarFragment()
         getInitialDataAndLoadFullProduct()
         observeViewModel()
         initCustomBottomNavigation()
     }
-
-//    private fun setupToolbarFragment() {
-//        if (supportFragmentManager.findFragmentById(R.id.toolbar_fragment_container) == null) {
-//            supportFragmentManager.commit {
-//                replace(
-//                    R.id.toolbar_fragment_container,
-//                    ToolbarFragment.newInstance(title = null, showBackButton = true)
-//                )
-//            }
-//        }
-//    }
 
     private fun getInitialDataAndLoadFullProduct() {
         val receivedItem: ItemsModel? = intent.getParcelableExtra("object")
@@ -71,15 +57,11 @@ class DetailActivity : BaseActivity() {
     }
 
     private fun observeViewModel() {
-        detailViewModel.product.observe(this, Observer { fullProduct ->
-            if (fullProduct == null) {
-                Toast.makeText(this, "Не удалось загрузить информацию о товаре", Toast.LENGTH_LONG)
-                    .show()
-                finish()
-                return@Observer
+        lifecycleScope.launch {
+            detailViewModel.product.filterNotNull().collect { fullProduct ->
+                updateUi(fullProduct)
             }
-            updateUi(fullProduct)
-        })
+        }
     }
 
     private fun updateUi(item: ItemsModel) {
@@ -128,7 +110,7 @@ class DetailActivity : BaseActivity() {
         if (item.size.isNotEmpty()) {
             binding.txtSizeDetail.visibility = View.VISIBLE
             binding.recViewSizeListDetail.visibility = View.VISIBLE
-            binding.recViewSizeListDetail.adapter = SizeAdapter(item.size)
+            binding.recViewSizeListDetail.adapter = SizeAdapter(item.size.toMutableList())
             binding.recViewSizeListDetail.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         } else {
@@ -145,14 +127,6 @@ class DetailActivity : BaseActivity() {
             binding.recViewColorLitDetail.visibility = View.GONE
         }
     }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (item.itemId == android.R.id.home) {
-//            onBackPressedDispatcher.onBackPressed()
-//            return true
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 
     private fun initCustomBottomNavigation() {
         val bottomNav = binding.includeBottomNavDetail

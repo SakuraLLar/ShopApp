@@ -13,12 +13,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import dev.sakura.models.User
 import dev.sakura.feature_auth.databinding.BottomSheetRegisterBinding
 import dev.sakura.core.auth.SessionManagerImpl
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.viewModel.AuthState
 import dev.sakura.feature_auth.viewModel.AuthViewModel
+import dev.sakura.models.UserModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -100,7 +100,7 @@ class RegisterBottomSheetDialogFragment : BottomSheetDialogFragment() {
         })
 
         authViewModel.registrationSuccessAction.observe(viewLifecycleOwner, Observer { event ->
-            event.getContentIfNotHandled()?.let { registeredUser: User ->
+            event.getContentIfNotHandled()?.let { registeredUser: UserModel->
                 Toast.makeText(
                     context,
                     "Регистрация успешна! Добро пожаловать, ${registeredUser.firstName}!",

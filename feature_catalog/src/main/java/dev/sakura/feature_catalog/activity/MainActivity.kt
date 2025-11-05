@@ -2,10 +2,10 @@ package dev.sakura.feature_catalog.activity
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +26,7 @@ import dev.sakura.feature_catalog.adapter.SliderAdapter
 import dev.sakura.feature_catalog.databinding.ActivityMainBinding
 import dev.sakura.feature_catalog.viewModel.MainViewModel
 import dev.sakura.models.SliderModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -168,12 +169,11 @@ class MainActivity : BaseActivity() {
         binding.recViewPopularMain.layoutManager = GridLayoutManager(this, 2)
         binding.recViewPopularMain.adapter = popularAdapter
 
-        mainViewModel.populars.observe(this, Observer { popularList ->
-            if (popularList != null) {
+        lifecycleScope.launch {
+            mainViewModel.populars.collect { popularList ->
                 popularAdapter.submitList(popularList)
             }
-        })
-        mainViewModel.loadPopulars()
+        }
     }
 
     private fun observeFavourites() {

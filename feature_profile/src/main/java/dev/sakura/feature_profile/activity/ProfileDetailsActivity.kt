@@ -3,7 +3,6 @@ package dev.sakura.feature_profile.activity
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,7 +14,7 @@ import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import dev.sakura.feature_profile.R
 import dev.sakura.feature_profile.databinding.ActivityProfileDetailsBinding
-import dev.sakura.models.User
+import dev.sakura.models.UserModel
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -73,7 +72,7 @@ class ProfileDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun displayUserData(user: User) {
+    private fun displayUserData(user: UserModel) {
         binding.txtHeaderUserName.text = "${user.firstName} ${user.lastName ?: ""}"
         binding.inputEditFirstName.setText(user.firstName)
         binding.inputEditLastName.setText(user.lastName ?: "")

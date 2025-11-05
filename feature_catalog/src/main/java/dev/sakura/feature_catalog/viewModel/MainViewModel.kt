@@ -3,12 +3,16 @@ package dev.sakura.feature_catalog.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sakura.common_ui.R
 import dev.sakura.feature_catalog.repository.CatalogRepository
 import dev.sakura.models.BrandModel
 import dev.sakura.models.ItemsModel
 import dev.sakura.models.SliderModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,11 +26,15 @@ class MainViewModel @Inject constructor(
     private val _brandItems = MutableLiveData<List<BrandModel>>()
     val brands: LiveData<List<BrandModel>> = _brandItems
 
-    private val _popular = MutableLiveData<List<ItemsModel>>()
-    val populars: LiveData<List<ItemsModel>> = _popular
-
     private val _selectedBrand = MutableLiveData<BrandModel?>()
     val selectedBrand: LiveData<BrandModel?> = _selectedBrand
+
+    val populars: StateFlow<List<ItemsModel>> = catalogRepository.getPopulars()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList(),
+        )
 
     fun loadBanners() {
         val localBanners = mutableListOf<SliderModel>()
@@ -47,10 +55,6 @@ class MainViewModel @Inject constructor(
             BrandModel(title = "Lacoste", R.drawable.cat6),
         )
         _brandItems.value = localBrands
-    }
-
-    fun loadPopulars() {
-        _popular.value = catalogRepository.getPopulars()
     }
 
     fun onBrandSelected(brand: BrandModel) {

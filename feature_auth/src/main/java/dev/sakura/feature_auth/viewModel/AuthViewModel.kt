@@ -9,7 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sakura.core.auth.AuthManager
 import dev.sakura.core.data.UserRepository
 import dev.sakura.core.util.Event
-import dev.sakura.models.User
+import dev.sakura.data.entities.UserEntity
+import dev.sakura.models.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,7 +20,7 @@ import javax.inject.Inject
 sealed class AuthState {
     object Idle : AuthState()
     object Loading : AuthState()
-    data class Success(val user: User? = null, val message: String) : AuthState()
+    data class Success(val user: UserModel? = null, val message: String) : AuthState()
     data class Error(val message: String) : AuthState()
 }
 
@@ -33,13 +34,13 @@ class AuthViewModel @Inject constructor(
     private val _authState = MutableLiveData<AuthState>(AuthState.Idle)
     val authState: LiveData<AuthState> = _authState
 
-    private val _navigationToMain = MutableLiveData<Event<User>>()
-    val navigationToMain: LiveData<Event<User>> = _navigationToMain
+    private val _navigationToMain = MutableLiveData<Event<UserModel>>()
+    val navigationToMain: LiveData<Event<UserModel>> = _navigationToMain
 
-    private val _registrationSuccessAction = MutableLiveData<Event<User>>()
-    val registrationSuccessAction: LiveData<Event<User>> = _registrationSuccessAction
+    private val _registrationSuccessAction = MutableLiveData<Event<UserModel>>()
+    val registrationSuccessAction: LiveData<Event<UserModel>> = _registrationSuccessAction
 
-    val currentUser: LiveData<User?> = authManager.currentUser
+    val currentUser: LiveData<UserModel?> = authManager.currentUser
 
     fun registerUser(
         firstName: String,
@@ -54,7 +55,7 @@ class AuthViewModel @Inject constructor(
             try {
                 val passwordHash = hashPasswordWithBcrypt(password)
 
-                val userToRegister = User(
+                val userToRegister = UserModel(
                     firstName = firstName,
                     lastName = lastName,
                     email = email,

@@ -6,28 +6,28 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import dev.sakura.models.CartItem
+import dev.sakura.data.entities.CartItemEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CartDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertItem(cartItem: CartItem)
+    suspend fun insertItem(cartItem: CartItemEntity)
 
     @Update
-    suspend fun updateItem(cartItem: CartItem)
+    suspend fun updateItem(cartItem: CartItemEntity)
 
     @Delete
-    suspend fun deleteItem(cartItem: CartItem)
+    suspend fun deleteItem(cartItem: CartItemEntity)
 
     @Query("DELETE FROM cart_items WHERE productId = :productId")
     suspend fun deleteItemById(productId: String)
 
     @Query("SELECT * FROM cart_items")
-    fun getAllItems(): Flow<List<CartItem>>
+    fun getAllItems(): Flow<List<CartItemEntity>>
 
     @Query("SELECT * FROM cart_items WHERE productId = :productId")
-    suspend fun getItemById(productId: String): CartItem?
+    suspend fun getItemById(productId: String): CartItemEntity?
 
     @Query("DELETE FROM cart_items")
     suspend fun clearCart()

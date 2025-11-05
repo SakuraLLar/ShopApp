@@ -1,11 +1,16 @@
 package dev.sakura.feature_catalog.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sakura.feature_catalog.repository.CatalogRepository
 import dev.sakura.models.ItemsModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -13,11 +18,17 @@ class DetailViewModel @Inject constructor(
     private val catalogRepository: CatalogRepository,
 ) : ViewModel() {
 
-    private val _product = MutableLiveData<ItemsModel?>()
-    val product: LiveData<ItemsModel?> = _product
+    private val _productId = MutableStateFlow<Int?>(null)
+
+    val product: StateFlow<ItemsModel?> = _productId.filterNotNull().flatMapLatest { id ->
+        catalogRepository.findPopularById(id)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = null
+    )
 
     fun loadProductById(productId: Int) {
-        val foundProduct = catalogRepository.findPopularById(productId)
-        _product.value = foundProduct
+        _productId.value = productId
     }
 }

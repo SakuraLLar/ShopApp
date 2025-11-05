@@ -1,32 +1,32 @@
 package dev.sakura.data.repository
 
-import dev.sakura.models.User
 import dev.sakura.core.data.UserRepository
 import dev.sakura.data.user.UserDao
+import dev.sakura.models.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import mappers.toEntity
+import mappers.toModel
 import javax.inject.Inject
 import javax.inject.Singleton
 
 class UserAlreadyExistsException(message: String) : Exception(message)
 
 @Singleton
-class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : UserRepository{
+class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : UserRepository {
 
-    override suspend fun registerUserAndGetNewUser(user: User): Result<User?> {
+    override suspend fun registerUserAndGetNewUser(user: UserModel): Result<UserModel?> {
         return withContext(Dispatchers.IO) {
             try {
-                if (userDao.doesUserExist(user.email, user.phoneNumber)) {
-                    Result.failure(UserAlreadyExistsException("Пользователь с email ${user.email} или телефоном ${user.phoneNumber} уже существует."))
+                val userEntity = user.toEntity()
+
+                if (userDao.doesUserExist(userEntity.email, userEntity.phoneNumber)) {
+                    Result.failure(UserAlreadyExistsException("Пользователь с email ${userEntity.email} или телефоном ${userEntity.phoneNumber} уже существует."))
                 } else {
-                    val userId = userDao.insertUser(user)
+                    val userId = userDao.insertUser(userEntity)
                     if (userId > 0) {
-                        val newUser = userDao.getUserById(userId)
-                        if (newUser != null) {
-                            Result.success(newUser)
-                        } else {
-                            Result.failure(Exception("Не удалось получить данные нового пользователя после регистрации."))
-                        }
+                        val newUserEntity = userDao.getUserById(userId)
+                        Result.success(newUserEntity?.toModel())
                     } else {
                         Result.failure(Exception("Не удалось зарегистрировать пользователя. Код ошибки БД"))
                     }
@@ -37,21 +37,22 @@ class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : Use
         }
     }
 
-    override suspend fun getUserByEmailOrPhoneNumberForLogin(emailOrPhone: String): Result<User?> {
+    override suspend fun getUserByEmailOrPhoneNumberForLogin(emailOrPhone: String): Result<UserModel?> {
         return withContext(Dispatchers.IO) {
             try {
-                val user = userDao.getUserByEmailOrPhoneNumber(emailOrPhone)
-                Result.success(user)
+                val userEntity = userDao.getUserByEmailOrPhoneNumber(emailOrPhone)
+                Result.success(userEntity?.toModel())
             } catch (e: Exception) {
                 Result.failure(e)
             }
         }
     }
 
-    override suspend fun getUserById(userID: Long): Result<User?> {
+    override suspend fun getUserById(userID: Long): Result<UserModel?> {
         return withContext(Dispatchers.IO) {
             try {
-                Result.success(userDao.getUserById(userID))
+                val userEntity = userDao.getUserById(userID)
+                Result.success(userEntity?.toModel())
             } catch (e: Exception) {
                 Result.failure(e)
             }

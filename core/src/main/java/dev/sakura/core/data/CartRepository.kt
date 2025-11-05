@@ -1,11 +1,11 @@
 package dev.sakura.core.data
 
-import dev.sakura.models.CartItem
+import dev.sakura.models.CartItemModel
 import dev.sakura.models.ItemsModel
 import kotlinx.coroutines.flow.Flow
 
 interface CartRepository {
-    val allCartItems: Flow<List<CartItem>>
+    val allCartItems: Flow<List<CartItemModel>>
     val cartTotalPrice: Flow<Double?>
     val cartTotalItemCount: Flow<Int?>
 

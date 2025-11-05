@@ -1,17 +1,17 @@
-package dev.sakura.models
+package dev.sakura.data.entities
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Parcelize
-data class ItemsModel(
+@Entity(tableName = "products")
+data class ItemsEntity(
+    @PrimaryKey
     var resourceId: Int = 0,
     var title: String = "",
     val description: String = "",
-//    var size: ArrayList<String> = ArrayList(),
     var size: List<String> = emptyList(),
     var price: Double = 0.0,
     var rating: Double = 0.0,
     var numberInCart: Int = 0,
     val colorResourceNames: List<String> = emptyList(),
-) : Parcelable
+)

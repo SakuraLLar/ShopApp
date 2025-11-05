@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:cardBackgroundColor="?attr/colorSurfaceContainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="12dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_view_item_pic"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
             tools:src="@tools:sample/avatars" />
 
         <TextView
@@ -27,48 +31,53 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textSize="16sp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textStyle="bold"
-            tools:text="Название товара"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/image_view_item_pic"
-            app:layout_constraintTop_toTopOf="@+id/image_view_item_pic" />
+            app:layout_constraintTop_toTopOf="@+id/image_view_item_pic"
+            tools:text="Название товара, которое занимает две строки." />
 
         <TextView
             android:id="@+id/text_view_item_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/text_view_item_title"
             app:layout_constraintTop_toBottomOf="@+id/text_view_item_title"
-            tools:text="$0.0" />
+            tools:text="$30.0" />
 
         <TextView
             android:id="@+id/text_view_item_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/text_view_item_price"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_item_price"
+            android:layout_marginStart="12dp"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_item_price"
+            app:layout_constraintStart_toEndOf="@+id/text_view_item_price"
+            app:layout_constraintTop_toTopOf="@+id/text_view_item_price"
             tools:text="Количество: 0" />
 
         <TextView
             android:id="@+id/text_view_order_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@drawable/status_background"
             android:paddingStart="8dp"
             android:paddingTop="4dp"
+
             android:paddingEnd="8dp"
             android:paddingBottom="4dp"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="12sp"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="@color/black"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/text_view_item_quantity"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_item_quantity"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="Товар оформляется" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

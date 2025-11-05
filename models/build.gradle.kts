@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
+//    alias(libs.plugins.ksp)
+//    alias(libs.plugins.kotlin.parcelize)
     id("kotlin-parcelize")
 }
 android {
@@ -22,9 +23,10 @@ android {
 }
 
 dependencies {
-
     // room
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
+//    implementation(libs.androidx.room.runtime)
+//    ksp(libs.androidx.room.compiler)
+//    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.core.ktx)
+
 }

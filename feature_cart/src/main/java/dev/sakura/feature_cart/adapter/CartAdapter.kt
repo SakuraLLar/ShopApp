@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import dev.sakura.models.CartItem
 import dev.sakura.feature_cart.databinding.ItemCartBinding
+import dev.sakura.models.CartItemModel
 
 class CartAdapter(
-    private val onIncreaseQuantity: (CartItem) -> Unit,
-    private val onDecreaseQuantity: (CartItem) -> Unit,
-    private val onRemoveItem: (CartItem) -> Unit,
-) : ListAdapter<CartItem, CartAdapter.CartViewHolder>(CartDiffCallback()) {
+    private val onIncreaseQuantity: (CartItemModel) -> Unit,
+    private val onDecreaseQuantity: (CartItemModel) -> Unit,
+    private val onRemoveItem: (CartItemModel) -> Unit,
+) : ListAdapter<CartItemModel, CartAdapter.CartViewHolder>(CartDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         val binding = ItemCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,14 +26,14 @@ class CartAdapter(
 
     inner class CartViewHolder(private val binding: ItemCartBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(cartItem: CartItem) {
+        fun bind(cartItem: CartItemModel) {
             binding.apply {
                 textViewProductTitleCart.text = cartItem.title
                 textViewProductPriceCart.text =
                     String.format("$%.2f", cartItem.price * cartItem.quantity)
                 textViewQuantityCart.text = cartItem.quantity.toString()
 
-                val imageId = cartItem.imageResourcedId
+                val imageId = cartItem.imageResourceId
                 if (imageId != null && imageId != 0) {
                     imageViewProductCart.setImageResource(imageId)
                 }
@@ -51,12 +51,12 @@ class CartAdapter(
         }
     }
 
-    class CartDiffCallback : DiffUtil.ItemCallback<CartItem>() {
-        override fun areItemsTheSame(oldItem: CartItem, newItem: CartItem): Boolean {
+    class CartDiffCallback : DiffUtil.ItemCallback<CartItemModel>() {
+        override fun areItemsTheSame(oldItem: CartItemModel, newItem: CartItemModel): Boolean {
             return oldItem.productId == newItem.productId
         }
 
-        override fun areContentsTheSame(oldItem: CartItem, newItem: CartItem): Boolean {
+        override fun areContentsTheSame(oldItem: CartItemModel, newItem: CartItemModel): Boolean {
             return oldItem == newItem
         }
     }

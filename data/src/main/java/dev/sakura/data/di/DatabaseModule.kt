@@ -2,15 +2,24 @@ package dev.sakura.data.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.sakura.data.AppDatabase
+import dev.sakura.data.InitialProducts
 import dev.sakura.data.cart.CartDao
+import dev.sakura.data.product.ProductDao
 import dev.sakura.data.repository.FavouritesRepositoryImpl
 import dev.sakura.data.user.UserDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import mappers.toEntity
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -19,12 +28,34 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
+    fun provideDataBaseCallback(
+        database: Provider<AppDatabase>,
+    ): RoomDatabase.Callback {
+        return object : RoomDatabase.Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                super.onCreate(db)
+                val productDao = database.get().productDao()
+                CoroutineScope(Dispatchers.IO).launch {
+                    val initialPopularModels = InitialProducts.get()
+                    val initialProductEntities = initialPopularModels.map { it.toEntity() }
+                    productDao.insertAll(initialProductEntities)
+                }
+            }
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(
+        @ApplicationContext appContext: Context,
+        callBack: RoomDatabase.Callback,
+    ): AppDatabase {
         return Room.databaseBuilder(
             appContext,
             AppDatabase::class.java,
             "shop_database"
         ).fallbackToDestructiveMigration(dropAllTables = true)
+            .addCallback(callBack)
             .build()
     }
 
@@ -32,6 +63,12 @@ object DatabaseModule {
     @Singleton
     fun provideCartDao(appDatabase: AppDatabase): CartDao {
         return appDatabase.cartDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providerProductDao(appDatabase: AppDatabase): ProductDao {
+        return appDatabase.productDao()
     }
 
     @Provides

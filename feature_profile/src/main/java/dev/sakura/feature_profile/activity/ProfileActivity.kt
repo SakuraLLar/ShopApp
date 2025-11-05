@@ -24,7 +24,7 @@ import dev.sakura.feature_auth.viewModel.AuthState
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import dev.sakura.feature_profile.R
 import dev.sakura.feature_profile.databinding.ActivityProfileBinding
-import dev.sakura.models.User
+import dev.sakura.models.UserModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -160,7 +160,7 @@ class ProfileActivity : BaseActivity() {
         cropImageLauncher.launch(cropOptions)
     }
 
-    private fun displayLoggedInUserUI(user: User) {
+    private fun displayLoggedInUserUI(user: UserModel) {
         binding.txtProfileUserInfo.text = getString(R.string.profile_logged_in_as, user.firstName)
         binding.txtOpenProfileDetails.visibility = View.VISIBLE
 

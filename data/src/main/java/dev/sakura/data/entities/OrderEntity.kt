@@ -4,9 +4,10 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(
-    tableName = "cart_items",
+    tableName = "orders",
     foreignKeys = [
         ForeignKey(
             entity = UserEntity::class,
@@ -17,13 +18,11 @@ import androidx.room.PrimaryKey
     ],
     indices = [Index(value = ["userId"])]
 )
-data class CartItemEntity(
+data class OrderEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val productId: String,
-    val title: String,
-    val price: Double,
-    val imageResourcedId: Int?,
-    var quantity: Int,
-    val userId: Long?,
+    val userId: Long,
+    val orderDate: Date,
+    val status: String,
+    val totalPrice: Double,
 )

@@ -12,13 +12,14 @@ import dagger.hilt.components.SingletonComponent
 import dev.sakura.data.AppDatabase
 import dev.sakura.data.InitialProducts
 import dev.sakura.data.cart.CartDao
+import dev.sakura.data.favourites.FavouritesDao
+import dev.sakura.data.mappers.toEntity
+import dev.sakura.data.orders.OrdersDao
 import dev.sakura.data.product.ProductDao
-import dev.sakura.data.repository.FavouritesRepositoryImpl
 import dev.sakura.data.user.UserDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import mappers.toEntity
 import javax.inject.Provider
 import javax.inject.Singleton
 
@@ -79,7 +80,13 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideFavouritesRepository(): FavouritesRepositoryImpl {
-        return FavouritesRepositoryImpl()
+    fun provideFavouritesDao(appDatabase: AppDatabase): FavouritesDao {
+        return appDatabase.favouritesDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideOrdersDao(appDatabase: AppDatabase): OrdersDao {
+        return appDatabase.ordersDao()
     }
 }

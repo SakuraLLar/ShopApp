@@ -9,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sakura.core.auth.AuthManager
 import dev.sakura.core.data.UserRepository
 import dev.sakura.core.util.Event
-import dev.sakura.data.entities.UserEntity
 import dev.sakura.models.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,8 +26,7 @@ sealed class AuthState {
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     application: Application,
-    private val userRepository: UserRepository,
-    private val authManager: AuthManager
+    private val authManager: AuthManager,
 ) : AndroidViewModel(application) {
 
     private val _authState = MutableLiveData<AuthState>(AuthState.Idle)
@@ -64,7 +62,8 @@ class AuthViewModel @Inject constructor(
                     gender = gender
                 )
 
-                val registrationResult = userRepository.registerUserAndGetNewUser(userToRegister)
+                val registrationResult = authManager.registerUser(userToRegister)
+
                 if (registrationResult.isSuccess) {
                     val registeredUser = registrationResult.getOrNull()
                     if (registeredUser != null) {
@@ -97,51 +96,25 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _authState.value = AuthState.Loading
             try {
-                val userResult =
-                    userRepository.getUserByEmailOrPhoneNumberForLogin(emailOrPhone)
-                if (userResult.isSuccess) {
-                    val user = userResult.getOrNull()
-                    if (user != null) {
-                        if (checkPasswordWithBCrypt(password, user.passwordHash)) {
-                            authManager.loadCurrentUser(user.id)
-                            _navigationToMain.value = Event(user)
-                        } else {
-                            _authState.value = AuthState.Error("Неверный логин или пароль.")
-                        }
-                    } else {
-                        _authState.value = AuthState.Error("Пользователь не найден.")
-                    }
+                val loginResult = authManager.loginUser(emailOrPhone, password)
+
+                if (loginResult.isSuccess) {
+                    val user = loginResult.getOrNull()!!
+                    _navigationToMain.value = Event(user)
                 } else {
-                    val exception = userResult.exceptionOrNull()
-                    _authState.value =
-                        AuthState.Error("Ошибка входа: ${exception?.message ?: "Неверный логин или пароль."}")
+                    _authState.value = AuthState.Error(
+                        loginResult.exceptionOrNull()?.message ?: "Неверный логин или пароль."
+                    )
                 }
             } catch (e: Exception) {
-                _authState.value = AuthState.Error("Произошла ошибка входа ${e.message}")
+                _authState.value = AuthState.Error("Произошла ошибка входа: ${e.message}")
             }
         }
-    }
-
-    fun loadCurrentUserFromSession(userId: Long) {
-        authManager.loadCurrentUser(userId)
     }
 
     private suspend fun hashPasswordWithBcrypt(password: String): String {
         return withContext(Dispatchers.Default) {
             BCrypt.hashpw(password, BCrypt.gensalt())
-        }
-    }
-
-    private suspend fun checkPasswordWithBCrypt(
-        plainPassword: String,
-        hashedPasswordFromDB: String,
-    ): Boolean {
-        return withContext(Dispatchers.Default) {
-            try {
-                BCrypt.checkpw(plainPassword, hashedPasswordFromDB)
-            } catch (e: Exception) {
-                false
-            }
         }
     }
 

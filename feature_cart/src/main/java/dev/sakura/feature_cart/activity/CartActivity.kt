@@ -57,11 +57,19 @@ class CartActivity : BaseActivity() {
                     )
                 })
 
-                ordersManager.placeOrder(itemsToOrder)
-
-                cartViewModel.clearCartViewModelAction()
-                Toast.makeText(this, "Заказ успешно оформлен", Toast.LENGTH_SHORT).show()
-                appNavigator.openOrders(this, arrayListOf())
+                ordersManager.placeOrder(itemsToOrder) { result ->
+                    if (result.isSuccess) {
+                        cartViewModel.clearCartViewModelAction()
+                        Toast.makeText(this, "Заказ успешно оформлен", Toast.LENGTH_SHORT).show()
+                        appNavigator.openOrders(this, arrayListOf())
+                    } else {
+                        Toast.makeText(
+                            this,
+                            result.exceptionOrNull()?.message ?: "Ошибка оформления заказа",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
             }
         }
 

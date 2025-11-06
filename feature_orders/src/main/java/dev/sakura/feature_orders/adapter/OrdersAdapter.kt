@@ -10,7 +10,7 @@ import dev.sakura.feature_orders.databinding.ItemOrdersBinding
 import dev.sakura.models.ItemsModel
 
 class OrdersAdapter(
-    private val onItemClick: (ItemsModel) -> Unit
+    private val onItemClick: (ItemsModel) -> Unit,
 ) : ListAdapter<ItemsModel, OrdersAdapter.OrderViewHolder>(OrdersDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
@@ -23,12 +23,13 @@ class OrdersAdapter(
     }
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        val order = getItem(position)
+        holder.bind(order)
     }
 
     inner class OrderViewHolder(private val binding: ItemOrdersBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
 
         fun bind(item: ItemsModel) {
             binding.textViewItemTitle.text = item.title

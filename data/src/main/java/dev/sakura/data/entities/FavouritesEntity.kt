@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "cart_items",
+    tableName = "favourites",
     foreignKeys = [
         ForeignKey(
             entity = UserEntity::class,
@@ -15,15 +15,11 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index(value = ["userId"])]
+    indices = [Index(value = ["userId", "productId"], unique = true)]
 )
-data class CartItemEntity(
+data class FavouritesEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val productId: String,
-    val title: String,
-    val price: Double,
-    val imageResourcedId: Int?,
-    var quantity: Int,
     val userId: Long?,
+    val productId: String,
 )

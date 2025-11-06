@@ -8,7 +8,6 @@ data class ItemsModel(
     var resourceId: Int = 0,
     var title: String = "",
     val description: String = "",
-//    var size: ArrayList<String> = ArrayList(),
     var size: List<String> = emptyList(),
     var price: Double = 0.0,
     var rating: Double = 0.0,

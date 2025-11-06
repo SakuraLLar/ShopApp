@@ -15,17 +15,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.common_ui.view.CustomBottomNavView
 import dev.sakura.core.activity.BaseActivity
 import dev.sakura.core.auth.AuthManager
-import dev.sakura.core.auth.SessionProvider
-import dev.sakura.core.favourites.FavouritesManager
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import dev.sakura.feature_catalog.R
 import dev.sakura.feature_catalog.adapter.BrandAdapter
 import dev.sakura.feature_catalog.adapter.PopularAdapter
+import dev.sakura.feature_catalog.adapter.PopularItem
 import dev.sakura.feature_catalog.adapter.SliderAdapter
 import dev.sakura.feature_catalog.databinding.ActivityMainBinding
 import dev.sakura.feature_catalog.viewModel.MainViewModel
 import dev.sakura.models.SliderModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,14 +40,8 @@ class MainActivity : BaseActivity() {
     @Inject
     lateinit var authManager: AuthManager
 
-    @Inject
-    lateinit var favouritesManager: FavouritesManager
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var popularAdapter: PopularAdapter
-
-    @Inject
-    lateinit var sessionProvider: SessionProvider
 
     private lateinit var brandAdapter: BrandAdapter
 
@@ -57,48 +51,28 @@ class MainActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        setupUserInfo()
         observeCurrentUser()
 
         initBanner()
         initBrand()
         initPopular()
-        observeFavourites()
 
         initCustomBottomNavigation()
         (binding.includeBottomNavMain
                 as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_explorer)
     }
 
-    override fun onResume() {
-        super.onResume()
-        setupUserInfo()
-    }
-
-    private fun setupUserInfo() {
-        if (sessionProvider.isLoggedIn()) {
-            sessionProvider.getCurrentUserId()?.let { userId ->
-                authViewModel.loadCurrentUserFromSession(userId)
-            }
-        } else {
-            binding.txtWelcomeMain.text = getString(R.string.main_greeting)
-            binding.txtNameMain.text = getString(R.string.guest_name)
-        }
-    }
-
     private fun observeCurrentUser() {
-        authViewModel.currentUser.observe(this, Observer { user ->
+        authManager.currentUser.observe(this) { user ->
             if (user != null) {
                 binding.txtWelcomeMain.text = getString(R.string.main_greeting_user, user.firstName)
                 binding.txtNameMain.visibility = View.GONE
             } else {
-                if (sessionProvider.isLoggedIn()) {
-                    binding.txtWelcomeMain.text = getString(R.string.main_greeting)
-                    binding.txtNameMain.text = "Ошибка загрузки."
-                    binding.txtNameMain.visibility = View.VISIBLE
-                }
+                binding.txtWelcomeMain.text = getString(R.string.main_greeting)
+                binding.txtNameMain.text = getString(R.string.guest_name)
+                binding.txtNameMain.visibility = View.VISIBLE
             }
-        })
+        }
     }
 
     private fun initBanner() {
@@ -164,21 +138,29 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initPopular() {
-        popularAdapter = PopularAdapter(favouritesManager)
+        popularAdapter = PopularAdapter(
+            onItemClick = { item ->
+                appNavigator.openProductDetails(this, item)
+            },
+            onFavouriteClick = { item ->
+                mainViewModel.toggleFavouriteStatus(item)
+            }
+        )
 
         binding.recViewPopularMain.layoutManager = GridLayoutManager(this, 2)
         binding.recViewPopularMain.adapter = popularAdapter
 
         lifecycleScope.launch {
-            mainViewModel.populars.collect { popularList ->
-                popularAdapter.submitList(popularList)
+            mainViewModel.populars.combine(mainViewModel.favouriteProductIds) { populars, favIds ->
+                populars.map { item ->
+                    PopularItem(
+                        model = item,
+                        isFavourite = favIds.contains(item.resourceId.toString())
+                    )
+                }
+            }.collect { combinedList ->
+                popularAdapter.submitList(combinedList)
             }
-        }
-    }
-
-    private fun observeFavourites() {
-        favouritesManager.favouriteStatusMap.observe(this) { statusMap ->
-            popularAdapter.setFavouritesStatusMap(statusMap)
         }
     }
 

@@ -9,13 +9,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.common_ui.view.CustomBottomNavView
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_orders.adapter.OrdersAdapter
 import dev.sakura.feature_orders.databinding.ActivityOrdersBinding
 import dev.sakura.feature_orders.viewModel.OrdersViewModel
+import dev.sakura.models.ItemsModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -56,22 +59,25 @@ class OrdersActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        ordersAdapter = OrdersAdapter { selectedItem ->
+        ordersAdapter = OrdersAdapter { selectedItem: ItemsModel ->
             appNavigator.openProductDetails(this, selectedItem)
         }
-        binding.recyclerViewOrders.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        binding.recyclerViewOrders.layoutManager =
+            androidx.recyclerview.widget.LinearLayoutManager(this)
         binding.recyclerViewOrders.adapter = ordersAdapter
     }
 
     private fun observeViewModel() {
-        ordersViewModel.orderedItemsList.observe(this, Observer { items ->
-            if (items.isNullOrEmpty()) {
-                showEmptyState(true)
-            } else {
-                showEmptyState(false)
-                ordersAdapter.submitList(items)
+        lifecycleScope.launch {
+            ordersViewModel.orderedItemsList.collectLatest { orders ->
+                if (orders.isNullOrEmpty()) {
+                    showEmptyState(true)
+                } else {
+                    showEmptyState(false)
+                    ordersAdapter.submitList(orders)
+                }
             }
-        })
+        }
     }
 
     private fun showEmptyState(isEmpty: Boolean) {

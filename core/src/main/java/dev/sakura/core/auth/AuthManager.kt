@@ -6,4 +6,6 @@ import dev.sakura.models.UserModel
 interface AuthManager {
     val currentUser: LiveData<UserModel?>
     fun loadCurrentUser(userId: Long)
+    suspend fun registerUser(user: UserModel): Result<UserModel?>
+    suspend fun loginUser(emailOrPhone: String, passwordHash: String): Result<UserModel?>
 }

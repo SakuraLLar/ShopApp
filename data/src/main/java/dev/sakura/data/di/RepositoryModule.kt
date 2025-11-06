@@ -4,6 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dev.sakura.core.auth.SessionManagerImpl
+import dev.sakura.core.auth.SessionProvider
 import dev.sakura.core.data.CartRepository
 import dev.sakura.core.data.FavouritesRepository
 import dev.sakura.core.data.OrdersRepository
@@ -17,6 +19,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindSessionProvider(impl: SessionManagerImpl): SessionProvider
 
     @Binds
     @Singleton

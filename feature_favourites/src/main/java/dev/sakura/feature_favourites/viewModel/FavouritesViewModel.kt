@@ -1,36 +1,42 @@
+@file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 package dev.sakura.feature_favourites.viewModel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.sakura.core.data.FavouritesRepository
 import dev.sakura.core.favourites.FavouritesManager
+import dev.sakura.feature_catalog.repository.CatalogRepository
 import dev.sakura.models.ItemsModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
     private val favouritesManager: FavouritesManager,
-    private val favouritesRepository: FavouritesRepository,
+    private val catalogRepository: CatalogRepository
 ) : ViewModel() {
 
-    val favouritesList: LiveData<List<ItemsModel>> = favouritesRepository.favouritesLiveData
+    val favouriteProductIds: Flow<List<String>> = favouritesManager.favouriteProductIds
+    val favouriteItems: Flow<List<ItemsModel>> = favouriteProductIds
+        .flatMapLatest { ids ->
+            catalogRepository.getProductsByIds(ids)
+        }
 
-    val favouriteStatusMap: LiveData<Map<Int, Boolean>> = favouritesManager.favouriteStatusMap
+    fun isFavourite(productId: String): Flow<Boolean> {
+        return favouritesManager.isFavourite(productId)
+    }
 
     fun toggleFavouriteStatus(item: ItemsModel) {
-        favouritesManager.toggleFavouriteStatus(item)
-    }
-
-    fun addItemToFavourites(item: ItemsModel) {
-        favouritesManager.addItemToFavourites(item)
-    }
-
-    fun removeItemFromFavourites(item: ItemsModel) {
-        favouritesManager.removeItemFromFavourites(item)
-    }
-
-    fun isFavourite(itemId: Int): Boolean {
-        return favouritesManager.isFavourite(itemId)
+        viewModelScope.launch {
+            val isCurrentlyFavourite = isFavourite(item.resourceId.toString()).first()
+            if (isCurrentlyFavourite) {
+                favouritesManager.removeFavourite(item)
+            } else {
+                favouritesManager.addFavourite(item)
+            }
+        }
     }
 }

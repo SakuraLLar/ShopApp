@@ -1,4 +1,4 @@
-package dev.sakura.data
+package dev.sakura.data.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

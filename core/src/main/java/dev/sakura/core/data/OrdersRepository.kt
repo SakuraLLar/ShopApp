@@ -1,9 +1,11 @@
 package dev.sakura.core.data
 
-import androidx.lifecycle.LiveData
 import dev.sakura.models.ItemsModel
+import dev.sakura.models.OrderModel
+import kotlinx.coroutines.flow.Flow
 
 interface OrdersRepository {
-    val orderedItemsLiveData: LiveData<List<ItemsModel>>
-    fun addOrderedItems(item: List<ItemsModel>)
+    fun getMyOrders(): Flow<List<OrderModel>>
+
+    suspend fun createOrderFromCartItems(items: List<ItemsModel>): Result<Unit>
 }

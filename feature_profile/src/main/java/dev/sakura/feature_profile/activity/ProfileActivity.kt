@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
@@ -17,10 +16,11 @@ import com.canhub.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.common_ui.view.CustomBottomNavView
 import dev.sakura.core.activity.BaseActivity
+import dev.sakura.core.auth.AuthManager
 import dev.sakura.core.auth.SessionManagerImpl
+import dev.sakura.core.auth.SessionProvider
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.core.util.ThemeManager
-import dev.sakura.feature_auth.viewModel.AuthState
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import dev.sakura.feature_profile.R
 import dev.sakura.feature_profile.databinding.ActivityProfileBinding
@@ -32,9 +32,14 @@ class ProfileActivity : BaseActivity() {
     @Inject
     lateinit var appNavigator: AppNavigator
 
+    @Inject
+    lateinit var authManager: AuthManager
+
+    @Inject
+    lateinit var sessionProvider: SessionProvider
+
     private lateinit var binding: ActivityProfileBinding
     private val authViewModel: AuthViewModel by viewModels()
-    private lateinit var sessionManager: SessionManagerImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,13 +47,9 @@ class ProfileActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        sessionManager = SessionManagerImpl(this)
-
         observeViewModel()
         setupThemeSwitch()
         setupClickListeners()
-
-        updateUIBaseOnLoginStatus()
 
         initCustomBottomNavigation()
         (binding.includeBottomNavProfile as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_profile)
@@ -62,55 +63,37 @@ class ProfileActivity : BaseActivity() {
             appNavigator.openLogin(supportFragmentManager)
         }
         binding.btnLogout.setOnClickListener {
-            sessionManager.logoutUser()
-            updateUIBaseOnLoginStatus()
+            sessionProvider.logoutUser()
             recreate()
         }
         binding.imageProfileAvatar.setOnClickListener {
-            if (sessionManager.isLoggedIn()) {
+            if (sessionProvider.isLoggedIn()) {
                 requestPermissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
             } else {
-                Toast.makeText(this, "Войдите в аккаунт, чтобы измменить фото", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Войдите в аккаунт, чтобы изменить фото", Toast.LENGTH_SHORT)
                     .show()
             }
         }
         binding.txtOpenProfileDetails.setOnClickListener {
-            val avatarUriString = sessionManager.getAvatarForCurrentUser()
+            val avatarUriString = (sessionProvider as? SessionManagerImpl)?.getAvatarForCurrentUser()
             appNavigator.openProfileDetails(this, avatarUriString)
         }
     }
 
     private fun observeViewModel() {
-        authViewModel.currentUser.observe(this, Observer { user ->
-            if (user != null && sessionManager.isLoggedIn()) {
+        authManager.currentUser.observe(this) { user ->
+            if (user != null) {
                 displayLoggedInUserUI(user)
             } else {
                 displayGuestUI()
             }
-        })
-        authViewModel.authState.observe(this, Observer { state ->
-            if (state is AuthState.Loading) View.VISIBLE else View.GONE
-        })
-    }
-
-    private fun updateUIBaseOnLoginStatus() {
-        if (sessionManager.isLoggedIn()) {
-            sessionManager.getCurrentUserId()?.let { userId ->
-                authViewModel.loadCurrentUserFromSession(userId)
-            } ?: run {
-                sessionManager.logoutUser()
-                displayGuestUI()
-            }
-        } else {
-            displayGuestUI()
         }
     }
 
     private val cropImageLauncher = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             val croppedUri = result.uriContent
-
-            sessionManager.saveAvatarForCurrentUser(croppedUri.toString())
+            (sessionProvider as? SessionManagerImpl)?.saveAvatarForCurrentUser(croppedUri.toString())
             Glide.with(this)
                 .load(croppedUri)
                 .into(binding.imageProfileAvatar)
@@ -164,7 +147,7 @@ class ProfileActivity : BaseActivity() {
         binding.txtProfileUserInfo.text = getString(R.string.profile_logged_in_as, user.firstName)
         binding.txtOpenProfileDetails.visibility = View.VISIBLE
 
-        val avatarUriString = sessionManager.getAvatarForCurrentUser()
+        val avatarUriString = (sessionProvider as? SessionManagerImpl)?.getAvatarForCurrentUser()
         if (avatarUriString != null) {
             Glide.with(this)
                 .load(Uri.parse(avatarUriString))
@@ -220,11 +203,6 @@ class ProfileActivity : BaseActivity() {
         bottomNav.navCart.setOnClickListener { appNavigator.openCart(this) }
         bottomNav.navFavourites.setOnClickListener { appNavigator.openFavourites(this) }
         bottomNav.navOrders.setOnClickListener { appNavigator.openOrders(this, arrayListOf()) }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        updateUIBaseOnLoginStatus()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

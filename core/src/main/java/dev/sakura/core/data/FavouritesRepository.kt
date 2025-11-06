@@ -1,15 +1,13 @@
 package dev.sakura.core.data
 
-import androidx.lifecycle.LiveData
 import dev.sakura.models.ItemsModel
+import kotlinx.coroutines.flow.Flow
 
 interface FavouritesRepository {
-    val favouritesLiveData: LiveData<List<ItemsModel>>
-    val isFavouritesStatusLiveData: LiveData<Map<Int, Boolean>>
+    val favouriteProductIds: Flow<List<String>>
 
-    fun addItem(item: ItemsModel)
-    fun removeItem(item: ItemsModel)
-    fun toggleFavouritesStatus(item: ItemsModel)
-    fun getFavourites(): List<ItemsModel>
-    fun isItemFavourite(itemId: Int): Boolean
+    fun isFavourite(productId: String): Flow<Boolean>
+
+    suspend fun addFavourite(item: ItemsModel)
+    suspend fun removeFavourite(item: ItemsModel)
 }

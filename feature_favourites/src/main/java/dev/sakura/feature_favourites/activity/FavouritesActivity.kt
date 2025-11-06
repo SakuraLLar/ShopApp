@@ -1,7 +1,6 @@
 package dev.sakura.feature_favourites.activity
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -10,7 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.common_ui.view.CustomBottomNavView
 import dev.sakura.core.activity.BaseActivity
@@ -18,6 +17,8 @@ import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_favourites.adapter.FavouritesAdapter
 import dev.sakura.feature_favourites.databinding.ActivityFavouritesBinding
 import dev.sakura.feature_favourites.viewModel.FavouritesViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -62,7 +63,7 @@ class FavouritesActivity : BaseActivity() {
                 appNavigator.openProductDetails(this, item)
             },
             onRemoveFromFavouritesClicked = { item ->
-                favouritesViewModel.removeItemFromFavourites(item)
+                favouritesViewModel.toggleFavouriteStatus(item)
                 Toast.makeText(this, "${item.title} удалено из избранного", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -71,14 +72,16 @@ class FavouritesActivity : BaseActivity() {
     }
 
     private fun observeViewModel() {
-        favouritesViewModel.favouritesList.observe(this, Observer { items ->
-            if (items.isNullOrEmpty()) {
-                showEmptyFavouritesState(true)
-            } else {
-                showEmptyFavouritesState(false)
-                favouritesAdapter.submitList(items)
+        lifecycleScope.launch {
+            favouritesViewModel.favouriteItems.collectLatest { items ->
+                if (items.isNullOrEmpty()) {
+                    showEmptyFavouritesState(true)
+                } else {
+                    showEmptyFavouritesState(false)
+                    favouritesAdapter.submitList(items)
+                }
             }
-        })
+        }
     }
 
     private fun showEmptyFavouritesState(isEmpty: Boolean) {

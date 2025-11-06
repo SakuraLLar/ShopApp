@@ -1,10 +1,12 @@
-package mappers
+package dev.sakura.data.mappers
 
 import dev.sakura.data.entities.CartItemEntity
 import dev.sakura.data.entities.ItemsEntity
+import dev.sakura.data.entities.OrderWithItems
 import dev.sakura.data.entities.UserEntity
 import dev.sakura.models.CartItemModel
 import dev.sakura.models.ItemsModel
+import dev.sakura.models.OrderModel
 import dev.sakura.models.UserModel
 
 fun ItemsEntity.toModel() = ItemsModel(
@@ -57,10 +59,30 @@ fun CartItemEntity.toModel() = CartItemModel(
     quantity = quantity
 )
 
-fun CartItemModel.toEntity() = CartItemEntity(
+fun CartItemModel.toEntity(userId: Long?) = CartItemEntity(
     productId = productId,
     title = title,
     price = price,
     imageResourcedId = imageResourceId,
-    quantity = quantity
+    quantity = quantity,
+    userId = userId
+)
+
+fun OrderWithItems.toModel() = OrderModel(
+    id = order.id,
+    orderDate = order.orderDate,
+    status = order.status,
+    totalPrice = order.totalPrice,
+    items = items.map { orderItem ->
+        ItemsModel(
+            resourceId = orderItem.imageResourceId ?: 0,
+            title = orderItem.title,
+            price = orderItem.price,
+            numberInCart = orderItem.quantity,
+            description = "",
+            size = emptyList(),
+            rating = 0.0,
+            colorResourceNames = emptyList()
+        )
+    }
 )

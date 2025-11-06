@@ -17,25 +17,42 @@ interface CartDao {
     @Update
     suspend fun updateItem(cartItem: CartItemEntity)
 
-    @Delete
-    suspend fun deleteItem(cartItem: CartItemEntity)
+    @Query("DELETE FROM cart_items WHERE productId = :productId AND userId = :userId")
+    suspend fun deleteItemById(productId: String, userId: Long)
 
-    @Query("DELETE FROM cart_items WHERE productId = :productId")
-    suspend fun deleteItemById(productId: String)
+    @Query("DELETE FROM cart_items WHERE productId = :productId AND userId IS NULL")
+    suspend fun deleteGuestItemById(productId: String)
 
-    @Query("SELECT * FROM cart_items")
-    fun getAllItems(): Flow<List<CartItemEntity>>
+    @Query("SELECT * FROM cart_items WHERE userId = :userId")
+    fun getAllItems(userId: Long): Flow<List<CartItemEntity>>
 
-    @Query("SELECT * FROM cart_items WHERE productId = :productId")
-    suspend fun getItemById(productId: String): CartItemEntity?
+    @Query("SELECT * FROM cart_items WHERE userId IS NULL")
+    fun getGuestAllItems(): Flow<List<CartItemEntity>>
 
-    @Query("DELETE FROM cart_items")
-    suspend fun clearCart()
+    @Query("SELECT * FROM cart_items WHERE productId = :productId AND userId = :userId")
+    suspend fun getItemById(productId: String, userId: Long): CartItemEntity?
 
-    @Query("SELECT SUM(price * quantity) FROM cart_items")
-    fun getTotalPrice(): Flow<Double?>
+    @Query("SELECT * FROM cart_items WHERE productId = :productId AND userId IS NULL")
+    suspend fun getGuestItemById(productId: String): CartItemEntity?
 
-    @Query("SELECT SUM(quantity) FROM cart_items")
-    fun getTotalItemCount(): Flow<Int?>
+    @Query("DELETE FROM cart_items WHERE userId = :userId")
+    suspend fun clearCart(userId: Long)
 
+    @Query("DELETE FROM cart_items WHERE userId IS NULL")
+    suspend fun clearGuestCart()
+
+    @Query("SELECT SUM(price * quantity) FROM cart_items WHERE userId = :userId")
+    fun getTotalPrice(userId: Long): Flow<Double?>
+
+    @Query("SELECT SUM(price * quantity) FROM cart_items WHERE userId IS NULL")
+    fun getGuestTotalPrice(): Flow<Double?>
+
+    @Query("SELECT SUM(quantity) FROM cart_items WHERE userId = :userId")
+    fun getTotalItemCount(userId: Long): Flow<Int?>
+
+    @Query("SELECT SUM(quantity) FROM cart_items WHERE userId IS NULL")
+    fun getGuestTotalItemCount(): Flow<Int?>
+
+    @Query("UPDATE cart_items SET userId = :userId WHERE userId IS NULL")
+    suspend fun assignGuestCartToUser(userId: Long)
 }

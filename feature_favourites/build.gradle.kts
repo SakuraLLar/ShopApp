@@ -58,4 +58,6 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":data"))
     implementation(project(":models"))
+
+    implementation(project(":feature_catalog"))
 }

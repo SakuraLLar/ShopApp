@@ -3,31 +3,34 @@ package dev.sakura.core.auth
 import android.content.Context
 import android.content.SharedPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SessionManagerImpl @Inject constructor(@ApplicationContext context: Context) :
     SessionProvider {
+
     private var prefs: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val _userIdFlow = MutableSharedFlow<Long?>(replay = 1)
 
     companion object {
         private const val PREFS_NAME = "ShopAppPrefs"
         private const val USER_ID_KEY = "user_id"
-        private const val IS_LOGGED_IN_KEY = "is_logged_in"
-        private const val AVATAR_URI_KEY_PREFIX = "avatar_uri_"
     }
 
     override fun createLoginSession(userId: Long) {
-        val editor = prefs.edit()
-        editor.putLong(USER_ID_KEY, userId)
-        editor.putBoolean(IS_LOGGED_IN_KEY, true)
-        editor.apply()
+        prefs.edit().putLong(USER_ID_KEY, userId).apply()
+        _userIdFlow.tryEmit(userId)
     }
 
     override fun isLoggedIn(): Boolean {
-        return prefs.getBoolean(IS_LOGGED_IN_KEY, false)
+        return prefs.contains(USER_ID_KEY)
     }
 
     override fun getCurrentUserId(): Long? {
@@ -36,21 +39,25 @@ class SessionManagerImpl @Inject constructor(@ApplicationContext context: Contex
     }
 
     override fun logoutUser() {
-        val editor = prefs.edit()
-        editor.remove(USER_ID_KEY)
-        editor.putBoolean(IS_LOGGED_IN_KEY, false)
-        editor.apply()
+        prefs.edit().remove(USER_ID_KEY).apply()
+        _userIdFlow.tryEmit(null)
+    }
+
+    override fun getUserIdFlow(): Flow<Long?> {
+        return _userIdFlow
+            .onStart { emit(getCurrentUserId()) }
+            .distinctUntilChanged()
     }
 
     fun saveAvatarForCurrentUser(avatarUri: String) {
         getCurrentUserId()?.let { userId ->
-            prefs.edit().putString("$AVATAR_URI_KEY_PREFIX$userId", avatarUri).apply()
+            prefs.edit().putString("avatar_uri_$userId", avatarUri).apply()
         }
     }
 
     fun getAvatarForCurrentUser(): String? {
         return getCurrentUserId()?.let { userId ->
-            prefs.getString("$AVATAR_URI_KEY_PREFIX$userId", null)
+            prefs.getString("avatar_uri_$userId", null)
         }
     }
 }

@@ -6,18 +6,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sakura.common_ui.R
+import dev.sakura.core.favourites.FavouritesManager
 import dev.sakura.feature_catalog.repository.CatalogRepository
 import dev.sakura.models.BrandModel
 import dev.sakura.models.ItemsModel
 import dev.sakura.models.SliderModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val catalogRepository: CatalogRepository,
+    private val favouritesManager: FavouritesManager,
 ) : ViewModel() {
 
     private val _banner = MutableLiveData<List<SliderModel>>()
@@ -35,6 +40,20 @@ class MainViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList(),
         )
+
+    val favouriteProductIds: Flow<List<String>> = favouritesManager.favouriteProductIds
+
+    fun toggleFavouriteStatus(item: ItemsModel) {
+        viewModelScope.launch {
+            val isCurrentlyFavourite = favouritesManager.isFavourite(item.resourceId.toString()).first()
+
+            if (isCurrentlyFavourite) {
+                favouritesManager.removeFavourite(item)
+            } else {
+                favouritesManager.addFavourite(item)
+            }
+        }
+    }
 
     fun loadBanners() {
         val localBanners = mutableListOf<SliderModel>()

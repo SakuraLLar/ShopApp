@@ -1,12 +1,12 @@
 package dev.sakura.data.repository
 
 import dev.sakura.core.data.UserRepository
+import dev.sakura.data.mappers.toEntity
+import dev.sakura.data.mappers.toModel
 import dev.sakura.data.user.UserDao
 import dev.sakura.models.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import mappers.toEntity
-import mappers.toModel
 import javax.inject.Inject
 import javax.inject.Singleton
 

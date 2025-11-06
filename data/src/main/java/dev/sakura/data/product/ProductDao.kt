@@ -20,4 +20,7 @@ interface ProductDao {
 
     @Query("SELECT COUNT(*) FROM products")
     suspend fun count(): Int
+
+    @Query("SELECT * FROM products WHERE resourceId IN (:ids)")
+    fun findProductsByIds(ids: List<String>): Flow<List<ItemsEntity>>
 }

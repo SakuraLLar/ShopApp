@@ -1,66 +1,68 @@
+@file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+
 package dev.sakura.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import dev.sakura.core.auth.SessionProvider
 import dev.sakura.core.data.FavouritesRepository
+import dev.sakura.data.entities.FavouritesEntity
+import dev.sakura.data.favourites.FavouritesDao
 import dev.sakura.models.ItemsModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FavouritesRepositoryImpl @Inject constructor() : FavouritesRepository {
-    private val favourites = mutableListOf<ItemsModel>()
-    private val _favouritesLiveData = MutableLiveData<List<ItemsModel>>(emptyList())
-    override val favouritesLiveData: LiveData<List<ItemsModel>> = _favouritesLiveData
+class FavouritesRepositoryImpl @Inject constructor(
+    private val favouritesDao: FavouritesDao,
+    private val sessionProvider: SessionProvider,
+) : FavouritesRepository {
 
-    private val _isFavouriteStatusLiveData = MutableLiveData<Map<Int, Boolean>>(emptyMap())
-    override val isFavouritesStatusLiveData: LiveData<Map<Int, Boolean>> =
-        _isFavouriteStatusLiveData
+    override val favouriteProductIds: Flow<List<String>> =
+        sessionProvider.getUserIdFlow().flatMapLatest { userId ->
+            if (userId != null) {
+                favouritesDao.getFavouriteProductIds(userId)
+            } else {
+                favouritesDao.getGuestFavouriteProductIds()
+            }
+        }
 
-    init {
-        updateLiveData()
-    }
-
-    override fun addItem(item: ItemsModel) {
-        if (favourites.none { it.resourceId == item.resourceId }) {
-            favourites.add(item)
-            updateLiveData()
+    override fun isFavourite(productId: String): Flow<Boolean> {
+        return sessionProvider.getUserIdFlow().flatMapLatest { userId ->
+            if (userId != null) {
+                favouritesDao.isFavourite(userId, productId)
+            } else {
+                favouritesDao.isGuestFavourite(productId)
+            }
         }
     }
 
-    override fun removeItem(item: ItemsModel) {
-        if (favourites.removeAll { it.resourceId == item.resourceId }) {
-            updateLiveData()
+    override suspend fun addFavourite(item: ItemsModel) {
+        withContext(Dispatchers.IO) {
+            val userId = sessionProvider.getCurrentUserId()
+            val favourite =
+                FavouritesEntity(userId = userId, productId = item.resourceId.toString())
+            favouritesDao.add(favourite)
         }
     }
 
-    override fun toggleFavouritesStatus(item: ItemsModel) {
-        if (isItemFavourite(item.resourceId)) {
-            removeItem(item)
-        } else {
-            addItem(item)
+    override suspend fun removeFavourite(item: ItemsModel) {
+        withContext(Dispatchers.IO) {
+            val userId = sessionProvider.getCurrentUserId()
+            val productId = item.resourceId.toString()
+            if (userId != null) {
+                favouritesDao.remove(userId, productId)
+            } else {
+                favouritesDao.removeGuest(productId)
+            }
         }
     }
 
-    override fun isItemFavourite(itemId: Int): Boolean {
-        return favourites.any { it.resourceId == itemId }
-    }
-
-    fun toggleFavouriteStatus(item: ItemsModel) {
-        if (isItemFavourite(item.resourceId)) {
-            removeItem(item)
-        } else {
-            addItem(item)
+    suspend fun assignGuestFavouritesToUser(userId: Long) {
+        withContext(Dispatchers.IO) {
+            favouritesDao.assignGuestFavouritesToUser(userId)
         }
-    }
-
-    override fun getFavourites(): List<ItemsModel> {
-        return ArrayList(favourites)
-    }
-
-    private fun updateLiveData() {
-        _favouritesLiveData.postValue(ArrayList(favourites))
-        val statusMap = favourites.associate { it.resourceId to true }
-        _isFavouriteStatusLiveData.postValue(statusMap)
     }
 }

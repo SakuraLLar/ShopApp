@@ -5,28 +5,9 @@
     android:id="@+id/main_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
+    android:background="@drawable/background_gradient"
+    android:fitsSystemWindows="true"
     tools:context="dev.sakura.feature_catalog.activity.MainActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout_main"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:elevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tool_bar_main"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap" />
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scroll_view_main"
@@ -39,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="0dp"
-            android:paddingBottom="86dp">
+            android:paddingTop="@dimen/screen_content_top_margin">
 
             <Space
                 android:id="@+id/status_bar_and_toolbar_space_main"
@@ -80,7 +60,7 @@
                     android:id="@+id/img_search_main"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:srcCompat="@drawable/search_icon" />
+                    app:srcCompat="@drawable/pic_search_icon" />
 
             </LinearLayout>
 
@@ -221,7 +201,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="38dp"/>
+            android:layout_marginBottom="38dp" />
 
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

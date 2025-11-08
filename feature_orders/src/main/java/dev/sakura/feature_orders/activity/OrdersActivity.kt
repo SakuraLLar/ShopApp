@@ -37,15 +37,7 @@ class OrdersActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.ordersConstraintLayout) { view, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.toolBarOrders.updatePadding(top = insets.top)
-            binding.recyclerViewOrders.updatePadding(bottom = insets.bottom)
-            WindowInsetsCompat.CONSUMED
-        }
-
-        setupToolbar()
+        setupEdgeToEdge()
         setupRecyclerView()
         observeViewModel()
 
@@ -53,9 +45,15 @@ class OrdersActivity : AppCompatActivity() {
         (binding.includeBottomNavOrders as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_orders)
     }
 
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolBarOrders)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+    private fun setupEdgeToEdge() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.ordersConstraintLayout) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            binding.guidelineTopOrders.setGuidelineBegin(insets.top)
+            binding.recyclerViewOrders.updatePadding(insets.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private fun setupRecyclerView() {

@@ -17,6 +17,10 @@
     <color name="red">#E62617</color>
     <color name="redLight">#e97415</color>
 
+    <!-- Цвета элемента viewholder_size -->
+    <color name="primary">@color/redLight</color>
+    <color name="onSurfaceVariant">@color/grey</color>
+
     <!-- Цвет элемента layout_custom_bottom_nav-->
     <color name="color_bottom_nav_light">#565050</color>
     <color name="color_bottom_nav_white">#DAD8D8</color>
@@ -31,27 +35,23 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <!-- ============= ЦВЕТА ДЛЯ ТЕМ ============= -->
+
     <!--Светлая тема-->
     <color name="m3_primary_light">@color/redLight</color>
     <color name="m3_on_primary_light">@color/white</color>
-    <color name="m3_primary_container_light">#EADDFF</color>
-    <color name="m3_on_primary_container_light">#21005D</color>
-    <color name="m3_secondary_light">#625B71</color>
-    <color name="m3_on_secondary_light">@color/white</color>
-    <color name="m3_background_light">@color/white</color>
-    <color name="m3_on_background_light">@color/black</color>
-    <color name="m3_surface_light">@color/lightGrey</color>
-    <color name="m3_on_surface_light">@color/black</color>
+    <color name="m3_background_light">#FDFCFB</color>
+    <color name="m3_on_background_light">#1C1B1F</color>
+    <color name="m3_surface_light">#FDFCFB</color>
+    <color name="m3_on_surface_light">#1C1B1F</color>
+    <color name="m3_surface_container_light">#ECE6E1</color>
 
     <!-- Темная тема -->
     <color name="m3_primary_dark">@color/redLight</color>
     <color name="m3_on_primary_dark">@color/black</color>
-    <color name="m3_primary_container_dark">#D2A316</color>
-    <color name="m3_on_primary_container_dark">#EADDFF</color>
-    <color name="m3_secondary_dark">#CCC2DC</color>
-    <color name="m3_on_secondary_dark">#332D41</color>
-    <color name="m3_background_dark">@color/darkGrey</color>
-    <color name="m3_on_background_dark">@color/darkWhite</color>
-    <color name="m3_surface_dark">#313033</color>
-    <color name="m3_on_surface_dark">@color/darkWhite</color>
+    <color name="m3_background_dark">#181818</color>
+    <color name="m3_on_background_dark">#EAE1E0</color>
+    <color name="m3_surface_dark">#212121</color>
+    <color name="m3_on_surface_dark">#EAE1E0</color>
+    <color name="m3_surface_container_dark">#3A3837</color>
 </resources>

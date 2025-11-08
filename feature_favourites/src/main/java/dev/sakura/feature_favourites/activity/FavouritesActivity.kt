@@ -36,15 +36,7 @@ class FavouritesActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.favouritesConstraintLayout) { view, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.toolBarFavourites.updatePadding(top = insets.top)
-            binding.recyclerViewFavourites.updatePadding(bottom = insets.bottom)
-            WindowInsetsCompat.CONSUMED
-        }
-
-        setupToolbar()
+        setupEdgeToEdge()
         setupRecyclerView()
         observeViewModel()
 
@@ -52,9 +44,13 @@ class FavouritesActivity : BaseActivity() {
         (binding.includeBottomNavFavourites as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_favourites)
     }
 
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolBarFavourites)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
+    private fun setupEdgeToEdge() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            binding.guidelineTopFavourites.setGuidelineBegin(insets.top)
+            windowInsets
+        }
     }
 
     private fun setupRecyclerView() {

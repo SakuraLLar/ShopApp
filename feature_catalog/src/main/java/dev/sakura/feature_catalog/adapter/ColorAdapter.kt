@@ -2,6 +2,7 @@ package dev.sakura.feature_catalog.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
@@ -12,14 +13,13 @@ import dev.sakura.feature_catalog.databinding.ViewholderColorBinding
 
 class ColorAdapter(private var items: List<String>) :
     RecyclerView.Adapter<ColorAdapter.ViewHolder>() {
-    private var selectedPosition = -1
-    private var lastSelectedPosition = -1
+
+    private var selectedPosition = RecyclerView.NO_POSITION
     private lateinit var context: Context
 
     fun updateData(newItems: MutableList<String>) {
         items = newItems
-        selectedPosition = -1
-        lastSelectedPosition = -1
+        selectedPosition = RecyclerView.NO_POSITION
         notifyDataSetChanged()
     }
 
@@ -45,36 +45,28 @@ class ColorAdapter(private var items: List<String>) :
                 .into(holder.binding.pic)
         } else {
             holder.binding.pic.setImageDrawable(
-                ContextCompat.getColor(
-                    context,
-                    R.color.lightGrey
-                ).toDrawable()
+                ContextCompat.getColor(context, R.color.lightGrey).toDrawable()
             )
         }
 
         holder.binding.root.setOnClickListener {
-            val currentAdapterPosition = holder.adapterPosition
-            if (currentAdapterPosition != RecyclerView.NO_POSITION) {
-
-                if (selectedPosition == currentAdapterPosition) {
-                    selectedPosition = -1
-                    notifyItemChanged(currentAdapterPosition)
-                } else {
-                    val previouslySelectedPosition = selectedPosition
-                    selectedPosition = currentAdapterPosition
-
-                    if (previouslySelectedPosition != RecyclerView.NO_POSITION) {
-                        notifyItemChanged(previouslySelectedPosition)
-                    }
-                    notifyItemChanged(selectedPosition)
+            val previousSelectedPosition = selectedPosition
+            if (selectedPosition == holder.adapterPosition) {
+                selectedPosition = RecyclerView.NO_POSITION
+                notifyItemChanged(previousSelectedPosition)
+            } else {
+                selectedPosition = holder.adapterPosition
+                if (previousSelectedPosition != RecyclerView.NO_POSITION) {
+                    notifyItemChanged(previousSelectedPosition)
                 }
+                notifyItemChanged(selectedPosition)
             }
         }
 
         if (selectedPosition == position) {
-            holder.binding.layoutColor.setBackgroundResource(R.drawable.yellow_bg)
+            holder.binding.viewOutline.visibility = View.VISIBLE
         } else {
-            holder.binding.layoutColor.setBackgroundResource(R.drawable.grey_bg_selected)
+            holder.binding.viewOutline.visibility = View.GONE
         }
     }
 

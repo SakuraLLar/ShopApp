@@ -3,20 +3,20 @@ package dev.sakura.feature_catalog.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import dev.sakura.common_ui.R
 import dev.sakura.feature_catalog.databinding.ViewholderSizeBinding
 
 class SizeAdapter(private var items: MutableList<String>) :
     RecyclerView.Adapter<SizeAdapter.ViewHolder>() {
-    private var selectedPosition = -1
-    private var lastSelectedPosition = -1
+
+    private var selectedPosition = RecyclerView.NO_POSITION
     private lateinit var context: Context
 
     fun updateData(newItems: MutableList<String>) {
         items = newItems
-        selectedPosition = -1
-        lastSelectedPosition = -1
+        selectedPosition = RecyclerView.NO_POSITION
         notifyDataSetChanged()
     }
 
@@ -36,33 +36,27 @@ class SizeAdapter(private var items: MutableList<String>) :
         holder.binding.txtSize.text = items[position]
 
         holder.binding.root.setOnClickListener {
-            val currentAdapterPosition = holder.adapterPosition
-            if (currentAdapterPosition != RecyclerView.NO_POSITION) {
+            val previousSelectedPosition = selectedPosition
 
-                if (selectedPosition == currentAdapterPosition) {
-                    selectedPosition = -1
-                    notifyItemChanged(currentAdapterPosition)
-                } else {
-                    lastSelectedPosition = selectedPosition
-                    selectedPosition = currentAdapterPosition
+            if (selectedPosition == holder.adapterPosition) {
+                selectedPosition = RecyclerView.NO_POSITION
+                notifyItemChanged(previousSelectedPosition)
+            } else {
+                selectedPosition = holder.adapterPosition
 
-                    if (lastSelectedPosition != RecyclerView.NO_POSITION && lastSelectedPosition < items.size && lastSelectedPosition >= 0) {
-                        notifyItemChanged(lastSelectedPosition)
-                    }
-
-                    if (selectedPosition != RecyclerView.NO_POSITION && selectedPosition < items.size) {
-                        notifyItemChanged(selectedPosition)
-                    }
+                if (previousSelectedPosition != RecyclerView.NO_POSITION) {
+                    notifyItemChanged(previousSelectedPosition)
                 }
+                notifyItemChanged(selectedPosition)
             }
         }
 
         if (selectedPosition == position) {
-            holder.binding.layoutColor.setBackgroundResource(R.drawable.yellow_bg)
-            holder.binding.txtSize.setTextColor(context.resources.getColor(R.color.black))
+            holder.binding.sizeItemRoot.setBackgroundResource(R.drawable.size_item_bg_selected)
+            holder.binding.txtSize.setTextColor(ContextCompat.getColor(context, R.color.primary))
         } else {
-            holder.binding.layoutColor.setBackgroundResource(R.drawable.grey_bg_selected)
-            holder.binding.txtSize.setTextColor(context.resources.getColor(R.color.black))
+            holder.binding.sizeItemRoot.setBackgroundResource(R.drawable.size_item_bg_default)
+            holder.binding.txtSize.setTextColor(ContextCompat.getColor(context, R.color.onSurfaceVariant))
         }
     }
 

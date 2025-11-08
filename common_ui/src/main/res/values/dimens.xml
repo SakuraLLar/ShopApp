@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <dimen name="bottom_nav_margin_original">16dp</dimen>
+    <dimen name="screen_content_top_margin">45dp</dimen>
+
 </resources>

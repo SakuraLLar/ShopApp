@@ -2,9 +2,13 @@ package dev.sakura.feature_catalog.activity
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,9 +44,28 @@ class DetailActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        setupEdgeToEdge()
+        initUiElements()
         getInitialDataAndLoadFullProduct()
         observeViewModel()
         initCustomBottomNavigation()
+    }
+
+    private fun setupEdgeToEdge() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            binding.btnBackDetail.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top + 16
+            }
+            windowInsets
+        }
+    }
+
+    private fun initUiElements() {
+        binding.btnBackDetail.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun getInitialDataAndLoadFullProduct() {
@@ -73,10 +96,6 @@ class DetailActivity : BaseActivity() {
         binding.btnAddToCartDetail.setOnClickListener {
             cartManager.addItemToCart(item)
             Toast.makeText(this, "${item.title} добавлен в корзину", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.btnGoToCartDetail.setOnClickListener {
-            appNavigator.openCart(this)
         }
 
         setupSlider(item)
@@ -119,12 +138,12 @@ class DetailActivity : BaseActivity() {
         }
 
         if (item.colorResourceNames.isNotEmpty()) {
-            binding.recViewColorLitDetail.visibility = View.VISIBLE
-            binding.recViewColorLitDetail.adapter = ColorAdapter(item.colorResourceNames)
-            binding.recViewColorLitDetail.layoutManager =
+            binding.recViewColorListDetail.visibility = View.VISIBLE
+            binding.recViewColorListDetail.adapter = ColorAdapter(item.colorResourceNames)
+            binding.recViewColorListDetail.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         } else {
-            binding.recViewColorLitDetail.visibility = View.GONE
+            binding.recViewColorListDetail.visibility = View.GONE
         }
     }
 

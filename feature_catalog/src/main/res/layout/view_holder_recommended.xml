@@ -24,7 +24,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/btn_3"
+        app:srcCompat="@drawable/pic_favourite_default"
         app:tint="?attr/colorControlNormal" />
 
     <TextView
@@ -59,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/txtRating"
         app:layout_constraintEnd_toStartOf="@+id/txtRating"
         app:layout_constraintTop_toTopOf="@+id/txtRating"
-        app:srcCompat="@drawable/star" />
+        app:srcCompat="@drawable/pic_star" />
 
     <TextView
         android:id="@+id/txtTitle"

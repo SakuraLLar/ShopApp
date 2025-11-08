@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">ShopApp</string>
 
-    <!--Test-->
-    <string name="intro_title_test">Line one\nLine two</string>
+    <!-- All -->
+    <string name="back_button">Назад</string>
 
     <!--Intro Activity-->
     <string name="intro_title">Сделай шаг \n В мир моды и стиля</string>

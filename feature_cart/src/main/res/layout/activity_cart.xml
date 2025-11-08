@@ -5,28 +5,16 @@
     android:id="@+id/cart_constrain_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
+    android:background="@drawable/background_gradient"
+    android:fitsSystemWindows="true"
     tools:context="dev.sakura.feature_cart.activity.CartActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout_cart"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:elevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tool_bar_cart"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap" />
-    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/screen_content_top_margin" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_cart"
@@ -37,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout_cart"
+        app:layout_constraintTop_toTopOf="@+id/guideline_top_cart"
         tools:listitem="@layout/item_cart" />
 
     <TextView
@@ -51,7 +39,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout_cart"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_top_cart"
         tools:visibility="visible" />
 
     <LinearLayout

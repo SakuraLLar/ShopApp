@@ -58,20 +58,20 @@ class MainViewModel @Inject constructor(
     fun loadBanners() {
         val localBanners = mutableListOf<SliderModel>()
 
-        localBanners.add(SliderModel(R.drawable.banner1))
-        localBanners.add(SliderModel(R.drawable.banner2))
+        localBanners.add(SliderModel(R.drawable.pic_banner1))
+        localBanners.add(SliderModel(R.drawable.pic_banner2))
 
         _banner.value = localBanners
     }
 
     fun loadBrands() {
         val localBrands = listOf(
-            BrandModel(title = "Adidas", R.drawable.cat1),
-            BrandModel(title = "Nike", R.drawable.cat2),
-            BrandModel(title = "Puma", R.drawable.cat3),
-            BrandModel(title = "Skechers", R.drawable.cat4),
-            BrandModel(title = "Reebok", R.drawable.cat5),
-            BrandModel(title = "Lacoste", R.drawable.cat6),
+            BrandModel(title = "Adidas", R.drawable.pic_brand_adidas),
+            BrandModel(title = "Nike", R.drawable.pic_brand_nike),
+            BrandModel(title = "Puma", R.drawable.pic_brand_puma),
+            BrandModel(title = "Skechers", R.drawable.pic_brand_skechers),
+            BrandModel(title = "Reebok", R.drawable.pic_brand_reebok),
+            BrandModel(title = "Lacoste", R.drawable.pic_brand_lacoste),
         )
         _brandItems.value = localBrands
     }

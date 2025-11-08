@@ -20,7 +20,7 @@
         android:background="@drawable/background_rectangle_gradient_catalog"
         android:padding="8dp"
         app:tint="@color/brand_icon_tint_selector"
-        tools:src="@drawable/cat1" />
+        tools:src="@drawable/pic_brand_adidas" />
 
     <TextView
         android:id="@+id/txtTitle"

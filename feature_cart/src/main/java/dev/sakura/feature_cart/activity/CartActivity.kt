@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +38,7 @@ class CartActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        setupEdgeToEdge()
         setupRecyclerView()
         observeViewModel()
 
@@ -75,6 +78,15 @@ class CartActivity : BaseActivity() {
 
         initCustomBottomNavigation()
         (binding.includeBottomNavCart as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_cart)
+    }
+
+    private fun setupEdgeToEdge() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            binding.guidelineTopCart.setGuidelineBegin(insets.top)
+            windowInsets
+        }
     }
 
     private fun setupRecyclerView() {

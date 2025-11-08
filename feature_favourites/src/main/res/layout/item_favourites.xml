@@ -35,7 +35,7 @@
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/btn_3_red"
+            app:srcCompat="@drawable/pic_favourite_selected"
             app:tint="@color/red" />
 
         <TextView

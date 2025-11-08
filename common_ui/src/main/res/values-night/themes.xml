@@ -1,46 +1,34 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-
     <style name="Base.Theme.ShopApp" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Основные цвета -->
         <item name="colorPrimary">@color/m3_primary_dark</item>
         <item name="colorOnPrimary">@color/m3_on_primary_dark</item>
-        <item name="colorPrimaryContainer">@color/m3_primary_container_dark</item>
-        <item name="colorOnPrimaryContainer">@color/m3_on_primary_container_dark</item>
-        <item name="colorSecondary">@color/m3_secondary_dark</item>
-        <item name="colorOnSecondary">@color/m3_on_secondary_dark</item>
+
+        <!-- Цвета фона и повехоностей-->
         <item name="android:colorBackground">@color/m3_background_dark</item>
-        <item name="colorSurface">@color/m3_surface_dark</item>
         <item name="colorOnBackground">@color/m3_on_background_dark</item>
+        <item name="colorSurface">@color/m3_surface_dark</item>
         <item name="colorOnSurface">@color/m3_on_surface_dark</item>
 
+        <!-- Цвета контейнеров (для градиента и карточек) -->
+        <item name="colorSurfaceContainer">@color/m3_surface_container_dark</item>
+        <item name="colorSecondary">@color/yellow</item>
+        <item name="colorOnSecondary">@color/black</item>
+
         <!-- Статус бар -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <!--        <item name="android:statusBarColor">?attr/colorPrimary</item>-->
+        <!--        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
 
         <!-- Цвет иконок тулбара и других элементов управления -->
+        <!--        <item name="colorControlNormal">@color/m3_on_surface_dark</item>-->
+        <!--        <item name="android:textColorPrimary">@color/m3_on_background_dark</item>-->
         <item name="colorControlNormal">@color/m3_on_surface_dark</item>
-        <item name="android:textColorPrimary">@color/m3_on_background_dark</item>
 
         <!-- Цвет элемента block_background -->
         <item name="cardSurfaceColor">@color/color_block_dark</item>"
-
     </style>
-
-    <!-- ЯВНАЯ ТЕМНАЯ ТЕМА (для принудительного выбора пользователем) -->
-    <style name="Theme.ShopApp.Dark" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="colorPrimary">@color/m3_primary_dark</item>
-        <item name="colorOnPrimary">@color/m3_on_primary_dark</item>
-        <item name="colorPrimaryContainer">@color/m3_primary_container_dark</item>
-        <item name="colorOnPrimaryContainer">@color/m3_on_primary_container_dark</item>
-        <item name="colorSecondary">@color/m3_secondary_dark</item>
-        <item name="colorOnSecondary">@color/m3_on_secondary_dark</item>
-        <item name="android:colorBackground">@color/m3_background_dark</item>
-        <item name="colorSurface">@color/m3_surface_dark</item>
-        <item name="colorOnBackground">@color/m3_on_background_dark</item>
-        <item name="colorOnSurface">@color/m3_on_surface_dark</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
-        <item name="colorControlNormal">@color/m3_on_surface_dark</item>
-        <item name="android:textColorPrimary">@color/m3_on_background_dark</item>
-    </style>
-
 </resources>

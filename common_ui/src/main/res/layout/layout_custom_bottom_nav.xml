@@ -16,7 +16,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/button_yellow_bg"
+        android:background="@drawable/background_yellow_bg_selector"
         android:orientation="horizontal">
 
         <!--        Explorer-->
@@ -36,7 +36,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/btn_1"
+                app:srcCompat="@drawable/pic_search"
                 app:tint="@color/lightDark" />
         </LinearLayout>
 
@@ -57,7 +57,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/btn_2"
+                app:srcCompat="@drawable/pic_cart"
                 app:tint="@color/lightDark" />
         </LinearLayout>
 
@@ -78,7 +78,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/btn_3"
+                app:srcCompat="@drawable/pic_favourite"
                 app:tint="@color/lightDark" />
         </LinearLayout>
 
@@ -99,7 +99,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/btn_4"
+                app:srcCompat="@drawable/pic_order"
                 app:tint="@color/lightDark" />
         </LinearLayout>
 
@@ -120,7 +120,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/btn_5"
+                app:srcCompat="@drawable/pic_profile"
                 app:tint="@color/lightDark" />
         </LinearLayout>
     </LinearLayout>

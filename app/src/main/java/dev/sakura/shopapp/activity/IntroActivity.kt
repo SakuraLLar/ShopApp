@@ -28,7 +28,6 @@ class IntroActivity : BaseActivity() {
     @Inject
     lateinit var sessionProvider: SessionProvider
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

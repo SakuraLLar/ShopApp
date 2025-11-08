@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import dev.sakura.data.entities.FavouritesEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -30,6 +31,21 @@ interface FavouritesDao {
     @Query("DELETE FROM favourites WHERE userId IS NULL AND productId = :productId")
     suspend fun removeGuest(productId: String)
 
+    @Transaction
+    suspend fun assignGuestFavouritesToUser(userId: Long) {
+        deleteGuestDuplicatesForUser(userId)
+        updateRemainingGuestFavourites(userId)
+    }
+
+    @Query("""
+        DELETE FROM favourites
+        WHERE userId IS NULL
+        AND productId IN (
+        SELECT productId FROM favourites WHERE userId = :userId
+        )
+    """)
+    suspend fun deleteGuestDuplicatesForUser(userId: Long)
+
     @Query("UPDATE favourites SET userId = :userId WHERE userId IS NULL")
-    suspend fun assignGuestFavouritesToUser(userId: Long)
+    suspend fun updateRemainingGuestFavourites(userId: Long)
 }

@@ -38,7 +38,7 @@ class ToolbarFragment : Fragment() {
         (activity as? AppCompatActivity)?.supportActionBar?.apply {
             this.title = this@ToolbarFragment.title
             setDisplayHomeAsUpEnabled(showBackButton)
-            setHomeAsUpIndicator(R.drawable.ic_back)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_back)
         }
     }
 

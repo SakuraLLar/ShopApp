@@ -75,7 +75,8 @@ class ProfileActivity : BaseActivity() {
             }
         }
         binding.txtOpenProfileDetails.setOnClickListener {
-            val avatarUriString = (sessionProvider as? SessionManagerImpl)?.getAvatarForCurrentUser()
+            val avatarUriString =
+                (sessionProvider as? SessionManagerImpl)?.getAvatarForCurrentUser()
             appNavigator.openProfileDetails(this, avatarUriString)
         }
     }
@@ -151,11 +152,11 @@ class ProfileActivity : BaseActivity() {
         if (avatarUriString != null) {
             Glide.with(this)
                 .load(Uri.parse(avatarUriString))
-                .placeholder(R.drawable.ic_avatar_placeholder)
-                .error(R.drawable.ic_avatar_placeholder)
+                .placeholder(dev.sakura.common_ui.R.drawable.pic_avatar_placeholder)
+                .error(dev.sakura.common_ui.R.drawable.pic_avatar_placeholder)
                 .into(binding.imageProfileAvatar)
         } else {
-            binding.imageProfileAvatar.setImageResource(R.drawable.ic_avatar_placeholder)
+            binding.imageProfileAvatar.setImageResource(dev.sakura.common_ui.R.drawable.pic_avatar_placeholder)
         }
 
         binding.btnLogin.visibility = View.GONE
@@ -166,7 +167,7 @@ class ProfileActivity : BaseActivity() {
     private fun displayGuestUI() {
         binding.txtProfileUserInfo.text = getString(R.string.profile_guest)
         binding.txtOpenProfileDetails.visibility = View.GONE
-        binding.imageProfileAvatar.setImageResource(R.drawable.ic_avatar_placeholder)
+        binding.imageProfileAvatar.setImageResource(dev.sakura.common_ui.R.drawable.pic_avatar_placeholder)
         binding.btnLogin.visibility = View.VISIBLE
         binding.btnRegister.visibility = View.VISIBLE
         binding.btnLogout.visibility = View.GONE

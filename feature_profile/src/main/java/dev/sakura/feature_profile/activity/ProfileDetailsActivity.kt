@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.core.activity.BaseActivity
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.viewModel.AuthViewModel
-import dev.sakura.feature_profile.R
 import dev.sakura.feature_profile.databinding.ActivityProfileDetailsBinding
 import dev.sakura.models.UserModel
 import javax.inject.Inject
@@ -82,7 +81,7 @@ class ProfileDetailsActivity : BaseActivity() {
         avatarUri?.let { uriString ->
             Glide.with(this)
                 .load(Uri.parse(uriString))
-                .placeholder(R.drawable.ic_avatar_placeholder)
+                .placeholder(dev.sakura.common_ui.R.drawable.pic_avatar_placeholder)
                 .into(binding.imageAvatarProfileDetails)
         }
     }

@@ -6,4 +6,5 @@ interface UserRepository {
     suspend fun registerUserAndGetNewUser(user: UserModel): Result<UserModel?>
     suspend fun getUserByEmailOrPhoneNumberForLogin(emailOrPhone: String): Result<UserModel?>
     suspend fun getUserById(userId: Long): Result<UserModel?>
+    suspend fun updateUser(user: UserModel): Result<Unit>
 }

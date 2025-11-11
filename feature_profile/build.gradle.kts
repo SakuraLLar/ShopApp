@@ -66,4 +66,6 @@ dependencies {
     implementation(project(":models"))
 
     implementation(project(":feature_auth"))
+    implementation(project(":feature_orders"))
+
 }

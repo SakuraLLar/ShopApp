@@ -3,6 +3,7 @@
 
     <!-- All -->
     <string name="back_button">Назад</string>
+    <string name="select_cover_img">Обводка</string>
 
     <!--Intro Activity-->
     <string name="intro_title">Сделай шаг \n В мир моды и стиля</string>
@@ -21,4 +22,5 @@
 
     <!--General strings-->
     <string name="check_password">Показать пароль</string>
+
 </resources>

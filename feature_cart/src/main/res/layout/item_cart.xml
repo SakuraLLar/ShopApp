@@ -14,7 +14,7 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/image_view_product_cart"
+            android:id="@+id/img_view_product_cart"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
@@ -29,8 +29,8 @@
             android:layout_marginStart="16dp"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/image_view_product_cart"
-            app:layout_constraintTop_toTopOf="@id/image_view_product_cart"
+            app:layout_constraintStart_toEndOf="@id/img_view_product_cart"
+            app:layout_constraintTop_toTopOf="@id/img_view_product_cart"
             app:layout_constraintEnd_toStartOf="@+id/button_remove_item_cart"
             tools:text="Название товара" />
 
@@ -64,7 +64,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="@id/text_view_product_title_cart"
             app:layout_constraintTop_toBottomOf="@id/text_view_product_price_cart"
-            app:layout_constraintBottom_toBottomOf="@id/image_view_product_cart">
+            app:layout_constraintBottom_toBottomOf="@id/img_view_product_cart">
 
             <ImageButton
                 android:id="@+id/button_decrease_quantity"

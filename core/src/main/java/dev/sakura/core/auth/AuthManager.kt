@@ -8,4 +8,5 @@ interface AuthManager {
     fun loadCurrentUser(userId: Long)
     suspend fun registerUser(user: UserModel): Result<UserModel?>
     suspend fun loginUser(emailOrPhone: String, passwordHash: String): Result<UserModel?>
+    suspend fun updateUserData(user: UserModel): Result<Unit>
 }

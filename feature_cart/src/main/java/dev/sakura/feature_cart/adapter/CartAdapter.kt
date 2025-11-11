@@ -35,7 +35,7 @@ class CartAdapter(
 
                 val imageId = cartItem.imageResourceId
                 if (imageId != null && imageId != 0) {
-                    imageViewProductCart.setImageResource(imageId)
+                    imgViewProductCart.setImageResource(imageId)
                 }
 
                 buttonIncreaseQuantity.setOnClickListener {

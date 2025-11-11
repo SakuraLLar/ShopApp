@@ -1,7 +1,10 @@
 package dev.sakura.core.navigation
 
+import android.app.Activity
 import androidx.fragment.app.FragmentManager
 import android.content.Context
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import dev.sakura.models.ItemsModel
 
 interface AppNavigator {
@@ -14,6 +17,7 @@ interface AppNavigator {
     fun openFavourites(context: Context)
     fun openOrders(context: Context, items: ArrayList<ItemsModel>)
     fun openProfile(context: Context)
-    fun openProfileDetails(context: Context, avatarUri: String?)
+    fun openProfileDetails(activity: Activity, launcher: ActivityResultLauncher<Intent>)
+    fun openSettings(activity: Activity, launcher: ActivityResultLauncher<Intent>)
     fun goBack(context: Context)
 }

@@ -21,7 +21,5 @@
         android:id="@+id/view_outline"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/color_item_outline_selected"
-        android:visibility="gone"
-        tools:visibility="gone" />
+        android:background="@drawable/color_item_outline_default" />
 </androidx.cardview.widget.CardView>

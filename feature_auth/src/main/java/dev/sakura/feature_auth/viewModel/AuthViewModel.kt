@@ -38,6 +38,9 @@ class AuthViewModel @Inject constructor(
     private val _registrationSuccessAction = MutableLiveData<Event<UserModel>>()
     val registrationSuccessAction: LiveData<Event<UserModel>> = _registrationSuccessAction
 
+    private val _updateState = MutableLiveData<Event<Result<Unit>>>()
+    val updateState: LiveData<Event<Result<Unit>>> = _updateState
+
     val currentUser: LiveData<UserModel?> = authManager.currentUser
 
     fun registerUser(
@@ -89,6 +92,40 @@ class AuthViewModel @Inject constructor(
             } catch (e: Exception) {
                 _authState.value = AuthState.Error("Произошла ошибка ${e.message}")
             }
+        }
+    }
+
+    fun updateUser(
+        firstName: String,
+        lastName: String?,
+        email: String,
+        phoneNumber: String,
+        newPassword: String?
+    ) {
+        viewModelScope.launch {
+            val currentUser = authManager.currentUser.value
+
+            if (currentUser == null) {
+                _updateState.value = Event(Result.failure(Exception("Пользователь не найден")))
+                return@launch
+            }
+
+            val newPasswordHash = if (!newPassword.isNullOrEmpty()) {
+                hashPasswordWithBcrypt(newPassword)
+            } else {
+                currentUser.passwordHash
+            }
+
+            val updateUser = currentUser.copy(
+                firstName = firstName,
+                lastName = lastName,
+                email = email,
+                phoneNumber = phoneNumber,
+                passwordHash = newPasswordHash
+            )
+
+            val result = authManager.updateUserData(updateUser)
+            _updateState.value = Event(result)
         }
     }
 

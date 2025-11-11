@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="cardSurfaceColor" format="color" />
+
+    <declare-styleable name="GradientBorderView">
+        <attr name="gbv_strokeWidth" format="dimension" />
+        <attr name="gbv_startColor" format="color" />
+        <attr name="gbv_centerColor" format="color" />
+        <attr name="gbv_endColor" format="color" />
+    </declare-styleable>
+
 </resources>

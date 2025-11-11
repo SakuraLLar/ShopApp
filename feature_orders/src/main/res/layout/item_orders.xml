@@ -17,7 +17,7 @@
         android:padding="12dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/image_view_item_pic"
+            android:id="@+id/img_view_item_pic"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="centerCrop"
@@ -36,8 +36,8 @@
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/image_view_item_pic"
-            app:layout_constraintTop_toTopOf="@+id/image_view_item_pic"
+            app:layout_constraintStart_toEndOf="@+id/img_view_item_pic"
+            app:layout_constraintTop_toTopOf="@+id/img_view_item_pic"
             tools:text="Название товара, которое занимает две строки." />
 
         <TextView

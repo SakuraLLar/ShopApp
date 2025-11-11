@@ -13,38 +13,70 @@
         android:id="@+id/appbar_profile_details"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:background="@drawable/background_rectangle_gradient"
-        android:fitsSystemWindows="true"
+        android:background="@android:color/transparent"
         android:clipToPadding="false"
+        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_profile_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@drawable/background_rectangle_gradient"
+            app:contentScrim="@android:color/transparent"
             app:expandedTitleMarginBottom="16dp"
             app:expandedTitleMarginStart="72dp"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false">
 
-            <LinearLayout
-                android:id="@+id/header_content"
+            <ImageView
+                android:id="@+id/img_cover_profile_details"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
+                android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.7">
+                app:layout_collapseParallaxMultiplier="0.7"
+                tools:src="@drawable/cover_gradient_lava" />
+
+            <ImageView
+                android:id="@+id/btn_back_profile_details"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/button_oval_background"
+                android:padding="8dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/btn_settings"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/button_oval_background"
+                android:padding="8dp"
+                android:src="@drawable/pic_settings"
+                app:tint="@color/white" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/collapsing_toolbar_content_profile_details"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/image_avatar_profile_details"
+                    android:id="@+id/img_avatar_profile_details"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
-                    android:layout_gravity="center"
                     android:background="@drawable/background_oval_white_stroke"
                     android:padding="3dp"
                     android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@+id/txt_header_user_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                     tools:src="@drawable/pic_avatar_placeholder" />
 
@@ -53,60 +85,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:layout_marginBottom="24dp"
                     android:text="Имя"
                     android:textColor="@android:color/white"
                     android:textSize="22sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_profile_details"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:gravity="top"
-                android:paddingTop="?attr/actionBarSize"
-                android:fitsSystemWindows="true"
-                app:layout_collapseMode="pin" >
-
-                <ImageView
-                    android:id="@+id/btn_back_profile_details"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/button_oval_background"
-                    android:padding="12dp"
-                    android:src="@drawable/ic_arrow_back"
-                    app:tint="@android:color/white" />
-
-                <FrameLayout
-                    android:id="@+id/btn_edit_save_container"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="end"
-                    android:layout_marginEnd="8dp" >
-
-                    <ImageView
-                        android:id="@+id/btn_edit_profile_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/button_oval_background"
-                        android:padding="12dp"
-                        android:src="@drawable/ic_edit"
-                        app:tint="@android:color/white" />
-
-                    <ImageView
-                        android:id="@+id/btn_save_profile_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/button_oval_background"
-                        android:padding="12dp"
-                        android:src="@drawable/ic_check"
-                        android:visibility="gone"
-                        app:tint="@android:color/white" />
-
-                </FrameLayout>
-            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -125,67 +114,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:paddingStart="24dp"
+                android:paddingTop="24dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="16dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_layout_first_name"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Имя">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_edit_first_name"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_email"
+                        app:tint="?attr/colorOnSurfaceVariant" />
+
+                    <TextView
+                        android:id="@+id/txt_user_email"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="16dp"
+                        android:textAppearance="?attr/textAppearanceBodyLarge"
+                        android:textColor="?attr/colorOnSurface"
+                        tools:text="example@email.com" />
+                </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_layout_last_name"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Фамлия">
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_edit_last_name"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_phone"
+                        app:tint="?attr/colorOnSurfaceVariant" />
+
+                    <TextView
+                        android:id="@+id/txt_user_phone"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_layout_email"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Почта">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_edit_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_layout_phone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Телефон">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_edit_phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone" />
-                </com.google.android.material.textfield.TextInputLayout>
-
+                        android:layout_marginStart="16dp"
+                        android:textAppearance="?attr/textAppearanceBodyLarge"
+                        android:textColor="?attr/colorOnSurface"
+                        tools:text="+ 8 800 800 80 80" />
+                </LinearLayout>
             </LinearLayout>
 
             <View
@@ -202,16 +179,35 @@
                 android:text="Заказы"
                 android:textAppearance="?attr/textAppearanceTitleMedium" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_orders"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/item_order_placeholder" />
+                android:layout_marginTop="8dp" >
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_orders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_orders" />
+
+                <TextView
+                    android:id="@+id/txt_empty_orders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:text="Тут пока пусто"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

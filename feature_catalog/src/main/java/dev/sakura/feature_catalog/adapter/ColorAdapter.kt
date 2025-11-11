@@ -49,24 +49,34 @@ class ColorAdapter(private var items: List<String>) :
             )
         }
 
+        if (selectedPosition == position) {
+            holder.binding.viewOutline.setBackgroundResource(
+                R.drawable.color_item_outline_selected
+            )
+        } else {
+            holder.binding.viewOutline.setBackgroundResource(
+                R.drawable.color_item_outline_default
+            )
+        }
+
         holder.binding.root.setOnClickListener {
             val previousSelectedPosition = selectedPosition
-            if (selectedPosition == holder.adapterPosition) {
+            val currentPosition = holder.adapterPosition
+
+            if (currentPosition == RecyclerView.NO_POSITION) {
+                return@setOnClickListener
+            }
+
+            if (previousSelectedPosition == currentPosition) {
                 selectedPosition = RecyclerView.NO_POSITION
-                notifyItemChanged(previousSelectedPosition)
+                notifyItemChanged(currentPosition)
             } else {
-                selectedPosition = holder.adapterPosition
+                selectedPosition = currentPosition
                 if (previousSelectedPosition != RecyclerView.NO_POSITION) {
                     notifyItemChanged(previousSelectedPosition)
                 }
                 notifyItemChanged(selectedPosition)
             }
-        }
-
-        if (selectedPosition == position) {
-            holder.binding.viewOutline.visibility = View.VISIBLE
-        } else {
-            holder.binding.viewOutline.visibility = View.GONE
         }
     }
 

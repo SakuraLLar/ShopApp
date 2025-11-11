@@ -79,6 +79,15 @@ class AuthManagerImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateUserData(user: UserModel): Result<Unit> {
+        val result = userRepository.updateUser(user)
+
+        if (result.isSuccess) {
+            _currentUser.postValue(user)
+        }
+        return result
+    }
+
     private suspend fun mergeGuestData(userId: Long) {
         withContext(Dispatchers.IO) {
             cartRepository.assignGuestCartToUser(userId)

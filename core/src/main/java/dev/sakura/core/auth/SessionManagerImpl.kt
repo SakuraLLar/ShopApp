@@ -2,6 +2,7 @@ package dev.sakura.core.auth
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.DrawableRes
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,6 +23,7 @@ class SessionManagerImpl @Inject constructor(@ApplicationContext context: Contex
     companion object {
         private const val PREFS_NAME = "ShopAppPrefs"
         private const val USER_ID_KEY = "user_id"
+        private const val COVER_ID_KEY_PREFIX = "cover_id"
     }
 
     override fun createLoginSession(userId: Long) {
@@ -49,15 +51,28 @@ class SessionManagerImpl @Inject constructor(@ApplicationContext context: Contex
             .distinctUntilChanged()
     }
 
-    fun saveAvatarForCurrentUser(avatarUri: String) {
+    override fun saveAvatarForCurrentUser(avatarUri: String) {
         getCurrentUserId()?.let { userId ->
             prefs.edit().putString("avatar_uri_$userId", avatarUri).apply()
         }
     }
 
-    fun getAvatarForCurrentUser(): String? {
+    override fun getAvatarForCurrentUser(): String? {
         return getCurrentUserId()?.let { userId ->
             prefs.getString("avatar_uri_$userId", null)
+        }
+    }
+
+    override fun saveCoverForCurrentUser(@DrawableRes coverId: Int) {
+        getCurrentUserId()?.let { userId ->
+            prefs.edit().putInt(COVER_ID_KEY_PREFIX + userId, coverId).apply()
+        }
+    }
+
+    override fun getCoverForCurrentUser(): Int? {
+        return getCurrentUserId()?.let { userId ->
+            val coverId = prefs.getInt(COVER_ID_KEY_PREFIX + userId, -1)
+            if (coverId != -1) coverId else null
         }
     }
 }

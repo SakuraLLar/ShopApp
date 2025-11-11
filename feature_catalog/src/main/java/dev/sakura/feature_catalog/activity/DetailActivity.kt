@@ -44,11 +44,17 @@ class DetailActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        setupClickListeners()
         setupEdgeToEdge()
-        initUiElements()
         getInitialDataAndLoadFullProduct()
         observeViewModel()
         initCustomBottomNavigation()
+    }
+
+    private fun setupClickListeners() {
+        binding.btnBackDetail.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun setupEdgeToEdge() {
@@ -59,12 +65,6 @@ class DetailActivity : BaseActivity() {
                 topMargin = insets.top + 16
             }
             windowInsets
-        }
-    }
-
-    private fun initUiElements() {
-        binding.btnBackDetail.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
         }
     }
 

@@ -22,11 +22,11 @@ class CustomBottomNavView @JvmOverloads constructor(
         binding = LayoutCustomBottomNavBinding.inflate(LayoutInflater.from(context), this, true)
 
         tabIcons = mapOf(
-            R.id.nav_explorer to binding.imageViewExplorerIcon,
-            R.id.nav_cart to binding.imageViewCartIcon,
-            R.id.nav_favourites to binding.imageViewFavouritesIcon,
-            R.id.nav_orders to binding.imageViewOrdersIcon,
-            R.id.nav_profile to binding.imageViewProfileIcon,
+            R.id.nav_explorer to binding.imgViewExplorerIcon,
+            R.id.nav_cart to binding.imgViewCartIcon,
+            R.id.nav_favourites to binding.imgViewFavouritesIcon,
+            R.id.nav_orders to binding.imgViewOrdersIcon,
+            R.id.nav_profile to binding.imgViewProfileIcon,
         )
 
         setupClickListeners()

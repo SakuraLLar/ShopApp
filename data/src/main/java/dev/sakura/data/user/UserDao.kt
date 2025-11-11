@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import dev.sakura.data.entities.UserEntity
 
 @Dao
@@ -27,9 +28,8 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE email = :emailOrPhone OR phoneNumber = :emailOrPhone LIMIT 1")
     suspend fun getUserByEmailOrPhoneNumber(emailOrPhone: String): UserEntity?
 
-    // Метод для обновления пользователя
-    // @Update
-    // suspend fun updateUser(user: UserEntity)
+     @Update
+     suspend fun updateUser(user: UserEntity)
 
     // Метод для удаления пользователя
     // @Delete

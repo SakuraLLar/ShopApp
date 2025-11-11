@@ -3,6 +3,7 @@ package dev.sakura.shopapp.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentManager
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.fragment.LoginDialogFragment
@@ -14,6 +15,7 @@ import dev.sakura.feature_favourites.activity.FavouritesActivity
 import dev.sakura.feature_orders.activity.OrdersActivity
 import dev.sakura.feature_profile.activity.ProfileActivity
 import dev.sakura.feature_profile.activity.ProfileDetailsActivity
+import dev.sakura.feature_profile.activity.SettingsActivity
 import dev.sakura.models.ItemsModel
 import dev.sakura.shopapp.activity.IntroActivity
 import javax.inject.Inject
@@ -62,11 +64,14 @@ class AppNavigatorImpl @Inject constructor() : AppNavigator {
         context.startActivity(intent)
     }
 
-    override fun openProfileDetails(context: Context, avatarUri: String?) {
-        val intent = Intent(context, ProfileDetailsActivity::class.java).apply {
-            putExtra(ProfileDetailsActivity.EXTRA_AVATAR_URI, avatarUri)
-        }
-        context.startActivity(intent)
+    override fun openProfileDetails(activity: Activity, launcher: ActivityResultLauncher<Intent>) {
+        val intent = Intent(activity, ProfileDetailsActivity::class.java)
+        launcher.launch(intent)
+    }
+
+    override fun openSettings(activity: Activity, launcher: ActivityResultLauncher<Intent>) {
+        val intent = Intent(activity, SettingsActivity::class.java)
+        launcher.launch(intent)
     }
 
     override fun openLogin(fragmentManager: FragmentManager) {

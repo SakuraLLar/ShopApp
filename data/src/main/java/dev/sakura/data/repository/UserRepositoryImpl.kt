@@ -58,4 +58,15 @@ class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : Use
             }
         }
     }
+
+    override suspend fun updateUser(user: UserModel): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            try {
+                userDao.updateUser(user.toEntity())
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
 }

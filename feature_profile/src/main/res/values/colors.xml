@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Цвета для обложек -->
+    <color name="lavaLight_cover">#EDB606</color>
+    <color name="lava_cover">#e97415</color>
+    <color name="lavaDark_cover">#E62617</color>
+
+    <color name="lavenderLight_cover">#A46DBF</color>
+    <color name="lavender_cover">#6B45A6</color>
+    <color name="lavenderDark_cover">#3E1F70</color>
+
+    <color name="oceanLight_cover">#74D6ED</color>
+    <color name="ocean_cover">#3686AB</color>
+    <color name="oceanDark_cover">#033C74</color>
+
+    <color name="sunsetLight_cover">#EDDC88</color>
+    <color name="sunset_cover">#B99427</color>
+    <color name="sunsetDark_cover">#895700</color>
+
+    <color name="bitumenLight_cover">#B5B1D2</color>
+    <color name="bitumen_cover">#6D6DA0</color>
+    <color name="bitumenDark_cover">#3E3E5F</color>
+
+    <color name="leavesLight_cover">#36E899</color>
+    <color name="leaves_cover">#24A22D</color>
+    <color name="leavesDark_cover">#03771D</color>
+
+    <color name="wineLight_cover">#EB9B9B</color>
+    <color name="wine_cover">#BF3434</color>
+    <color name="wineDark_cover">#561717</color>
+
+    <color name="flowersLight_cover">#FFC107</color>
+    <color name="flowers_cover">#B95189</color>
+    <color name="flowersDark_cover">#9D3F43</color>
+
+    <color name="cloudLight_cover">#B0E3F8</color>
+    <color name="cloud_cover">#4C81EA</color>
+    <color name="cloudDark_cover">#267696</color>
+
+    <color name="loveLight_cover">#FF5F9E</color>
+    <color name="love_cover">#CB58A5</color>
+    <color name="loveDark_cover">#B1227D</color>
+
+    <color name="forestLight_cover">#02A677</color>
+    <color name="forest_cover">#017F4B</color>
+    <color name="forestDark_cover">#0E2B09</color>
+
+    <color name="spaceLight_cover">#3E1C3C</color>
+    <color name="space_cover">#142B64</color>
+    <color name="spaceDark_cover">#290C25</color>
+
+</resources>

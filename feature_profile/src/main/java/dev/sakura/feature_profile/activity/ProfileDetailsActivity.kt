@@ -1,19 +1,34 @@
 package dev.sakura.feature_profile.activity
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.core.activity.BaseActivity
+import dev.sakura.core.auth.SessionProvider
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.viewModel.AuthViewModel
+import dev.sakura.feature_orders.adapter.OrdersAdapter
+import dev.sakura.feature_orders.viewModel.OrdersViewModel
+import dev.sakura.feature_profile.R
 import dev.sakura.feature_profile.databinding.ActivityProfileDetailsBinding
 import dev.sakura.models.UserModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -23,30 +38,38 @@ class ProfileDetailsActivity : BaseActivity() {
     @Inject
     lateinit var appNavigator: AppNavigator
 
+    @Inject
+    lateinit var sessionProvider: SessionProvider
+
     private lateinit var binding: ActivityProfileDetailsBinding
+
     private val authViewModel: AuthViewModel by viewModels()
+    private val ordersViewModel: OrdersViewModel by viewModels()
+
     private var isEditMode = false
     private var avatarUri: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var ordersAdapter: OrdersAdapter
 
-        binding = ActivityProfileDetailsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.appbarProfileDetails) { view, insets ->
-            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-            view.setPadding(0, statusBarHeight, 0, 0)
-            insets
+    private val settingsLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                authViewModel.currentUser.value?.let { displayUserData(it) }
+                setResult(RESULT_OK)
+            }
         }
 
-        avatarUri = intent.getStringExtra(EXTRA_AVATAR_URI)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityProfileDetailsBinding.inflate(layoutInflater)
+        enableEdgeToEdge()
+        setContentView(binding.root)
 
         setupClickListeners()
-        observeViewModel()
-        toggleEditMode(false)
+        setupEdgeToEdge()
+        setupRecyclerView()
+        observeViewModels()
         initCustomBottomNavigation()
-
         setupAppBarScrollAnimation()
     }
 
@@ -55,46 +78,83 @@ class ProfileDetailsActivity : BaseActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.btnEditProfileDetails.setOnClickListener {
-            toggleEditMode(true)
-        }
-
-        binding.btnSaveProfileDetails.setOnClickListener {
-            // TODO: Здесь будет логика сохранения данных из полей ввода
-            toggleEditMode(false)
+        binding.btnSettings.setOnClickListener {
+            appNavigator.openSettings(this, settingsLauncher)
         }
     }
 
-    private fun observeViewModel() {
+    private fun setupEdgeToEdge() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            binding.btnBackProfileDetails.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top + 16
+            }
+
+            binding.btnSettings.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top + 16
+            }
+            windowInsets
+        }
+    }
+
+    private fun setupRecyclerView() {
+        ordersAdapter = OrdersAdapter { clickedItem ->
+            appNavigator.openProductDetails(this, clickedItem)
+        }
+
+        binding.recyclerViewOrders.apply {
+            adapter = ordersAdapter
+            layoutManager = LinearLayoutManager(this@ProfileDetailsActivity)
+            isNestedScrollingEnabled = false
+        }
+    }
+
+    private fun observeViewModels() {
         authViewModel.currentUser.observe(this) { user ->
             user?.let { displayUserData(it) }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                ordersViewModel.orderedItemsList.collect { orders ->
+                    if (orders.isEmpty()) {
+                        binding.recyclerViewOrders.visibility = View.GONE
+                        binding.txtEmptyOrders.visibility = View.VISIBLE
+                    } else {
+                        binding.recyclerViewOrders.visibility = View.VISIBLE
+                        binding.txtEmptyOrders.visibility = View.GONE
+                        ordersAdapter.submitList(orders)
+                    }
+                }
+            }
         }
     }
 
     private fun displayUserData(user: UserModel) {
         binding.txtHeaderUserName.text = "${user.firstName} ${user.lastName ?: ""}"
-        binding.inputEditFirstName.setText(user.firstName)
-        binding.inputEditLastName.setText(user.lastName ?: "")
-        binding.inputEditEmail.setText(user.email)
-        binding.inputEditPhone.setText(user.phoneNumber)
+        binding.txtUserEmail.text = user.email
+        binding.txtUserPhone.text = user.phoneNumber
 
-        avatarUri?.let { uriString ->
+        val currentAvatarUri = sessionProvider.getAvatarForCurrentUser()
+
+        if (currentAvatarUri != null) {
             Glide.with(this)
-                .load(Uri.parse(uriString))
-                .placeholder(dev.sakura.common_ui.R.drawable.pic_avatar_placeholder)
-                .into(binding.imageAvatarProfileDetails)
+                .load(Uri.parse(currentAvatarUri))
+                .placeholder(R.drawable.pic_avatar_placeholder)
+                .error(R.drawable.pic_avatar_placeholder)
+                .into(binding.imgAvatarProfileDetails)
+        } else {
+            binding.imgAvatarProfileDetails.setImageResource(R.drawable.pic_avatar_placeholder)
         }
-    }
 
-    private fun toggleEditMode(isEditing: Boolean) {
-        isEditMode = isEditing
-        binding.inputEditFirstName.isEnabled = isEditing
-        binding.inputEditLastName.isEnabled = isEditing
-        binding.inputEditEmail.isEnabled = isEditing
-        binding.inputEditPhone.isEnabled = isEditing
+        val currentCoverId = sessionProvider.getCoverForCurrentUser()
 
-        binding.btnEditProfileDetails.visibility = if (isEditing) View.GONE else View.VISIBLE
-        binding.btnSaveProfileDetails.visibility = if (isEditing) View.VISIBLE else View.GONE
+        if (currentCoverId != null) {
+            binding.imgCoverProfileDetails.setImageResource(currentCoverId)
+        } else {
+            binding.imgCoverProfileDetails.setImageResource(R.drawable.cover_gradient_lava)
+        }
     }
 
     private fun initCustomBottomNavigation() {
@@ -111,16 +171,16 @@ class ProfileDetailsActivity : BaseActivity() {
         binding.appbarProfileDetails.addOnOffsetChangedListener(
             AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
                 val totalScrollRange = appBarLayout.totalScrollRange
-                val alpha = 1 - (abs(verticalOffset).toFloat() / totalScrollRange)
-                binding.imageAvatarProfileDetails.alpha = alpha
+                val alpha = 1.0f - (abs(verticalOffset).toFloat() / totalScrollRange)
+
+                binding.collapsingToolbarContentProfileDetails.alpha = alpha
+                binding.collapsingToolbarContentProfileDetails.visibility =
+                    if (alpha < 0.1) View.INVISIBLE else View.VISIBLE
+                binding.imgAvatarProfileDetails.alpha = alpha
                 binding.txtHeaderUserName.alpha = alpha
                 binding.btnBackProfileDetails.alpha = alpha
-                binding.btnEditSaveContainer.alpha = alpha
+                binding.btnSettings.alpha = alpha
             }
         )
-    }
-
-    companion object {
-        const val EXTRA_AVATAR_URI = "extra_avatar_uri"
     }
 }

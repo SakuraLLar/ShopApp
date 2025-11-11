@@ -39,7 +39,7 @@ class OrdersAdapter(
 
             Glide.with(itemView.context)
                 .load(item.resourceId)
-                .into(binding.imageViewItemPic)
+                .into(binding.imgViewItemPic)
 
             itemView.setOnClickListener {
                 onItemClick(item)

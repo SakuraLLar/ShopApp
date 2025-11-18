@@ -9,7 +9,7 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dev.sakura.common_ui.R
-import dev.sakura.feature_catalog.databinding.ViewholderColorBinding
+import dev.sakura.feature_catalog.databinding.ViewHolderColorBinding
 
 class ColorAdapter(private var items: List<String>) :
     RecyclerView.Adapter<ColorAdapter.ViewHolder>() {
@@ -28,7 +28,7 @@ class ColorAdapter(private var items: List<String>) :
         viewType: Int,
     ): ViewHolder {
         context = parent.context
-        val binding = ViewholderColorBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = ViewHolderColorBinding.inflate(LayoutInflater.from(context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -85,6 +85,6 @@ class ColorAdapter(private var items: List<String>) :
         return count
     }
 
-    inner class ViewHolder(val binding: ViewholderColorBinding) :
+    inner class ViewHolder(val binding: ViewHolderColorBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

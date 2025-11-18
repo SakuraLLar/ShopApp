@@ -54,10 +54,9 @@ class ProfileActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        observeViewModel()
-        setupThemeSwitch()
         setupClickListeners()
-
+        observeViewModels()
+        setupThemeSwitch()
         initCustomBottomNavigation()
         (binding.includeBottomNavProfile as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_profile)
     }
@@ -81,7 +80,7 @@ class ProfileActivity : BaseActivity() {
         }
     }
 
-    private fun observeViewModel() {
+    private fun observeViewModels() {
         authManager.currentUser.observe(this) { user ->
             if (user != null) {
                 displayLoggedInUserUI(user)

@@ -3,8 +3,8 @@
     <!--Main Activity-->
     <string name="main_greeting">Добро пожаловать!</string>
     <string name="main_greeting_user">Привет, %1$s!</string>
-    <string name="guest_name">Гость</string>
+    <string name="main_greeting_guest">Добро пожаловать, Гость!</string>
     <string name="name">Имя пользователя</string>
-
+    <string name="find_product">Найти товар</string>
 
 </resources>

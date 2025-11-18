@@ -59,6 +59,7 @@ dependencies {
 
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
 
     // DI
@@ -74,4 +75,5 @@ dependencies {
     implementation(project(":models"))
 
     implementation(project(":feature_auth"))
+    implementation(project(":feature_profile"))
 }

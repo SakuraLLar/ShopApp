@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Цвета для обложек -->
+    <!-- ============= ЦВЕТА ДЛЯ ОБЛОЖЕК ============= -->
+
     <color name="lavaLight_cover">#EDB606</color>
     <color name="lava_cover">#e97415</color>
     <color name="lavaDark_cover">#E62617</color>

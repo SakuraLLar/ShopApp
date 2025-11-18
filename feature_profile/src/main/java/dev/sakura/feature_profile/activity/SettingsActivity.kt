@@ -50,7 +50,7 @@ class SettingsActivity : AppCompatActivity() {
 
         setupClickListeners()
         setupEdgeToEdge()
-        observeViewModel()
+        observeViewModels()
         toggleEditMode(false)
         loadAndDisplayCurrentCover()
     }
@@ -94,7 +94,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeViewModel() {
+    private fun observeViewModels() {
         authManager.currentUser.observe(this) { user ->
             if (!isEditMode) {
                 user?.let { displayUserData(it) }
@@ -248,19 +248,4 @@ class SettingsActivity : AppCompatActivity() {
             binding.btnEditSaveSettings.text = "Изменить"
         }
     }
-
-//    private val coverToBorderMap = mapOf(
-//        R.drawable.cover_gradient_lava to R.drawable.outline_gradient_lava,
-//        R.drawable.cover_gradient_ocean to R.drawable.outline_gradient_ocean,
-//        R.drawable.cover_gradient_forest to R.drawable.outline_gradient_forest,
-//        R.drawable.cover_gradient_love to R.drawable.outline_gradient_love,
-//        R.drawable.cover_gradient_space to R.drawable.outline_gradient_space,
-//        R.drawable.cover_gradient_sunset to R.drawable.outline_gradient_sunset,
-//        R.drawable.cover_gradient_forest to R.drawable.outline_gradient_forest,
-//        R.drawable.cover_gradient_lavender to R.drawable.outline_gradient_lavender,
-//        R.drawable.cover_gradient_cloud to R.drawable.outline_gradient_cloud,
-//        R.drawable.cover_gradient_wine to R.drawable.outline_gradient_wine,
-//        R.drawable.cover_gradient_bitumen to R.drawable.outline_gradient_bitumen,
-//        R.drawable.cover_gradient_flowers to R.drawable.outline_gradient_flowers,
-//    )
 }

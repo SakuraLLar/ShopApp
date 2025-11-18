@@ -6,9 +6,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.common_ui.view.CustomBottomNavView
@@ -38,8 +36,7 @@ class FavouritesActivity : BaseActivity() {
 
         setupEdgeToEdge()
         setupRecyclerView()
-        observeViewModel()
-
+        observeViewModels()
         initCustomBottomNavigation()
         (binding.includeBottomNavFavourites as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_favourites)
     }
@@ -67,7 +64,7 @@ class FavouritesActivity : BaseActivity() {
         binding.recyclerViewFavourites.adapter = favouritesAdapter
     }
 
-    private fun observeViewModel() {
+    private fun observeViewModels() {
         lifecycleScope.launch {
             favouritesViewModel.favouriteItems.collectLatest { items ->
                 if (items.isNullOrEmpty()) {

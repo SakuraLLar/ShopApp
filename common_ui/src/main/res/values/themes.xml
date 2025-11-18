@@ -10,6 +10,9 @@
         <item name="colorOnBackground">@color/m3_on_background_light</item>
         <item name="colorSurface">@color/m3_surface_light</item>
         <item name="colorOnSurface">@color/m3_on_surface_light</item>
+        <item name="myColorSurface">?attr/colorSurface</item>
+        <item name="myColorSurfaceContainer">?attr/colorSurfaceContainer</item>
+
 
         <!-- Цвета контейнеров (для градиента и карточек) -->
         <item name="colorSurfaceContainer">@color/m3_surface_container_light</item>
@@ -17,15 +20,11 @@
         <item name="colorOnSecondary">@color/black</item>
 
         <!-- Статус бар -->
-        <!--        <item name="android:statusBarColor">?attr/colorPrimary</item>-->
-        <!--        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>-->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
 
         <!-- Цвет иконок тулбара и других элементов управления -->
-        <!--        <item name="colorControlNormal">@color/m3_on_surface_light</item>-->
-        <!--        <item name="android:textColorPrimary">@color/m3_on_background_light</item>-->
         <item name="colorControlNormal">@color/m3_on_surface_light</item>
 
         <!-- Цвет элемента block_background -->

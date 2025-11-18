@@ -69,8 +69,8 @@ class ProfileDetailsActivity : BaseActivity() {
         setupEdgeToEdge()
         setupRecyclerView()
         observeViewModels()
-        initCustomBottomNavigation()
         setupAppBarScrollAnimation()
+        initCustomBottomNavigation()
     }
 
     private fun setupClickListeners() {
@@ -157,16 +157,6 @@ class ProfileDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun initCustomBottomNavigation() {
-        val bottomNav = binding.includeBottomNavProfileDetails
-
-        bottomNav.navExplorer.setOnClickListener { appNavigator.openMain(this) }
-        bottomNav.navCart.setOnClickListener { appNavigator.openCart(this) }
-        bottomNav.navFavourites.setOnClickListener { appNavigator.openFavourites(this) }
-        bottomNav.navOrders.setOnClickListener { appNavigator.openOrders(this, arrayListOf()) }
-        bottomNav.navProfile.setOnClickListener { appNavigator.openProfile(this) }
-    }
-
     private fun setupAppBarScrollAnimation() {
         binding.appbarProfileDetails.addOnOffsetChangedListener(
             AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
@@ -182,5 +172,15 @@ class ProfileDetailsActivity : BaseActivity() {
                 binding.btnSettings.alpha = alpha
             }
         )
+    }
+
+    private fun initCustomBottomNavigation() {
+        val bottomNav = binding.includeBottomNavProfileDetails
+
+        bottomNav.navExplorer.setOnClickListener { appNavigator.openMain(this) }
+        bottomNav.navCart.setOnClickListener { appNavigator.openCart(this) }
+        bottomNav.navFavourites.setOnClickListener { appNavigator.openFavourites(this) }
+        bottomNav.navOrders.setOnClickListener { appNavigator.openOrders(this, arrayListOf()) }
+        bottomNav.navProfile.setOnClickListener { appNavigator.openProfile(this) }
     }
 }

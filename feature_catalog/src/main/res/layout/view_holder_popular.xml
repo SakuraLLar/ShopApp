@@ -7,7 +7,7 @@
     android:layout_margin="8dp">
 
     <ImageView
-        android:id="@+id/pic"
+        android:id="@+id/img_pic_popular"
         android:layout_width="164dp"
         android:layout_height="164dp"
         android:background="@drawable/grey_bg"
@@ -17,7 +17,7 @@
         tools:srcCompat="@drawable/shoes" />
 
     <ImageView
-        android:id="@+id/addToFavourites"
+        android:id="@+id/img_add_to_favourite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -28,7 +28,7 @@
         app:tint="?attr/colorControlNormal" />
 
     <TextView
-        android:id="@+id/txtPrice"
+        android:id="@+id/txt_price_popular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -37,32 +37,32 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pic" />
+        app:layout_constraintTop_toBottomOf="@+id/img_pic_popular" />
 
     <TextView
-        android:id="@+id/txtRating"
+        android:id="@+id/txt_rating_popular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:text="5"
         android:textColor="?attr/colorOnBackground"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtPrice"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_price_popular"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtPrice" />
+        app:layout_constraintTop_toTopOf="@+id/txt_price_popular" />
 
     <ImageView
-        android:id="@+id/star"
+        android:id="@+id/img_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtRating"
-        app:layout_constraintEnd_toStartOf="@+id/txtRating"
-        app:layout_constraintTop_toTopOf="@+id/txtRating"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_rating_popular"
+        app:layout_constraintEnd_toStartOf="@+id/txt_rating_popular"
+        app:layout_constraintTop_toTopOf="@+id/txt_rating_popular"
         app:srcCompat="@drawable/pic_star" />
 
     <TextView
-        android:id="@+id/txtTitle"
+        android:id="@+id/txt_title_popular"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
@@ -74,5 +74,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_price_popular" />
 </androidx.constraintlayout.widget.ConstraintLayout>

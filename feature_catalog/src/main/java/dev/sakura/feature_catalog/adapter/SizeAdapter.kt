@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import dev.sakura.common_ui.R
-import dev.sakura.feature_catalog.databinding.ViewholderSizeBinding
+import dev.sakura.feature_catalog.databinding.ViewHolderSizeBinding
 
 class SizeAdapter(private var items: MutableList<String>) :
     RecyclerView.Adapter<SizeAdapter.ViewHolder>() {
@@ -25,7 +25,7 @@ class SizeAdapter(private var items: MutableList<String>) :
         viewType: Int,
     ): ViewHolder {
         context = parent.context
-        val binding = ViewholderSizeBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = ViewHolderSizeBinding.inflate(LayoutInflater.from(context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -62,6 +62,6 @@ class SizeAdapter(private var items: MutableList<String>) :
 
     override fun getItemCount(): Int = items.size
 
-    inner class ViewHolder(val binding: ViewholderSizeBinding) :
+    inner class ViewHolder(val binding: ViewHolderSizeBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

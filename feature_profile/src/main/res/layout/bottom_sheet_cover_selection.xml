@@ -39,21 +39,23 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_close_cover"
-            style="?attr/materialButtonOutlinedStyle"
+            style="@style/Widget.App.Button.Yellow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
+            android:background="@drawable/custom_button_background"
             android:text="Закрыть" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save_cover"
+            style="@style/Widget.App.Button.Yellow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
+            android:background="@drawable/custom_button_background"
             android:text="Сохранить" />
 
     </LinearLayout>
-
 </LinearLayout>

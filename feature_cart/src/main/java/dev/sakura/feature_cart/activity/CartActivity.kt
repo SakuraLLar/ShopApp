@@ -40,7 +40,7 @@ class CartActivity : BaseActivity() {
 
         setupEdgeToEdge()
         setupRecyclerView()
-        observeViewModel()
+        observeViewModels()
 
         binding.buttonCheckout.setOnClickListener {
             val itemsInCart = cartViewModel.allCartItems.value
@@ -111,7 +111,7 @@ class CartActivity : BaseActivity() {
         }
     }
 
-    private fun observeViewModel() {
+    private fun observeViewModels() {
         cartViewModel.allCartItems.observe(this, Observer { cartItems ->
             if (cartItems.isNullOrEmpty()) {
                 binding.recyclerViewCart.visibility = View.GONE

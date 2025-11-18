@@ -47,7 +47,7 @@ class DetailActivity : BaseActivity() {
         setupClickListeners()
         setupEdgeToEdge()
         getInitialDataAndLoadFullProduct()
-        observeViewModel()
+        observeViewModels()
         initCustomBottomNavigation()
     }
 
@@ -79,7 +79,7 @@ class DetailActivity : BaseActivity() {
         detailViewModel.loadProductById(receivedItem.resourceId)
     }
 
-    private fun observeViewModel() {
+    private fun observeViewModels() {
         lifecycleScope.launch {
             detailViewModel.product.filterNotNull().collect { fullProduct ->
                 updateUi(fullProduct)

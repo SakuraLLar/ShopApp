@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:fitsSystemWindows="true"
     tools:context="dev.sakura.feature_profile.activity.ProfileActivity">
 
@@ -22,6 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:paddingTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,13 +56,15 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
         <ImageView
-            android:id="@+id/icon_notification"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:background="@drawable/outline_gradient_lava"
+            android:id="@+id/img_notification_icon_profile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/notification_icon_background"
+            app:srcCompat="@drawable/ic_bell"
+            android:translationX="10dp"
+            android:translationY="-10dp"
             app:layout_constraintEnd_toEndOf="@+id/img_profile_avatar"
             app:layout_constraintTop_toTopOf="@+id/img_profile_avatar"
-            app:srcCompat="@drawable/ic_bell"
             app:tint="?attr/colorOnPrimary" />
 
         <TextView
@@ -106,7 +112,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login"
-            style="@style/Widget.Material3.Button"
+            style="@style/Widget.App.Button.Yellow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/profile_action_login"
@@ -115,7 +121,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register"
-            style="@style/Widget.Material3.Button"
+            style="@style/Widget.App.Button.Yellow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -125,7 +131,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_logout"
-            style="@style/Widget.Material3.Button"
+            style="@style/Widget.App.Button.Yellow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/profile_action_logout"

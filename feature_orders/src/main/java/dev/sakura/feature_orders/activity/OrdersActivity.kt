@@ -39,8 +39,7 @@ class OrdersActivity : AppCompatActivity() {
 
         setupEdgeToEdge()
         setupRecyclerView()
-        observeViewModel()
-
+        observeViewModels()
         initCustomBottomNavigation()
         (binding.includeBottomNavOrders as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_orders)
     }
@@ -65,7 +64,7 @@ class OrdersActivity : AppCompatActivity() {
         binding.recyclerViewOrders.adapter = ordersAdapter
     }
 
-    private fun observeViewModel() {
+    private fun observeViewModels() {
         lifecycleScope.launch {
             ordersViewModel.orderedItemsList.collectLatest { orders ->
                 if (orders.isNullOrEmpty()) {

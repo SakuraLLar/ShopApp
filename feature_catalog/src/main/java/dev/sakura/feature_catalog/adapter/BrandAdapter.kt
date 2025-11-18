@@ -37,13 +37,13 @@ class BrandAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BrandItem) {
-            binding.txtTitle.text = item.brand.title
+            binding.txtTitleBrand.text = item.brand.title
             Glide.with(itemView.context)
                 .load(item.brand.resourceId)
-                .into(binding.pic)
+                .into(binding.imgPicBrand)
 
             binding.root.isActivated = item.isSelected
-            binding.txtTitle.visibility = if (item.isSelected) View.VISIBLE else View.GONE
+            binding.txtTitleBrand.visibility = if (item.isSelected) View.VISIBLE else View.GONE
             binding.root.setOnClickListener { onBrandClick(item.brand) }
         }
     }

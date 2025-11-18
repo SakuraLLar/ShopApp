@@ -1,9 +1,14 @@
 package dev.sakura.feature_catalog.activity
 
+import android.content.res.ColorStateList
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,12 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import dagger.hilt.android.AndroidEntryPoint
+import dev.sakura.common_ui.util.ThemeColorProvider
 import dev.sakura.common_ui.view.CustomBottomNavView
 import dev.sakura.core.activity.BaseActivity
 import dev.sakura.core.auth.AuthManager
+import dev.sakura.core.auth.SessionProvider
 import dev.sakura.core.navigation.AppNavigator
-import dev.sakura.feature_auth.viewModel.AuthViewModel
 import dev.sakura.feature_catalog.R
 import dev.sakura.feature_catalog.adapter.BrandAdapter
 import dev.sakura.feature_catalog.adapter.PopularAdapter
@@ -24,26 +32,32 @@ import dev.sakura.feature_catalog.adapter.PopularItem
 import dev.sakura.feature_catalog.adapter.SliderAdapter
 import dev.sakura.feature_catalog.databinding.ActivityMainBinding
 import dev.sakura.feature_catalog.viewModel.MainViewModel
+import dev.sakura.feature_profile.util.GradientBorderProvider
 import dev.sakura.models.SliderModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import dev.sakura.feature_profile.R as ProfileR
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
     @Inject
     lateinit var appNavigator: AppNavigator
 
-    private val authViewModel: AuthViewModel by viewModels()
-    private val mainViewModel: MainViewModel by viewModels()
-
     @Inject
     lateinit var authManager: AuthManager
 
+    @Inject
+    lateinit var sessionProvider: SessionProvider
+
+    private val mainViewModel: MainViewModel by viewModels()
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var popularAdapter: PopularAdapter
-
     private lateinit var brandAdapter: BrandAdapter
+
+    private var isSearchBarInToolbar = false
+    private lateinit var searchBarOriginalParams: android.view.ViewGroup.LayoutParams
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,26 +65,123 @@ class MainActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        setupEdgeToEdge()
         observeCurrentUser()
-
         initBanner()
         initBrand()
         initPopular()
-
+        setupRoundedCorners()
+        setupAppBarScrollAnimation()
         initCustomBottomNavigation()
         (binding.includeBottomNavMain
                 as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_explorer)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateHeaderColor()
+    }
+
+    private fun updateHeaderColor() {
+        val currentCoverId =
+            sessionProvider.getCoverForCurrentUser() ?: ProfileR.drawable.cover_gradient_lava
+
+        val gradientColors = GradientBorderProvider.coverToBorderColorMap[currentCoverId]
+            ?: GradientBorderProvider.coverToBorderColorMap[ProfileR.drawable.cover_gradient_lava]!!
+
+        val headerBackground =
+            ContextCompat.getDrawable(this, R.drawable.head_island_background_lava)?.mutate()
+
+        if (headerBackground is GradientDrawable) {
+            headerBackground.colors = intArrayOf(
+                ContextCompat.getColor(this, gradientColors.start),
+                ContextCompat.getColor(this, gradientColors.center),
+                ContextCompat.getColor(this, gradientColors.end)
+            )
+            binding.headerViewMain.background = headerBackground
+        }
+    }
+
+    private fun setupEdgeToEdge() {
+        ViewCompat.setFitsSystemWindows(binding.root, false)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            binding.headerViewMain.setPadding(
+                binding.headerViewMain.paddingLeft,
+                insets.top,
+                binding.headerViewMain.paddingRight,
+                binding.headerViewMain.paddingBottom
+            )
+
+            binding.toolbarMain.setPadding(
+                binding.toolbarMain.paddingLeft,
+                insets.top,
+                binding.toolbarMain.paddingRight,
+                binding.toolbarMain.paddingBottom
+            )
+
+            val toolbarHeight =
+                (56 * resources.displayMetrics.density).toInt()
+            binding.toolbarMain.layoutParams.height = insets.top + toolbarHeight
+
+            windowInsets
+        }
     }
 
     private fun observeCurrentUser() {
         authManager.currentUser.observe(this) { user ->
             if (user != null) {
                 binding.txtWelcomeMain.text = getString(R.string.main_greeting_user, user.firstName)
-                binding.txtNameMain.visibility = View.GONE
             } else {
-                binding.txtWelcomeMain.text = getString(R.string.main_greeting)
-                binding.txtNameMain.text = getString(R.string.guest_name)
-                binding.txtNameMain.visibility = View.VISIBLE
+                binding.txtWelcomeMain.text = getString(R.string.main_greeting_guest)
+            }
+        }
+    }
+
+    private fun setupRoundedCorners() {
+        val radius = resources.getDimension(R.dimen.corner_radius_large)
+        val shapeAppearanceModel = ShapeAppearanceModel.builder()
+            .setBottomLeftCornerSize(radius)
+            .setBottomRightCornerSize(radius)
+            .build()
+        val shapeDrawable = MaterialShapeDrawable(shapeAppearanceModel)
+
+        ViewCompat.setBackground(binding.appBarMain, shapeDrawable)
+
+        val colorSurface = ThemeColorProvider.getSurfaceColor(binding.root)
+        shapeDrawable.fillColor = ColorStateList.valueOf(colorSurface)
+    }
+
+    private fun setupAppBarScrollAnimation() {
+        searchBarOriginalParams = binding.searchBarContainer.layoutParams
+
+        binding.appBarMain.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val totalScrollRange = appBarLayout.totalScrollRange
+            val headerAlpha =
+                (totalScrollRange.toFloat() + verticalOffset) / totalScrollRange.toFloat()
+            binding.headerViewMain.alpha = headerAlpha
+            val isCollapsed = (totalScrollRange + verticalOffset) == 0
+
+            if (isCollapsed && !isSearchBarInToolbar) {
+                (binding.searchBarContainer.parent as? android.view.ViewGroup)?.removeView(binding.searchBarContainer)
+                binding.toolbarMain.addView(
+                    binding.searchBarContainer,
+                    androidx.appcompat.widget.Toolbar.LayoutParams(
+                        android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                        (46 * resources.displayMetrics.density).toInt()
+                    ).apply {
+                        marginStart = (16 * resources.displayMetrics.density).toInt()
+                        marginEnd = (16 * resources.displayMetrics.density).toInt()
+                    }
+                )
+                binding.toolbarMain.alpha = 1f
+                isSearchBarInToolbar = true
+            } else if (!isCollapsed && isSearchBarInToolbar) {
+                (binding.searchBarContainer.parent as? android.view.ViewGroup)?.removeView(binding.searchBarContainer)
+                binding.headerViewMain.addView(binding.searchBarContainer, searchBarOriginalParams)
+                binding.toolbarMain.alpha = 0f
+                isSearchBarInToolbar = false
             }
         }
     }

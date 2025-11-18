@@ -2,6 +2,9 @@
 <resources>
     <attr name="cardSurfaceColor" format="color" />
 
+    <attr name="myColorSurface" format="color|reference" />
+    <attr name="myColorSurfaceContainer" format="color|reference" />
+
     <declare-styleable name="GradientBorderView">
         <attr name="gbv_strokeWidth" format="dimension" />
         <attr name="gbv_startColor" format="color" />

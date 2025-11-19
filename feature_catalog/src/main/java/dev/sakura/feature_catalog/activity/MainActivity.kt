@@ -59,6 +59,8 @@ class MainActivity : BaseActivity() {
     private var isSearchBarInToolbar = false
     private lateinit var searchBarOriginalParams: android.view.ViewGroup.LayoutParams
 
+    private var topInset: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -71,7 +73,7 @@ class MainActivity : BaseActivity() {
         initBrand()
         initPopular()
         setupRoundedCorners()
-        setupAppBarScrollAnimation()
+        setupCustomScrollBehavior()
         initCustomBottomNavigation()
         (binding.includeBottomNavMain
                 as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_explorer)
@@ -103,28 +105,33 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupEdgeToEdge() {
-        ViewCompat.setFitsSystemWindows(binding.root, false)
+        var isPaddingApplied = false
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            topInset = insets.top
 
             binding.headerViewMain.setPadding(
                 binding.headerViewMain.paddingLeft,
-                insets.top,
+                topInset,
                 binding.headerViewMain.paddingRight,
                 binding.headerViewMain.paddingBottom
             )
+            binding.toolbarMain.setPadding(0, topInset, 0, 0)
 
-            binding.toolbarMain.setPadding(
-                binding.toolbarMain.paddingLeft,
-                insets.top,
-                binding.toolbarMain.paddingRight,
-                binding.toolbarMain.paddingBottom
-            )
-
-            val toolbarHeight =
-                (56 * resources.displayMetrics.density).toInt()
-            binding.toolbarMain.layoutParams.height = insets.top + toolbarHeight
-
+            if (!isPaddingApplied) {
+                binding.headerContainer.viewTreeObserver.addOnDrawListener {
+                    if (binding.headerContainer.height > 0) {
+                        binding.nestedScrollViewMain.setPadding(
+                            0,
+                            binding.headerContainer.height,
+                            0,
+                            binding.nestedScrollViewMain.paddingBottom
+                        )
+                        binding.headerContainer.bringToFront()
+                        isPaddingApplied = true
+                    }
+                }
+            }
             windowInsets
         }
     }
@@ -141,46 +148,56 @@ class MainActivity : BaseActivity() {
 
     private fun setupRoundedCorners() {
         val radius = resources.getDimension(R.dimen.corner_radius_large)
-        val shapeAppearanceModel = ShapeAppearanceModel.builder()
+        val colorSurface = ThemeColorProvider.getSurfaceColor(binding.root)
+        val shapeModel = ShapeAppearanceModel.builder()
             .setBottomLeftCornerSize(radius)
             .setBottomRightCornerSize(radius)
             .build()
-        val shapeDrawable = MaterialShapeDrawable(shapeAppearanceModel)
+        val shapeDrawable = MaterialShapeDrawable(shapeModel).apply {
+            fillColor = ColorStateList.valueOf(colorSurface)
+        }
 
-        ViewCompat.setBackground(binding.appBarMain, shapeDrawable)
-
-        val colorSurface = ThemeColorProvider.getSurfaceColor(binding.root)
-        shapeDrawable.fillColor = ColorStateList.valueOf(colorSurface)
+        binding.headerContainer.background = shapeDrawable
     }
 
-    private fun setupAppBarScrollAnimation() {
+    private fun setupCustomScrollBehavior() {
         searchBarOriginalParams = binding.searchBarContainer.layoutParams
 
-        binding.appBarMain.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-            val totalScrollRange = appBarLayout.totalScrollRange
-            val headerAlpha =
-                (totalScrollRange.toFloat() + verticalOffset) / totalScrollRange.toFloat()
-            binding.headerViewMain.alpha = headerAlpha
-            val isCollapsed = (totalScrollRange + verticalOffset) == 0
+        binding.nestedScrollViewMain.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            val toolbarHeight =
+                binding.headerContainer.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main).height
+            if (toolbarHeight == 0 || binding.headerContainer.height == 0) return@setOnScrollChangeListener
 
+            val scrollRange = binding.headerContainer.height - toolbarHeight
+            val clampedScrollY = scrollY.coerceIn(0, scrollRange)
+            binding.headerContainer.translationY = -clampedScrollY.toFloat()
+
+            val progress = if (scrollRange > 0) {
+                (clampedScrollY.toFloat() / scrollRange.toFloat()).coerceIn(0f, 1f)
+            } else {
+                0f
+            }
+
+            binding.headerViewMain.alpha = 1f - progress
+            binding.toolbarMain.alpha = progress
+
+            val isCollapsed = progress > 0.95f
             if (isCollapsed && !isSearchBarInToolbar) {
                 (binding.searchBarContainer.parent as? android.view.ViewGroup)?.removeView(binding.searchBarContainer)
-                binding.toolbarMain.addView(
+
+                binding.toolbarSearchBarProxyContainer.addView(
                     binding.searchBarContainer,
-                    androidx.appcompat.widget.Toolbar.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams(
                         android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                         (46 * resources.displayMetrics.density).toInt()
                     ).apply {
-                        marginStart = (16 * resources.displayMetrics.density).toInt()
-                        marginEnd = (16 * resources.displayMetrics.density).toInt()
+                        gravity = android.view.Gravity.CENTER_VERTICAL
                     }
                 )
-                binding.toolbarMain.alpha = 1f
                 isSearchBarInToolbar = true
             } else if (!isCollapsed && isSearchBarInToolbar) {
                 (binding.searchBarContainer.parent as? android.view.ViewGroup)?.removeView(binding.searchBarContainer)
                 binding.headerViewMain.addView(binding.searchBarContainer, searchBarOriginalParams)
-                binding.toolbarMain.alpha = 0f
                 isSearchBarInToolbar = false
             }
         }

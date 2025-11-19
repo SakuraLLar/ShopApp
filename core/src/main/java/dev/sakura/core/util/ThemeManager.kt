@@ -2,6 +2,7 @@ package dev.sakura.core.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 
 object ThemeManager {

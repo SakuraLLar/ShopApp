@@ -1,78 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="215dp"
-    android:layout_margin="8dp">
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="?attr/colorSurfaceContainer"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="4dp">
 
-    <ImageView
-        android:id="@+id/img_pic_popular"
-        android:layout_width="164dp"
-        android:layout_height="164dp"
-        android:background="@drawable/grey_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/shoes" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/img_add_to_favourite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/pic_favourite_default"
-        app:tint="?attr/colorControlNormal" />
+        <ImageView
+            android:id="@+id/img_pic_popular"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/shoes" />
 
-    <TextView
-        android:id="@+id/txt_price_popular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="$-"
-        android:textColor="?attr/colorOnBackground"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_pic_popular" />
+        <ImageView
+            android:id="@+id/img_add_to_favourite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/button_oval_background"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/pic_favourite_default"
+            app:tint="@android:color/white" />
 
-    <TextView
-        android:id="@+id/txt_rating_popular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:text="5"
-        android:textColor="?attr/colorOnBackground"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_price_popular"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txt_price_popular" />
+        <View
+            android:id="@+id/info_background"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:background="@drawable/bg_popular_item_info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/img_rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txt_rating_popular"
-        app:layout_constraintEnd_toStartOf="@+id/txt_rating_popular"
-        app:layout_constraintTop_toTopOf="@+id/txt_rating_popular"
-        app:srcCompat="@drawable/pic_star" />
+        <TextView
+            android:id="@+id/txt_title_popular"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/txt_price_popular"
+            app:layout_constraintEnd_toStartOf="@id/img_rating"
+            app:layout_constraintStart_toStartOf="@id/info_background"
+            tools:text="Nike Air Max" />
 
-    <TextView
-        android:id="@+id/txt_title_popular"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:singleLine="true"
-        android:text="title"
-        android:textColor="?attr/colorOnBackground"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_price_popular" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/txt_price_popular"
+            style="@style/TextAppearance.Material3.BodyLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="12dp"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@id/info_background"
+            app:layout_constraintStart_toStartOf="@id/info_background"
+            tools:text="$120.00" />
+
+        <ImageView
+            android:id="@+id/img_rating"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/txt_rating_popular"
+            app:layout_constraintEnd_toStartOf="@id/txt_rating_popular"
+            app:layout_constraintTop_toTopOf="@id/txt_rating_popular"
+            app:srcCompat="@drawable/pic_star"
+            app:tint="#FFC107" />
+
+        <TextView
+            android:id="@+id/txt_rating_popular"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@id/txt_price_popular"
+            app:layout_constraintEnd_toEndOf="@id/info_background"
+            app:layout_constraintTop_toTopOf="@id/txt_price_popular"
+            tools:text="4.8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

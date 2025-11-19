@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import dev.sakura.common_ui.R
 import dev.sakura.feature_catalog.databinding.ViewHolderPopularBinding
 import dev.sakura.models.ItemsModel
@@ -48,14 +47,16 @@ class PopularAdapter(
 
             Glide.with(itemView.context)
                 .load(item.model.resourceId)
-                .transform(CenterCrop())
                 .into(binding.imgPicPopular)
 
             val context = itemView.context
+            val favouriteColor = ContextCompat.getColor(context, R.color.red)
+            val defaultColor = ContextCompat.getColor(context, android.R.color.white)
+
             if (item.isFavourite) {
-                binding.imgAddToFavourite.setColorFilter(ContextCompat.getColor(context, R.color.red))
+                binding.imgAddToFavourite.setColorFilter(favouriteColor)
             } else {
-                binding.imgAddToFavourite.clearColorFilter()
+                binding.imgAddToFavourite.setColorFilter(defaultColor)
             }
 
             binding.imgAddToFavourite.setOnClickListener {

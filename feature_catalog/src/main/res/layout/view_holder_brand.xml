@@ -1,37 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/brand_linear_layout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/brand_card_view"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    android:background="@drawable/brand_item_background_selector"
-    android:gravity="center_vertical"
-    android:paddingStart="4dp"
-    android:paddingEnd="12dp">
+    android:layout_height="48dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp">
 
-    <ImageView
-        android:id="@+id/img_pic_brand"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:background="@drawable/background_yellow_bg_selector"
-        android:padding="8dp"
-        app:tint="@color/brand_icon_tint_selector"
-        tools:src="@drawable/pic_brand_adidas" />
+    <LinearLayout
+        android:id="@+id/brand_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="6dp"
+        android:paddingEnd="16dp">
 
-    <TextView
-        android:id="@+id/txt_title_brand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="8dp"
-        android:text="title"
-        android:textColor="@color/brand_text_color_selector"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        tools:visibility="visible" />
-</LinearLayout>
+        <ImageView
+            android:id="@+id/img_pic_brand"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/pic_brand_adidas" />
+
+        <TextView
+            android:id="@+id/txt_title_brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="Adidas"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+

@@ -2,5 +2,7 @@
 <resources>
     <dimen name="bottom_nav_margin_original">16dp</dimen>
     <dimen name="screen_content_top_margin">45dp</dimen>
-
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_medium">12dp</dimen>
+    <dimen name="screen_horizontal_padding">16dp</dimen>
 </resources>

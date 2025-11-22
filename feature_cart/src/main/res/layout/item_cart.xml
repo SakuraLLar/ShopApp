@@ -13,13 +13,22 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <CheckBox
+            android:id="@+id/checkbox_item_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <ImageView
             android:id="@+id/img_view_product_cart"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/checkbox_item_cart"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView

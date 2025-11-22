@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    app:cardBackgroundColor="?attr/colorSurfaceContainer"
     app:cardCornerRadius="12dp"
     app:cardElevation="0dp"
-    app:strokeWidth="1dp"
     app:strokeColor="?attr/colorOutlineVariant"
-    app:cardBackgroundColor="?attr/colorSurfaceContainer">
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -36,9 +35,11 @@
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/img_view_item_pic"
             app:layout_constraintTop_toTopOf="@+id/img_view_item_pic"
             tools:text="Название товара, которое занимает две строки." />
+
 
         <TextView
             android:id="@+id/text_view_item_price"

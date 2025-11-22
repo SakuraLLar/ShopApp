@@ -6,4 +6,5 @@ data class CartItemModel(
     val price: Double,
     val imageResourceId: Int?,
     val quantity: Int,
+    val isSelected: Boolean = true,
 )

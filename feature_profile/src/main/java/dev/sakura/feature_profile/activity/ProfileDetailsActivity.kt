@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -24,6 +25,7 @@ import dev.sakura.core.auth.SessionProvider
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.viewModel.AuthViewModel
 import dev.sakura.feature_orders.adapter.OrdersAdapter
+import dev.sakura.feature_orders.adapter.VerticalSpaceItemDecoration
 import dev.sakura.feature_orders.viewModel.OrdersViewModel
 import dev.sakura.feature_profile.R
 import dev.sakura.feature_profile.databinding.ActivityProfileDetailsBinding
@@ -45,9 +47,6 @@ class ProfileDetailsActivity : BaseActivity() {
 
     private val authViewModel: AuthViewModel by viewModels()
     private val ordersViewModel: OrdersViewModel by viewModels()
-
-    private var isEditMode = false
-    private var avatarUri: String? = null
 
     private lateinit var ordersAdapter: OrdersAdapter
 
@@ -84,16 +83,19 @@ class ProfileDetailsActivity : BaseActivity() {
     }
 
     private fun setupEdgeToEdge() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
 
             binding.btnBackProfileDetails.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top + 16
             }
-
             binding.btnSettings.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top + 16
             }
+            binding.nestedScrollViewProfileDetails.updatePadding(
+                bottom = insets.bottom
+            )
+
             windowInsets
         }
     }
@@ -103,6 +105,10 @@ class ProfileDetailsActivity : BaseActivity() {
             appNavigator.openProductDetails(this, clickedItem)
         }
 
+        val spacingInPixels =
+            resources.getDimensionPixelSize(dev.sakura.common_ui.R.dimen.spacing_medium)
+
+        binding.recyclerViewOrders.addItemDecoration(VerticalSpaceItemDecoration(spacingInPixels))
         binding.recyclerViewOrders.apply {
             adapter = ordersAdapter
             layoutManager = LinearLayoutManager(this@ProfileDetailsActivity)

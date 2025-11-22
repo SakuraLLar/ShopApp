@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.common_ui.view.CustomBottomNavView
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_orders.adapter.OrdersAdapter
+import dev.sakura.feature_orders.adapter.VerticalSpaceItemDecoration
 import dev.sakura.feature_orders.databinding.ActivityOrdersBinding
 import dev.sakura.feature_orders.viewModel.OrdersViewModel
 import dev.sakura.models.ItemsModel
@@ -50,7 +51,17 @@ class OrdersActivity : AppCompatActivity() {
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
 
             binding.guidelineTopOrders.setGuidelineBegin(insets.top)
-            binding.recyclerViewOrders.updatePadding(insets.bottom)
+
+            val desiredHorizontalPadding =
+                resources.getDimensionPixelSize(dev.sakura.common_ui.R.dimen.screen_horizontal_padding)
+            val finalPaddingLeft = insets.left + desiredHorizontalPadding
+            val finalPaddingRight = insets.right + desiredHorizontalPadding
+
+            binding.recyclerViewOrders.updatePadding(
+                left = finalPaddingLeft,
+                right = finalPaddingRight,
+                bottom = insets.bottom
+            )
             WindowInsetsCompat.CONSUMED
         }
     }
@@ -62,6 +73,19 @@ class OrdersActivity : AppCompatActivity() {
         binding.recyclerViewOrders.layoutManager =
             androidx.recyclerview.widget.LinearLayoutManager(this)
         binding.recyclerViewOrders.adapter = ordersAdapter
+
+        val spacingInPixels =
+            resources.getDimensionPixelSize(dev.sakura.common_ui.R.dimen.spacing_medium)
+        binding.recyclerViewOrders.addItemDecoration(VerticalSpaceItemDecoration(spacingInPixels))
+
+        val topSpacingInPixels =
+            resources.getDimensionPixelSize(dev.sakura.common_ui.R.dimen.spacing_large)
+        binding.recyclerViewOrders.addItemDecoration(
+            VerticalSpaceItemDecoration(
+                spacingInPixels,
+                topSpacingInPixels
+            )
+        )
     }
 
     private fun observeViewModels() {

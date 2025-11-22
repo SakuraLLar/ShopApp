@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope // ⭐ Импортируем lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.common_ui.view.CustomBottomNavView
@@ -18,6 +18,7 @@ import dev.sakura.feature_cart.adapter.CartAdapter
 import dev.sakura.feature_cart.databinding.ActivityCartBinding
 import dev.sakura.feature_cart.viewModel.CartViewModel
 import dev.sakura.models.ItemsModel
+import kotlinx.coroutines.launch // ⭐ Импортируем launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,40 +42,7 @@ class CartActivity : BaseActivity() {
         setupEdgeToEdge()
         setupRecyclerView()
         observeViewModels()
-
-        binding.buttonCheckout.setOnClickListener {
-            val itemsInCart = cartViewModel.allCartItems.value
-            if (itemsInCart.isNullOrEmpty()) {
-                Toast.makeText(this, "Корзина пуста", Toast.LENGTH_SHORT).show()
-            } else {
-                val itemsToOrder = ArrayList(itemsInCart.map { cartItem ->
-                    ItemsModel(
-                        resourceId = cartItem.imageResourceId ?: 0,
-                        title = cartItem.title,
-                        price = cartItem.price,
-                        numberInCart = cartItem.quantity,
-                        description = "",
-                        size = emptyList(),
-                        rating = 0.0,
-                        colorResourceNames = emptyList()
-                    )
-                })
-
-                ordersManager.placeOrder(itemsToOrder) { result ->
-                    if (result.isSuccess) {
-                        cartViewModel.clearCartViewModelAction()
-                        Toast.makeText(this, "Заказ успешно оформлен", Toast.LENGTH_SHORT).show()
-                        appNavigator.openOrders(this, arrayListOf())
-                    } else {
-                        Toast.makeText(
-                            this,
-                            result.exceptionOrNull()?.message ?: "Ошибка оформления заказа",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            }
-        }
+        setupClickListeners()
 
         initCustomBottomNavigation()
         (binding.includeBottomNavCart as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_cart)
@@ -83,7 +51,6 @@ class CartActivity : BaseActivity() {
     private fun setupEdgeToEdge() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-
             binding.guidelineTopCart.setGuidelineBegin(insets.top)
             windowInsets
         }
@@ -97,12 +64,13 @@ class CartActivity : BaseActivity() {
             onDecreaseQuantity = { cartItem ->
                 if (cartItem.quantity > 1) {
                     cartViewModel.updateItemQuantity(cartItem.productId, cartItem.quantity - 1)
-                } else {
-                    cartViewModel.removeItemFromCart(cartItem.productId)
                 }
             },
             onRemoveItem = { cartItem ->
                 cartViewModel.removeItemFromCart(cartItem.productId)
+            },
+            onToggleSelection = { productId ->
+                cartViewModel.toggleItemSelection(productId)
             }
         )
         binding.recyclerViewCart.apply {
@@ -112,27 +80,69 @@ class CartActivity : BaseActivity() {
     }
 
     private fun observeViewModels() {
-        cartViewModel.allCartItems.observe(this, Observer { cartItems ->
-            if (cartItems.isNullOrEmpty()) {
-                binding.recyclerViewCart.visibility = View.GONE
-                binding.textViewEmptyCart.visibility = View.VISIBLE
-                binding.layoutSummary.visibility = View.GONE
-            } else {
-                binding.recyclerViewCart.visibility = View.VISIBLE
-                binding.textViewEmptyCart.visibility = View.GONE
-                binding.layoutSummary.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            cartViewModel.cartItems.collect { items ->
+                cartAdapter.submitList(items)
+                val isEmpty = items.isEmpty()
+                binding.textViewEmptyCart.visibility = if (isEmpty) View.VISIBLE else View.GONE
+                binding.layoutSummary.visibility = if (isEmpty) View.GONE else View.VISIBLE
             }
-            cartAdapter.submitList(cartItems)
-        })
+        }
 
-        cartViewModel.cartTotalPrice.observe(this, Observer { totalPrice ->
-            binding.textViewTotalPrice.text = String.format("$%.2f", totalPrice ?: 0.0)
-        })
+        lifecycleScope.launch {
+            cartViewModel.totalPriceOfSelected.collect { price ->
+                binding.textViewTotalPrice.text = String.format("$%.2f", price)
+            }
+        }
+
+        lifecycleScope.launch {
+            cartViewModel.isAllSelected.collect { isAllSelected ->
+                binding.checkboxSelectAllCart.isChecked = isAllSelected
+            }
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.checkboxSelectAllCart.setOnClickListener {
+            cartViewModel.toggleSelectAll()
+        }
+
+        binding.buttonCheckout.setOnClickListener {
+            val selectedItems = cartViewModel.cartItems.value.filter { it.isSelected }
+
+            if (selectedItems.isEmpty()) {
+                Toast.makeText(this, "Выберите товары для оформления", Toast.LENGTH_SHORT).show()
+            } else {
+                val itemsToOrder = ArrayList(selectedItems.map { cartItem ->
+                    ItemsModel(
+                        resourceId = cartItem.imageResourceId ?: 0,
+                        title = cartItem.title,
+                        price = cartItem.price,
+                        numberInCart = cartItem.quantity
+                    )
+                })
+
+                ordersManager.placeOrder(itemsToOrder) { result ->
+                    if (result.isSuccess) {
+                        selectedItems.forEach { item ->
+                            cartViewModel.removeItemFromCart(item.productId)
+                        }
+                        Toast.makeText(this, "Заказ успешно оформлен", Toast.LENGTH_SHORT).show()
+                        appNavigator.openOrders(this, arrayListOf())
+                    } else {
+                        Toast.makeText(
+                            this,
+                            result.exceptionOrNull()?.message ?: "Ошибка оформления заказа",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
     }
 
     private fun initCustomBottomNavigation() {
         val bottomNav = binding.includeBottomNavCart
-
         bottomNav.navExplorer.setOnClickListener { appNavigator.openMain(this) }
         bottomNav.navFavourites.setOnClickListener { appNavigator.openFavourites(this) }
         bottomNav.navOrders.setOnClickListener { appNavigator.openOrders(this, arrayListOf()) }

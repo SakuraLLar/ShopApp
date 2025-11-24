@@ -2,7 +2,6 @@ package dev.sakura.feature_catalog.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
@@ -16,12 +15,6 @@ class ColorAdapter(private var items: List<String>) :
 
     private var selectedPosition = RecyclerView.NO_POSITION
     private lateinit var context: Context
-
-    fun updateData(newItems: MutableList<String>) {
-        items = newItems
-        selectedPosition = RecyclerView.NO_POSITION
-        notifyDataSetChanged()
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

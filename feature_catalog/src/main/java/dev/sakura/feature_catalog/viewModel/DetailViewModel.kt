@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,17 +41,5 @@ class DetailViewModel @Inject constructor(
 
     fun loadProductById(productId: Int) {
         _productId.value = productId
-    }
-
-    fun toggleFavourite() {
-        viewModelScope.launch {
-            val currentProduct = product.value ?: return@launch
-            val isCurrentlyFavourite = isFavourites.value
-            if (isCurrentlyFavourite) {
-                favouritesManager.removeFavourite(currentProduct)
-            } else {
-                favouritesManager.addFavourite(currentProduct)
-            }
-        }
     }
 }

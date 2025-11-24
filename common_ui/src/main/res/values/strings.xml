@@ -4,6 +4,8 @@
     <!-- All -->
     <string name="back_button">Назад</string>
     <string name="select_cover_img">Обводка</string>
+    <string name="content_description_img">TODO</string>
+
 
     <!--Intro Activity-->
     <string name="intro_title">Сделай шаг \n В мир моды и стиля</string>

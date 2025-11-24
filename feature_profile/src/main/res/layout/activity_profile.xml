@@ -59,6 +59,7 @@
         <ImageView
             android:id="@+id/img_notification_icon_profile"
             style="@style/Widget.App.NotificationIcon"
+            android:contentDescription="@string/content_description_img"
             android:translationX="10dp"
             android:translationY="-10dp"
             app:layout_constraintEnd_toEndOf="@+id/img_profile_avatar"
@@ -161,6 +162,7 @@
                 android:id="@+id/icon_theme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/content_description_img"
                 android:src="@drawable/ic_sun_mod"
                 app:tint="?attr/colorOnSurfaceVariant" />
 

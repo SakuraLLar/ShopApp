@@ -54,6 +54,7 @@
                         android:id="@+id/img_cover_settings"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:contentDescription="@string/content_description_img"
                         android:scaleType="centerCrop"
                         android:src="@drawable/cover_gradient_lava" />
 
@@ -104,6 +105,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@drawable/button_bg_glass_rectangle"
+                    android:contentDescription="@string/content_description_img"
                     android:padding="6dp"
                     android:src="@drawable/ic_add_photo"
                     app:iconTint="@android:color/white"

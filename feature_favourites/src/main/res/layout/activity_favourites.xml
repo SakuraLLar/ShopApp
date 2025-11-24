@@ -49,6 +49,7 @@
             android:id="@+id/image_view_empty_favourites"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:contentDescription="@string/content_description_img"
             android:src="@drawable/pic_heart_empty_large" />
 
         <TextView

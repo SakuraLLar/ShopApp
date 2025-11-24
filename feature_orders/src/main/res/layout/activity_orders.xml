@@ -43,6 +43,7 @@
             android:id="@+id/img_view_empty_orders"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:contentDescription="@string/content_description_img"
             android:src="@drawable/pic_not_orders" />
 
         <TextView

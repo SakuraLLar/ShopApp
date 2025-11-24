@@ -32,6 +32,7 @@
                 android:id="@+id/img_cover_profile_details"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/content_description_img"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7"
@@ -44,6 +45,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/button_bg_glass_oval"
+                android:contentDescription="@string/content_description_img"
                 android:padding="8dp"
                 android:src="@drawable/ic_arrow_back"
                 app:tint="@android:color/black" />
@@ -56,6 +58,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/button_bg_glass_oval"
+                android:contentDescription="@string/content_description_img"
                 android:padding="8dp"
                 android:src="@drawable/pic_settings"
                 app:tint="@android:color/black" />
@@ -130,6 +133,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:contentDescription="@string/content_description_img"
                         android:src="@drawable/ic_email"
                         app:tint="?attr/colorOnSurfaceVariant" />
 
@@ -153,6 +157,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:contentDescription="@string/content_description_img"
                         android:src="@drawable/ic_phone"
                         app:tint="?attr/colorOnSurfaceVariant" />
 

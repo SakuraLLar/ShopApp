@@ -14,12 +14,6 @@ class SizeAdapter(private var items: MutableList<String>) :
     private var selectedPosition = RecyclerView.NO_POSITION
     private lateinit var context: Context
 
-    fun updateData(newItems: MutableList<String>) {
-        items = newItems
-        selectedPosition = RecyclerView.NO_POSITION
-        notifyDataSetChanged()
-    }
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,

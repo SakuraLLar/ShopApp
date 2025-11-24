@@ -1,7 +1,6 @@
 @file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 package dev.sakura.data.repository
 
-import android.util.Log
 import dev.sakura.core.auth.SessionProvider
 import dev.sakura.core.data.OrdersRepository
 import dev.sakura.data.entities.OrderEntity

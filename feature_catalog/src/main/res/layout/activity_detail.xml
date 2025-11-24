@@ -102,6 +102,7 @@
                         android:id="@+id/img_star_detail"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
+                        android:contentDescription="@string/content_description_img"
                         app:srcCompat="@drawable/pic_star"
                         app:tint="@color/yellow" />
 

@@ -25,6 +25,7 @@
             android:id="@+id/img_view_product_cart"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:contentDescription="@string/content_description_img"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toEndOf="@+id/checkbox_item_cart"
             app:layout_constraintTop_toTopOf="parent"
@@ -58,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/content_description_img"
             android:src="@drawable/ic_delete"
             app:tint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,6 +81,7 @@
                 android:id="@+id/button_decrease_quantity"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:contentDescription="@string/content_description_img"
                 android:src="@drawable/ic_remove"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="centerInside"/>
@@ -97,6 +100,7 @@
                 android:id="@+id/button_increase_quantity"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:contentDescription="@string/content_description_img"
                 android:src="@drawable/ic_add"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="centerInside"/>

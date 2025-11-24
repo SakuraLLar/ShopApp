@@ -67,7 +67,7 @@ class FavouritesActivity : BaseActivity() {
     private fun observeViewModels() {
         lifecycleScope.launch {
             favouritesViewModel.favouriteItems.collectLatest { items ->
-                if (items.isNullOrEmpty()) {
+                if (items.isEmpty()) {
                     showEmptyFavouritesState(true)
                 } else {
                     showEmptyFavouritesState(false)

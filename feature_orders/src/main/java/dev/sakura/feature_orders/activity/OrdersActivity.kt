@@ -91,7 +91,7 @@ class OrdersActivity : AppCompatActivity() {
     private fun observeViewModels() {
         lifecycleScope.launch {
             ordersViewModel.orderedItemsList.collectLatest { orders ->
-                if (orders.isNullOrEmpty()) {
+                if (orders.isEmpty()) {
                     showEmptyState(true)
                 } else {
                     showEmptyState(false)

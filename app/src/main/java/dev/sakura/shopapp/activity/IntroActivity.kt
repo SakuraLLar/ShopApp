@@ -2,11 +2,9 @@ package dev.sakura.shopapp.activity
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.launch
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sakura.core.activity.BaseActivity
-import dev.sakura.core.auth.SessionManagerImpl
 import dev.sakura.core.auth.SessionProvider
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.core.util.AuthScreenProvider

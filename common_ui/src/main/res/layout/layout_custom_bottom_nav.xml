@@ -19,7 +19,6 @@
         android:background="@drawable/background_yellow_bg_selector"
         android:orientation="horizontal">
 
-        <!--        Explorer-->
         <LinearLayout
             android:id="@+id/nav_explorer"
             android:layout_width="0dp"
@@ -36,11 +35,11 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/content_description_img"
                 app:srcCompat="@drawable/pic_search"
                 app:tint="@color/lightDark" />
         </LinearLayout>
 
-        <!--        Cart-->
         <LinearLayout
             android:id="@+id/nav_cart"
             android:layout_width="0dp"
@@ -57,11 +56,11 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/content_description_img"
                 app:srcCompat="@drawable/pic_cart"
                 app:tint="@color/lightDark" />
         </LinearLayout>
 
-        <!--        Favourites-->
         <LinearLayout
             android:id="@+id/nav_favourites"
             android:layout_width="0dp"
@@ -78,11 +77,11 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/content_description_img"
                 app:srcCompat="@drawable/pic_favourite"
                 app:tint="@color/lightDark" />
         </LinearLayout>
 
-        <!--        Orders-->
         <LinearLayout
             android:id="@+id/nav_orders"
             android:layout_width="0dp"
@@ -99,11 +98,11 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/content_description_img"
                 app:srcCompat="@drawable/pic_order"
                 app:tint="@color/lightDark" />
         </LinearLayout>
 
-        <!--        Profile-->
         <LinearLayout
             android:id="@+id/nav_profile"
             android:layout_width="0dp"
@@ -120,6 +119,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/content_description_img"
                 app:srcCompat="@drawable/pic_profile"
                 app:tint="@color/lightDark" />
         </LinearLayout>

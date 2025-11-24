@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OrdersViewModel @Inject constructor(
-    private val ordersRepository: OrdersRepository,
+    ordersRepository: OrdersRepository,
 ) : ViewModel() {
     val orderedItemsList: Flow<List<ItemsModel>> = ordersRepository.getMyOrders().map { orders ->
         orders.flatMap { order ->

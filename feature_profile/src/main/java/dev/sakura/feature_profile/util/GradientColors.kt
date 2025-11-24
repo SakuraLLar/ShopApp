@@ -18,19 +18,4 @@ object GradientBorderProvider {
         R.drawable.cover_gradient_forest to GradientColors(R.color.forestDark_cover, R.color.forest_cover, R.color.forestLight_cover),
         R.drawable.cover_gradient_space to GradientColors(R.color.spaceDark_cover, R.color.space_cover, R.color.spaceLight_cover)
     )
-
-    val coverIdToGradientDrawableMap = mapOf(
-        R.drawable.cover_gradient_lava to R.drawable.cover_gradient_lava,
-        R.drawable.cover_gradient_lavender to R.drawable.cover_gradient_lavender,
-        R.drawable.cover_gradient_ocean to R.drawable.cover_gradient_ocean,
-        R.drawable.cover_gradient_sunset to R.drawable.cover_gradient_sunset,
-        R.drawable.cover_gradient_bitumen to R.drawable.cover_gradient_bitumen,
-        R.drawable.cover_gradient_leaves to R.drawable.cover_gradient_leaves,
-        R.drawable.cover_gradient_wine to R.drawable.cover_gradient_wine,
-        R.drawable.cover_gradient_flowers to R.drawable.cover_gradient_flowers,
-        R.drawable.cover_gradient_cloud to R.drawable.cover_gradient_cloud,
-        R.drawable.cover_gradient_love to R.drawable.cover_gradient_love,
-        R.drawable.cover_gradient_forest to R.drawable.cover_gradient_forest,
-        R.drawable.cover_gradient_space to R.drawable.cover_gradient_space
-    )
 }

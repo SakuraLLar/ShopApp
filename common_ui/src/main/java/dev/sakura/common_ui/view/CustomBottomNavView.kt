@@ -57,8 +57,4 @@ class CustomBottomNavView @JvmOverloads constructor(
             }
         }
     }
-
-    fun setOnNavigationItemSelectedListener(listener: (itemId: Int) -> Unit) {
-        this.itemSelectedListener = listener
-    }
 }

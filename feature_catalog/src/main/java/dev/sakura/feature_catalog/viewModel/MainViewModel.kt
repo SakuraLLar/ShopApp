@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val catalogRepository: CatalogRepository,
+    catalogRepository: CatalogRepository,
     private val favouritesManager: FavouritesManager,
 ) : ViewModel() {
 

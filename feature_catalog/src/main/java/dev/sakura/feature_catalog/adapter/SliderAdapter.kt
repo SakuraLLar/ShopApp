@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import dev.sakura.feature_catalog.R
 import dev.sakura.models.SliderModel
@@ -16,15 +15,6 @@ class SliderAdapter(
 ) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
 
     private lateinit var context: Context
-    private val runnable = Runnable {
-        notifyDataSetChanged()
-    }
-
-    fun updateItems(newItems: List<SliderModel>) {
-        sliderItemsInternal.clear()
-        sliderItemsInternal.addAll(newItems)
-        notifyDataSetChanged()
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

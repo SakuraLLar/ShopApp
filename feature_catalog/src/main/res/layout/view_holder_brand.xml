@@ -24,6 +24,7 @@
             android:id="@+id/img_pic_brand"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:contentDescription="@string/content_description_img"
             android:scaleType="fitCenter"
             tools:src="@drawable/pic_brand_adidas" />
 

@@ -29,12 +29,6 @@
     <color name="color_block_light">#f4f3f1</color>
     <color name="color_block_dark">#3d3c3a</color>
 
-    <!-- Кнопка "Добавить в коризну" -->
-    <style name="Widget.App.Button.Yellow" parent="Widget.Material3.Button">
-        <item name="backgroundTint">@color/yellow</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
     <!-- ============= ЦВЕТА ДЛЯ ОБЛОЖЕК ============= -->
 
     <color name="lavaLight_cover">#EDB606</color>

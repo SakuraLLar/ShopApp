@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentManager
+import dev.sakura.common_ui.fragment.NotificationsDialogFragment
 import dev.sakura.core.navigation.AppNavigator
 import dev.sakura.feature_auth.fragment.LoginDialogFragment
 import dev.sakura.feature_auth.fragment.RegisterBottomSheetDialogFragment
@@ -94,5 +95,10 @@ class AppNavigatorImpl @Inject constructor() : AppNavigator {
         if (context is Activity) {
             context.finish()
         }
+    }
+
+    override fun openNotifications(fragmentManager: FragmentManager) {
+        NotificationsDialogFragment.newInstance()
+            .show(fragmentManager, NotificationsDialogFragment.TAG)
     }
 }

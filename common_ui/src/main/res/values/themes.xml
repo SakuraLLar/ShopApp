@@ -13,7 +13,6 @@
         <item name="myColorSurface">?attr/colorSurface</item>
         <item name="myColorSurfaceContainer">?attr/colorSurfaceContainer</item>
 
-
         <!-- Цвета контейнеров (для градиента и карточек) -->
         <item name="colorSurfaceContainer">@color/m3_surface_container_light</item>
         <item name="colorSecondary">@color/yellow</item>
@@ -38,4 +37,15 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <!-- Наложение для "стеклянной" иконки -->
+    <style name="Theme.App.GlassNotificationIcon" parent="">
+        <item name="notificationIconBackground">@drawable/button_bg_glass_oval</item>
+    </style>
+
+    <!-- Наложение для непрозрачной иконки -->
+    <style name="Theme.App.SolidNotificationIcon" parent="">
+        <item name="notificationIconBackground">@drawable/button_bg_solid_oval</item>
+    </style>
+
 </resources>

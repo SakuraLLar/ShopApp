@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/head_island_background_lava"
             android:paddingBottom="24dp"
+            android:theme="@style/Theme.App.GlassNotificationIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -35,19 +36,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/main_greeting" />
-
-            <ImageView
-                android:id="@+id/img_notification_icon_main"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
-                android:background="@drawable/button_oval_background"
-                android:padding="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_bell"
-                app:tint="?attr/colorOnPrimary" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/search_bar_container"

@@ -4,6 +4,7 @@
 
     <attr name="myColorSurface" format="color|reference" />
     <attr name="myColorSurfaceContainer" format="color|reference" />
+    <attr name="notificationIconBackground" format="reference" />
 
     <declare-styleable name="GradientBorderView">
         <attr name="gbv_strokeWidth" format="dimension" />

@@ -13,7 +13,6 @@
         <item name="myColorSurface">?attr/colorSurface</item>
         <item name="myColorSurfaceContainer">?attr/colorSurfaceContainer</item>
 
-
         <!-- Цвета контейнеров (для градиента и карточек) -->
         <item name="colorSurfaceContainer">@color/m3_surface_container_dark</item>
         <item name="colorSecondary">@color/yellow</item>

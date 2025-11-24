@@ -43,10 +43,10 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/button_oval_background"
+                android:background="@drawable/button_bg_glass_oval"
                 android:padding="8dp"
                 android:src="@drawable/ic_arrow_back"
-                app:tint="@android:color/white" />
+                app:tint="@android:color/black" />
 
             <ImageView
                 android:id="@+id/btn_settings"
@@ -55,10 +55,10 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/button_oval_background"
+                android:background="@drawable/button_bg_glass_oval"
                 android:padding="8dp"
                 android:src="@drawable/pic_settings"
-                app:tint="@color/white" />
+                app:tint="@android:color/black" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/collapsing_toolbar_content_profile_details"

@@ -75,6 +75,7 @@ class MainActivity : BaseActivity() {
         setupRoundedCorners()
         setupCustomScrollBehavior()
         initCustomBottomNavigation()
+
         (binding.includeBottomNavMain
                 as? CustomBottomNavView)?.updateSelection(dev.sakura.common_ui.R.id.nav_explorer)
     }

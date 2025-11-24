@@ -78,6 +78,10 @@ class ProfileActivity : BaseActivity() {
         binding.txtOpenProfileDetails.setOnClickListener {
             appNavigator.openProfileDetails(this, profileDetailsLauncher)
         }
+
+        binding.imgNotificationIconProfile.setOnClickListener {
+            appNavigator.openNotifications(supportFragmentManager)
+        }
     }
 
     private fun observeViewModels() {

@@ -20,4 +20,5 @@ interface AppNavigator {
     fun openProfileDetails(activity: Activity, launcher: ActivityResultLauncher<Intent>)
     fun openSettings(activity: Activity, launcher: ActivityResultLauncher<Intent>)
     fun goBack(context: Context)
+    fun openNotifications(fragmentManager: FragmentManager)
 }

@@ -27,6 +27,7 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:paddingTop="16dp"
+        android:theme="@style/Theme.App.GlassNotificationIcon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline_top_profile">
@@ -57,15 +58,11 @@
 
         <ImageView
             android:id="@+id/img_notification_icon_profile"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/notification_icon_background"
-            app:srcCompat="@drawable/ic_bell"
+            style="@style/Widget.App.NotificationIcon"
             android:translationX="10dp"
             android:translationY="-10dp"
             app:layout_constraintEnd_toEndOf="@+id/img_profile_avatar"
-            app:layout_constraintTop_toTopOf="@+id/img_profile_avatar"
-            app:tint="?attr/colorOnPrimary" />
+            app:layout_constraintTop_toTopOf="@+id/img_profile_avatar" />
 
         <TextView
             android:id="@+id/txt_profile_user_info"
